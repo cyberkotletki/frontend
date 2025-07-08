@@ -1,12 +1,8 @@
 import { createAppKit } from '@reown/appkit/react'
 import { networks, projectId, metadata, ethersAdapter } from './config'
-import { ActionButtonList } from './components/wallet_components/ActionButtonList.tsx'
-import { SmartContractActionButtonList } from './components/wallet_components/SmartContractActionButtonList.tsx'
-import { InfoList } from './components/wallet_components/InfoList.tsx'
-import { useState } from 'react'
 
 import "./App.css"
-import Container from "./components/Container.tsx";
+import {AppRouter} from "./app/AppRouter.tsx";
 
 // Create a AppKit instance
 createAppKit({
@@ -24,6 +20,8 @@ createAppKit({
 })
 
 export function App() {
+
+    /*
   const [transactionHash, setTransactionHash] = useState('');
   const [signedMsg, setSignedMsg] = useState('');
   const [balance, setBalance] = useState('');
@@ -41,9 +39,15 @@ export function App() {
     setBalance(balance)
   }
 
+     */
+
   return (
-      <Container>
-        <div className={"pages w-full"}>
+      <div id='App'>
+
+          <AppRouter/>
+
+          { /*
+          <div className={"pages w-full"}>
           <img src="/reown.svg" alt="Reown" style={{ width: '150px', height: '150px' }} />
           <h1>AppKit ethers React dApp Example</h1>
               <appkit-button />
@@ -57,7 +61,9 @@ export function App() {
               </div>
               <InfoList hash={transactionHash} signedMsg={signedMsg} balance={balance}/>
         </div>
-      </Container>
+          */}
+
+      </div>
   )
 }
 
