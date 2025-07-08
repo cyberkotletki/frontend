@@ -1,18 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import App from './App'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import { HeroUIProvider } from "@heroui/react";
-import './styles/variables.scss';
 
-createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <BrowserRouter>
-            <HeroUIProvider>
-                <main className="dark text-foreground bg-background">
-                    <App />
-                </main>
-            </HeroUIProvider>
-        </BrowserRouter>
-    </StrictMode>,
-)
+import App from "./App.tsx";
+import { Provider } from "./provider.tsx";
+import "@/styles/globals.scss";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider>
+          <HeroUIProvider>
+          <main className="dark text-foreground bg-background">
+            <App />
+          </main>
+        </HeroUIProvider>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>,
+);

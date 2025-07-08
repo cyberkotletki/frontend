@@ -1,0 +1,42 @@
+.header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+
+.ProfilePage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--background-color);
+  color: white;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+}
+
+.profileOptions {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  background-color: #18181B;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 30px;
+  gap: 30px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  font-size: 24px;
+}

@@ -1,3 +1,4 @@
+@import "../../../styles/variables.scss";
 .homePage {
   display: flex;
   justify-content: center;
@@ -47,18 +48,16 @@
 }
 
 .topButton {
-  background-color: var(--primary-color);
+  background-color: #7272FDFF;
   color: var(--secondary-color);
   width: 329px;
   height: 76px;
   font-size: 24px;
-  border-radius: var(--radius-full);
 }
 
 .orDivider {
   color: var(--secondary-color);
   font-size: 24px;
-  margin: -20px 0px;
 }
 
 .bottomButton {
