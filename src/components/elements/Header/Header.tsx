@@ -1,5 +1,6 @@
 import { Button } from "@heroui/react";
 import { Image } from "@heroui/image";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./styles.module.scss";
 
@@ -23,11 +24,20 @@ const BackIcon = () => {
 };
 
 const Header = () => {
+  const navigate = useNavigate();
   const isStreamer = false;
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   return (
     <div className={styles.header}>
-      <Button className={styles.backButton} startContent={<BackIcon />} />
+      <Button
+        className={styles.backButton}
+        startContent={<BackIcon />}
+        onClick={handleBackClick}
+      />
 
       <div className={styles.profileInfo}>
         {isStreamer && <div className={styles.count}>300$</div>}

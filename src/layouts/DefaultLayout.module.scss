@@ -1,0 +1,45 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerNormal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  height: var(--header-height);
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.headerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  height: var(--header-height);
+  backdrop-filter: blur(10px);
+}
+
+.compact {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.full {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.content {
+  flex: 1;
+  padding-top: var(--header-height);
+  overflow-y: auto;
+}
+
+.overlayContent {
+  flex: 1;
+  overflow-y: auto;
+}

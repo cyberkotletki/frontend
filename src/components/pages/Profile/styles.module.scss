@@ -21,6 +21,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 700px;
+  margin-top: 60px;
 }
 
 .profileOptions {
@@ -39,4 +40,14 @@
     align-items: center;
     gap: 10px;
   font-size: 24px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.signOutBtn {
+  margin: 0px 20px;
 }

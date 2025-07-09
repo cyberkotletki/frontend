@@ -1,28 +1,27 @@
-import Header from "@/components/elements/Header/Header.tsx";
 import styles from "./styles.module.scss";
-import { Image } from "@heroui/image";
-import {Avatar} from "@heroui/react";
+import { Avatar } from "@heroui/react";
 
-const Banner = () => {
+interface BannerProps {
+  mode?: "compact" | "full";
+}
+
+const Banner = ({ mode = "compact" }: BannerProps) => {
     return (
         <div className={styles.bannerContainer}>
-            <Header/>
             <div className={styles.profileInfo}>
-                <div className={styles.banner}>
-                    <Image
+                <div className={`${styles.banner} ${styles[mode]}`}>
+                    <img
                         alt="Banner"
                         src="/example.png"
+                        className={styles.bannerImage}
                     />
                 </div>
-
-                <div className={styles.user}>
-
+                <div className={`${styles.user} ${styles[`user_${mode}`]}`}>
                     <div className={styles.avatar}>
                         <Avatar
-                            className="w-20 h-20 text-large"
+                            className={mode === "full" ? "w-24 h-24 text-large" : "w-20 h-20 text-large"}
                             src="https://i.pravatar.cc/150?u=a04258114e29026708c"
                         />
-
                     </div>
                     <div className={styles.name}>
                         Mr Bublik

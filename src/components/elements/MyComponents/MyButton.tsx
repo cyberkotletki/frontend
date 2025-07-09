@@ -7,6 +7,9 @@ export const MyButton = extendVariants(Button, {
             danger: "bg-[#231212] text-[#733B3B]",
             vasily: "bg-[#7272FD] text-[#fff]",
         },
+        size: {
+            xl: "px-8 py-4 text-lg h-14",
+        },
         isDisabled: {
             true: "bg-[#eaeaea] text-[#000] opacity-50 cursor-not-allowed",
         },
