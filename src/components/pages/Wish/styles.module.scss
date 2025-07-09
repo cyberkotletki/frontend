@@ -1,3 +1,90 @@
-.content {
+.wishPage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--background-color);
+  color: white;
+}
 
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+  margin: 100px auto 0;
+  padding: 20px;
+  gap: 20px;
+  color: white;
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.wishName {
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  flex: 1;
+}
+
+.progress {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+}
+
+.progressContainer {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(40, 40, 80, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(84, 84, 182, 0.8) var(--fill-percentage, 0%),
+    transparent var(--fill-percentage, 0%)
+  );
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.wishImage {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
 }

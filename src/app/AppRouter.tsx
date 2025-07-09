@@ -4,6 +4,7 @@ import HomePage from "../components/pages/Home/Home.tsx";
 import AddWish from "../components/pages/AddWish/AddWish.tsx";
 import ProfilePage from "../components/pages/Profile/Profile.tsx";
 import WishlistPage from "../components/pages/WishLish/Wishlist.tsx";
+import WishPage from "../components/pages/Wish/Wish.tsx";
 
 import { routes } from "./App.routes.ts";
 
@@ -16,6 +17,7 @@ export const AppRouter = () => {
       <Route element={<AddWish />} path={routes.addwish()} />
       <Route element={<ProfilePage />} path={routes.profile()} />
       <Route element={<WishlistPage />} path={routes.wishlist(":id")} />
+      <Route element={<WishPage />} path={routes.wish(":id")} />
       <Route element={<DonatHistoryPage />} path={routes.donathistory()} />
     </Routes>
   );

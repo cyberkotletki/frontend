@@ -42,7 +42,7 @@ const DonatHistoryPage = () => {
   const groupedHistory = groupByDate(mockHistoryData.history);
 
   return (
-    <DefaultLayout overlayMode={"header"} >
+    <DefaultLayout overlayMode={"header"}>
       <div className={styles.history}>
         <div className={styles.page}>
           {Object.entries(groupedHistory).map(([date, items]) => (

@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import wishReducer from "@/stores/wishSlice.tsx";
+
 export const store = configureStore({
   reducer: {
-    //...
+    wish: wishReducer,
   },
 });
 
