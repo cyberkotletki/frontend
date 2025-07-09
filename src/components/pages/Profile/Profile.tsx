@@ -21,6 +21,14 @@ const ProfilePage = () => {
     navigate(routes.wishlist("user123"));
   };
 
+  const handleSettings = () => {
+    navigate(routes.settings());
+  };
+
+  const handleWithdrawal = () => {
+    navigate(routes.withdrawal());
+  };
+
   return (
     <DefaultLayout overlayMode={"banner_compact"}>
       <div className={styles.ProfilePage}>
@@ -42,7 +50,7 @@ const ProfilePage = () => {
               />
               <div className={styles.text}>Analytics</div>
             </div>
-            <div className={styles.option}>
+            <div className={styles.option} onClick={handleWithdrawal}>
               <Icon
                 className={styles.icon}
                 icon="solar:card-recive-line-duotone"
@@ -50,7 +58,7 @@ const ProfilePage = () => {
               <div className={styles.text}>Withdrawal</div>
             </div>
             <Divider className="my-4" />
-            <div className={styles.option}>
+            <div className={styles.option} onClick={handleSettings}>
               <Icon className={styles.icon} icon="solar:settings-linear" />
               <div className={styles.text}>Settings</div>
             </div>

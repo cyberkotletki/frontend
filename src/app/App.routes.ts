@@ -6,7 +6,6 @@ class Routes {
   donathistory = () => "/history" as const;
   register = () => "/register" as const;
   settings = () => "/settings" as const;
-  streamer = (id: string) => `/streamer/${id}` as const;
   wish = (id: string) => `/wish/${id}` as const;
   wishlist = (id: string) => `/wishlist/${id}` as const;
   withdrawal = () => "/withdrawal" as const;

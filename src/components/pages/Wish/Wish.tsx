@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+
 import styles from "./styles.module.scss";
 
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
@@ -12,7 +13,8 @@ const WishPage = () => {
   const navigate = useNavigate();
   const wishFromStore = useAppSelector((state) => state.wish.wish);
 
-  const wish = wishFromStore || mockWishlistData.wishes.find((w) => w.id === id);
+  const wish =
+    wishFromStore || mockWishlistData.wishes.find((w) => w.id === id);
 
   if (!wish) {
     return (
@@ -46,42 +48,55 @@ const WishPage = () => {
       <div className={styles.wishPage}>
         <Banner mode="compact" />
         <div className={styles.content}>
-          {/* Название и прогресс НАД полоской */}
-          <div className={styles.header}>
-            <div className={styles.wishName}>{wish.name}</div>
-            <div className={styles.progress}>
-              {wish.pol_amount}/{wish.pol_target} ETH
+          <div>
+            <div className={styles.header}>
+              <div className={styles.wishName}>{wish.name}</div>
+              <div className={styles.progress}>
+                {wish.pol_amount}/{wish.pol_target} ETH
+              </div>
+            </div>
+
+            <div className={styles.progressContainer}>
+              <div
+                className={styles.progressBar}
+                style={
+                  {
+                    "--fill-percentage": `${percentage}%`,
+                  } as React.CSSProperties
+                }
+              />
             </div>
           </div>
 
-          <div className={styles.progressContainer}>
-            <div
-              className={styles.progressBar}
-              style={{ "--fill-percentage": `${percentage}%` } as React.CSSProperties}
-            />
-          </div>
-
-          {wish.description && <div className={styles.description}>{wish.description}</div>}
+          {wish.description && (
+            <div className={styles.description}>{wish.description}</div>
+          )}
 
           <div className={styles.imageContainer}>
-            <img src="/example.png" alt={wish.name} className={styles.wishImage} />
+            <img
+              alt={wish.name}
+              className={styles.wishImage}
+              src="/example.png"
+            />
           </div>
 
           <div className={styles.buttons}>
             {wish.wish_url && (
               <MyButton
+                className="w-full"
                 color="vasily"
                 radius="full"
-                className="w-full"
+                size="xl"
                 onClick={handleOpenLink}
               >
                 Open item link
               </MyButton>
             )}
             <MyButton
-              color="vasily"
-              radius="full"
               className="w-full"
+              color="antivasily"
+              radius="full"
+              size="xl"
               onClick={handleDonate}
             >
               Donate

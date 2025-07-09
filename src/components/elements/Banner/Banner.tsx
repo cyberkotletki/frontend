@@ -4,9 +4,10 @@ import styles from "./styles.module.scss";
 
 interface BannerProps {
   mode?: "compact" | "full";
+  showName?: boolean;
 }
 
-const Banner = ({ mode = "compact" }: BannerProps) => {
+const Banner = ({ mode = "compact", showName = true }: BannerProps) => {
   return (
     <div className={styles.bannerContainer}>
       <div className={styles.profileInfo}>
@@ -24,7 +25,7 @@ const Banner = ({ mode = "compact" }: BannerProps) => {
               src="https://i.pravatar.cc/150?u=a04258114e29026708c"
             />
           </div>
-          <div className={styles.name}>Mr Bublik</div>
+          {showName && <div className={styles.name}>Mr Bublik</div>}
         </div>
       </div>
     </div>
