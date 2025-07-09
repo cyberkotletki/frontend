@@ -21,7 +21,7 @@ export const mockWishlistData: WishlistResponse = {
       image: "https://donly.one/api/static/1",
       pol_target: 1.5,
       pol_amount: 0.9,
-      is_priority: true
+      is_priority: true,
     },
     {
       wish_url: "https://amazon.com/mechanical-keyboard",
@@ -30,7 +30,7 @@ export const mockWishlistData: WishlistResponse = {
       image: "https://donly.one/api/static/2",
       pol_target: 2.0,
       pol_amount: 0.4,
-      is_priority: false
+      is_priority: false,
     },
     {
       wish_url: null,
@@ -39,7 +39,7 @@ export const mockWishlistData: WishlistResponse = {
       image: "https://donly.one/api/static/3",
       pol_target: 5.0,
       pol_amount: 3.2,
-      is_priority: true
+      is_priority: true,
     },
     {
       wish_url: "https://store.com/webcam",
@@ -48,7 +48,7 @@ export const mockWishlistData: WishlistResponse = {
       image: "https://donly.one/api/static/4",
       pol_target: 0.8,
       pol_amount: 0.8,
-      is_priority: false
-    }
-  ]
+      is_priority: false,
+    },
+  ],
 };

@@ -20,7 +20,7 @@
   border-radius: 0 0 32px 32px;
 
   &.compact {
-    height: 150px;
+    height: 170px;
   }
 
   &.full {
@@ -52,17 +52,17 @@
 .user_compact {
   flex-direction: row;
   align-items: flex-end;
-  bottom: -50px;
+  margin-top: -50px;
 }
 
 .user_full {
+  margin-top: -50px;
   flex-direction: column;
   align-items: center;
   height: 160px;
   gap: 8px;
   z-index: 200;
   position: relative;
-  bottom: 50px;
 }
 
 .avatar {

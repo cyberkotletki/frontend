@@ -1,9 +1,9 @@
 class Routes {
   home = () => "/" as const;
 
-  addwish = () => "/addwish" as const;
+  addwish = () => "/add-wish" as const;
   analysis = () => "/analysis" as const;
-  donathistory = () => "/donathistory" as const;
+  donathistory = () => "/history" as const;
   register = () => "/register" as const;
   settings = () => "/settings" as const;
   streamer = (id: string) => `/streamer/${id}` as const;

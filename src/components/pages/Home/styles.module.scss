@@ -1,12 +1,4 @@
 @import "../../../styles/variables.scss";
-.homePage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 20px;
-}
 
 .content {
   display: flex;
@@ -61,8 +53,6 @@
 }
 
 .bottomButton {
-  background-color:  var(--secondary-color) !important;
-  color: var(--primary-color);
   width: 329px;
   height: 76px;
   font-size: 24px;

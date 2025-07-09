@@ -1,27 +1,39 @@
 import { ReactNode } from "react";
-import Header from "@/components/elements/Header/Header";
+
 import styles from "./DefaultLayout.module.scss";
+
+import Header from "@/components/elements/Header/Header";
 
 interface DefaultLayoutProps {
   children: ReactNode;
-  overlayHeader?: boolean;
-  hasBanner?: boolean;
-  bannerMode?: "compact" | "full";
+  overlayMode: "none" | "header" | "banner_full" | "banner_compact";
 }
 
 const DefaultLayout = ({
   children,
-  overlayHeader = false,
-  hasBanner = false,
-  bannerMode = "compact"
+  overlayMode = "none",
 }: DefaultLayoutProps) => {
-  const shouldOverlay = overlayHeader || hasBanner;
+  const shouldOverlay = overlayMode !== "none";
+  const bannerMode =
+    overlayMode === "banner_full"
+      ? "full"
+      : overlayMode === "banner_compact"
+        ? "compact"
+        : "";
 
   return (
     <div className={styles.layout}>
-      <div className={shouldOverlay ? `${styles.headerOverlay} ${styles[bannerMode]}` : styles.headerNormal}>
-        <Header />
-      </div>
+      {overlayMode !== "none" && (
+        <div
+          className={
+            shouldOverlay
+              ? `${styles.headerOverlay} ${bannerMode ? styles[bannerMode] : ""}`
+              : styles.headerNormal
+          }
+        >
+          <Header />
+        </div>
+      )}
       <main className={shouldOverlay ? styles.overlayContent : styles.content}>
         {children}
       </main>

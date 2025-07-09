@@ -1,4 +1,3 @@
-
 export interface DonateHistoryItem {
   type: "donate";
   username: string | null;
@@ -31,7 +30,7 @@ export const mockHistoryData: HistoryResponse = {
       datetime: "2024-07-09T14:30:00+0300",
       amount: 10.1,
       wish_uuid: "0197ec91-c0ee-729e-a85f-0d421763b998",
-      message: "Hey! Great stream, here's for coffee ☕"
+      message: "Hey! Great stream, here's for coffee ☕",
     },
     {
       type: "donate",
@@ -39,12 +38,12 @@ export const mockHistoryData: HistoryResponse = {
       datetime: "2024-07-09T12:15:00+0300",
       amount: 25.5,
       wish_uuid: "0197ec91-c0ee-729e-a85f-0d421763b999",
-      message: null
+      message: null,
     },
     {
       type: "withdraw",
       datetime: "2024-07-08T18:45:00+0300",
-      amount: 100.0
+      amount: 100.0,
     },
     {
       type: "donate",
@@ -52,7 +51,7 @@ export const mockHistoryData: HistoryResponse = {
       datetime: "2024-07-08T16:20:00+0300",
       amount: 5.0,
       wish_uuid: "0197ec91-c0ee-729e-a85f-0d421763b997",
-      message: "Thanks for the content!"
+      message: "Thanks for the content!",
     },
     {
       type: "donate",
@@ -60,7 +59,7 @@ export const mockHistoryData: HistoryResponse = {
       datetime: "2024-07-07T20:10:00+0300",
       amount: 50.0,
       wish_uuid: "0197ec91-c0ee-729e-a85f-0d421763b996",
-      message: "Keep it up, best streamer!"
-    }
-  ]
+      message: "Keep it up, best streamer!",
+    },
+  ],
 };

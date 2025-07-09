@@ -6,6 +6,7 @@ import ProfilePage from "../components/pages/Profile/Profile.tsx";
 import WishlistPage from "../components/pages/WishLish/Wishlist.tsx";
 
 import { routes } from "./App.routes.ts";
+
 import DonatHistoryPage from "@/components/pages/DonatHistory/DonatHistory.tsx";
 
 export const AppRouter = () => {
@@ -15,7 +16,7 @@ export const AppRouter = () => {
       <Route element={<AddWish />} path={routes.addwish()} />
       <Route element={<ProfilePage />} path={routes.profile()} />
       <Route element={<WishlistPage />} path={routes.wishlist(":id")} />
-      <Route element={<DonatHistoryPage />} path={routes.donathistory()}/>
+      <Route element={<DonatHistoryPage />} path={routes.donathistory()} />
     </Routes>
   );
 };
