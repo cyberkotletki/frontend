@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Button } from "@heroui/react";
 
 import styles from "./styles.module.scss";
 
@@ -10,7 +11,6 @@ import { mockWishlistData, Wish } from "@/types/wishlist";
 import { useAppDispatch } from "@/stores/hooks.tsx";
 import { setWish } from "@/stores/wishSlice.tsx";
 import { routes } from "@/app/App.routes.ts";
-import {Button} from "@heroui/react";
 
 const WishlistPage = () => {
   const dispatch = useAppDispatch();
