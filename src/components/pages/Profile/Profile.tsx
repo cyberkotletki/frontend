@@ -1,4 +1,4 @@
-import { Divider } from "@heroui/react";
+import { Button, Divider } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 
@@ -75,6 +75,11 @@ const ProfilePage = () => {
               Sign out
             </MyButton>
           </div>
+        </div>
+        <div className={styles.copyBnt}>
+          <Button isIconOnly radius="full" size="lg">
+            <Icon className={styles.plusIcon} icon="solar:share-bold" />
+          </Button>
         </div>
       </div>
     </DefaultLayout>

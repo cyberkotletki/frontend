@@ -42,7 +42,7 @@
   display: flex;
   align-items: flex-end;
   gap: 15px;
-  z-index: 100;
+  z-index: 5;
   width: auto;
   max-width: 400px;
   height: 80px;
@@ -61,12 +61,12 @@
   align-items: center;
   height: 160px;
   gap: 8px;
-  z-index: 200;
+  z-index: 5;
   position: relative;
 }
 
 .avatar {
-  z-index: 101;
+  z-index: 6;
   flex-shrink: 0;
 }
 
@@ -75,7 +75,7 @@
   font-weight: bold;
   color: white;
   text-shadow: 0 2px 4px rgba(0,0,0,0.7);
-  z-index: 201;
+  z-index: 6;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -87,5 +87,13 @@
   header {
     position: relative;
     z-index: 10;
+  }
+
+  .drawer-backdrop {
+    z-index: 50 !important;
+  }
+
+  .drawer-content {
+    z-index: 51 !important;
   }
 }

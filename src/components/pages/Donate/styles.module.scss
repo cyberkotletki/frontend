@@ -1,0 +1,109 @@
+.drawerDonate {
+
+}
+
+.donateContainer {
+  position: relative;
+  width: 100%;
+}
+
+.drawerContent {
+  background-color: #1a1a1a !important;
+  color: white !important;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.switchContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.switchLabel {
+  font-size: 14px;
+  color: white;
+  font-weight: 500;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: white;
+  padding: 16px 0 8px;
+}
+
+.closeButton {
+  color: white;
+}
+
+.drawerHeader {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.drawerFooter {
+  padding: 16px 24px 24px;
+}
+
+.footerButtons {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
+
+.footerButton {
+  flex: 1;
+}
+
+:global {
+  .nextui-drawer-content {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .nextui-c-PJLV-ijHfcFK-css {
+    background-color: #1a1a1a !important;
+  }
+
+  .nextui-drawer-header {
+    background-color: #1a1a1a !important;
+  }
+
+  .nextui-drawer-body {
+    background-color: #1a1a1a !important;
+  }
+
+  .nextui-drawer-footer {
+    background-color: #1a1a1a !important;
+  }
+}

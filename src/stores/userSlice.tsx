@@ -11,7 +11,7 @@ export interface UserState {
 
 const initialState: UserState = {
   user: {
-    name: "Bublik",
+    name: "Anonymous",
     topics: ["Gaming", "Streaming", "Technology", "Music"],
   },
 };

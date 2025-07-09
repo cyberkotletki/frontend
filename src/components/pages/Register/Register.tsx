@@ -1,12 +1,14 @@
 import { createAppKit } from "@reown/appkit/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./styles.module.scss";
 
-import {testNetwork} from "@/config/wallet.ts";
-import {  projectId, metadata, ethersAdapter } from "@/config/site.ts";
+import { testNetwork } from "@/config/wallet.ts";
+import { projectId, metadata, ethersAdapter } from "@/config/site.ts";
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
+import { routes } from "@/app/App.routes.ts";
 
 createAppKit({
   adapters: [ethersAdapter],
@@ -20,17 +22,20 @@ createAppKit({
 
   themeVariables: {
     "--w3m-accent": "#000000",
-  }
+  },
 });
 
 const Register = () => {
+  const navigate = useNavigate();
   const [loggedInTelegram, setLoggedInTelegram] = useState<boolean>(false);
   const [walletProvided] = useState<boolean>(false);
   const loginViaTelegram = () => {
     setLoggedInTelegram(true);
   };
 
-
+  const handleStart = () => {
+    navigate(routes.profile());
+  };
 
   return (
     <DefaultLayout overlayMode={"header"}>
@@ -73,15 +78,16 @@ const Register = () => {
                 <appkit-button />
               </div>
             </div>
-            <MyButton
-              className={styles.accentButton}
-              color="vasily"
-              disabled={!walletProvided}
-              radius="full"
-              onClick={loginViaTelegram}
-            >
-              Start earning money
-            </MyButton>
+            <div onClick={handleStart}>
+              <MyButton
+                className={styles.accentButton}
+                color="vasily"
+                disabled={!walletProvided}
+                radius="full"
+              >
+                Start earning money
+              </MyButton>
+            </div>
           </>
         )}
       </div>

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./styles.module.scss";
 
+import { routes } from "@/app/App.routes.ts";
+
 const BackIcon = () => {
   return (
     <svg
@@ -31,6 +33,10 @@ const Header = () => {
     navigate(-1);
   };
 
+  const handleAvatarClick = () => {
+    navigate(routes.profile());
+  };
+
   return (
     <div className={styles.header}>
       <Button
@@ -41,7 +47,7 @@ const Header = () => {
 
       <div className={styles.profileInfo}>
         {isStreamer && <div className={styles.count}>300$</div>}
-        <div className={styles.avatar}>
+        <div className={styles.avatar} onClick={handleAvatarClick}>
           <Image alt="User Avatar" height={40} src="/logo.png" width={40} />
         </div>
       </div>

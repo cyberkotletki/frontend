@@ -9,7 +9,9 @@ class Routes {
   wish = (id: string) => `/wish/${id}` as const;
   wishlist = (id: string) => `/wishlist/${id}` as const;
   withdrawal = () => "/withdrawal" as const;
+  // TODO: ID profile
   profile = () => "/profile" as const;
+  error = () => "/error" as const;
 }
 
 export const routes = new Routes();

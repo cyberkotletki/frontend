@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Button, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerBody } from "@heroui/react";
 
 import styles from "./styles.module.scss";
 
@@ -10,12 +11,13 @@ import { mockWishlistData, Wish } from "@/types/wishlist";
 import { useAppDispatch } from "@/stores/hooks.tsx";
 import { setWish } from "@/stores/wishSlice.tsx";
 import { routes } from "@/app/App.routes.ts";
-import {Button} from "@heroui/react";
 
 const WishlistPage = () => {
   const dispatch = useAppDispatch();
   const [, setSelectedWish] = useState<Wish | null>(null);
   const navigate = useNavigate();
+  const { isOpen: isShareOpen, onOpen: onShareOpen, onClose: onShareClose } = useDisclosure();
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const calculatePercentage = (current: number, target: number): number => {
     return Math.min(Math.round((current / target) * 100), 100);
@@ -36,12 +38,55 @@ const WishlistPage = () => {
     navigate(routes.wish(wish.id));
   };
 
+  const handleAddBtnClick = () => {
+    console.log("Navigating to addwish route");
+    navigate(routes.addwish());
+  };
+
+  const handleShareBtnClick = () => {
+    onShareOpen();
+  };
+
+  const handleCopyLink = () => {
+    const wishlistUrl = window.location.href;
+    navigator.clipboard.writeText(wishlistUrl)
+      .then(() => {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy link: ', err);
+      });
+  };
+
+  const handleShare = async (platform: string) => {
+    const wishlistUrl = window.location.href;
+    const shareText = "Check out my wishlist!";
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "My Wishlist",
+          text: shareText,
+          url: wishlistUrl,
+        });
+      } catch (err) {
+        console.error('Share failed:', err);
+        handleCopyLink();
+      }
+    } else {
+      handleCopyLink();
+    }
+
+    onShareClose();
+  };
+
   const WishItem = ({ wish }: { wish: Wish }) => {
     const percentage = calculatePercentage(wish.pol_amount, wish.pol_target);
 
     return (
       <div
-        className={styles.wish}
+        className={styles.wish + (wish.is_priority ? "" : ` ${styles.small}`)}
         style={{ "--fill-percentage": `${percentage}%` } as React.CSSProperties}
         onClick={() => handleOnWishClick(wish)}
       >
@@ -85,9 +130,64 @@ const WishlistPage = () => {
             ))}
           </div>
         </div>
-        <div className={styles.addBnt}>
-          <Button radius="full" size="lg" />
+        <div className={styles.btnGroup}>
+          <div className={styles.actionBtn}>
+            <Button
+              isIconOnly
+              radius="full"
+              size="lg"
+              onPress={handleAddBtnClick}
+            >
+              <Icon className={styles.actionIcon} icon="solar:add-circle-linear" />
+            </Button>
+          </div>
+          <div className={styles.actionBtn}>
+            <Button
+              isIconOnly
+              radius="full"
+              size="lg"
+              onPress={handleShareBtnClick}
+            >
+              <Icon className={styles.actionIcon} icon="solar:share-bold" />
+            </Button>
+          </div>
         </div>
+
+        {/* Share Drawer */}
+        <Drawer
+          backdrop="blur"
+          isOpen={isShareOpen}
+          placement="bottom"
+          size="3xl"
+          onClose={onShareClose}
+          className={styles.drawerContent}
+        >
+          <DrawerContent>
+            <DrawerHeader className={styles.drawerHeader}>
+              <div>Share Wishlist</div>
+            </DrawerHeader>
+            <DrawerBody>
+              <div className={styles.shareOptions}>
+                <div className={styles.shareOption} onClick={() => handleShare('twitter')}>
+                  <Icon icon="mdi:twitter" className={styles.shareIcon} width={32} />
+                  <span>Twitter</span>
+                </div>
+                <div className={styles.shareOption} onClick={() => handleShare('facebook')}>
+                  <Icon icon="mdi:facebook" className={styles.shareIcon} width={32} />
+                  <span>Facebook</span>
+                </div>
+                <div className={styles.shareOption} onClick={() => handleShare('telegram')}>
+                  <Icon icon="mdi:telegram" className={styles.shareIcon} width={32} />
+                  <span>Telegram</span>
+                </div>
+                <div className={styles.shareOption} onClick={handleCopyLink}>
+                  <Icon icon="mdi:content-copy" className={styles.shareIcon} width={32} />
+                  <span>{linkCopied ? 'Copied!' : 'Copy Link'}</span>
+                </div>
+              </div>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </div>
     </DefaultLayout>
   );

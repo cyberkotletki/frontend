@@ -78,7 +78,6 @@ const WithdrawalPage = () => {
         <div className={styles.form}>
           <div className={styles.formGroup}>
             <Autocomplete
-              className="max-w-xs"
               defaultItems={currency}
               label="Currency"
               placeholder="Select currency"
