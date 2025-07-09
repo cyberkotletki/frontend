@@ -48,24 +48,21 @@ const WishPage = () => {
       <div className={styles.wishPage}>
         <Banner mode="compact" />
         <div className={styles.content}>
-          <div>
-            <div className={styles.header}>
-              <div className={styles.wishName}>{wish.name}</div>
-              <div className={styles.progress}>
-                {wish.pol_amount}/{wish.pol_target} ETH
-              </div>
+          {/* Название и прогресс НАД полоской */}
+          <div className={styles.header}>
+            <div className={styles.wishName}>{wish.name}</div>
+            <div className={styles.progress}>
+              {wish.pol_amount}/{wish.pol_target} ETH
             </div>
+          </div>
 
-            <div className={styles.progressContainer}>
-              <div
-                className={styles.progressBar}
-                style={
-                  {
-                    "--fill-percentage": `${percentage}%`,
-                  } as React.CSSProperties
-                }
-              />
-            </div>
+          <div className={styles.progressContainer}>
+            <div
+              className={styles.progressBar}
+              style={
+                { "--fill-percentage": `${percentage}%` } as React.CSSProperties
+              }
+            />
           </div>
 
           {wish.description && (
@@ -86,7 +83,6 @@ const WishPage = () => {
                 className="w-full"
                 color="vasily"
                 radius="full"
-                size="xl"
                 onClick={handleOpenLink}
               >
                 Open item link
@@ -94,9 +90,8 @@ const WishPage = () => {
             )}
             <MyButton
               className="w-full"
-              color="antivasily"
+              color="vasily"
               radius="full"
-              size="xl"
               onClick={handleDonate}
             >
               Donate

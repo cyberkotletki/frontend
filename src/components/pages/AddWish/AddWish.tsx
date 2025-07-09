@@ -1,12 +1,11 @@
-import { Checkbox, Input, Textarea } from "@heroui/react";
-import { Image } from "@heroui/react";
+import { Checkbox, cn, Input, Textarea } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 import styles from "./styles.module.scss";
 
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Uploader from "@/components/elements/Uploader/Uploader.tsx";
-import { MyButton } from "@/components/custom/MyButton.tsx";
+import { MyButton } from "@/components/custom/MyButton";
 
 const AddWish = () => {
   return (
@@ -31,14 +30,19 @@ const AddWish = () => {
             <Uploader />
 
             <div className={styles.imageContainer}>
-              <Image
-                isBlurred
+              {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+              <img
                 alt="Image Preview"
-                className={styles.imagePreview}
+                className={cn(styles.imagePreview, "")}
                 src="./example.png"
                 width={334}
               />
-              <div className={styles.imageFunctions}>
+              <div
+                className={cn(
+                  styles.imageFunctions,
+                  "z-10 p-4 rounded-full bg-black/50 backdrop-blur-3xl ",
+                )}
+              >
                 <Icon className={styles.function} icon="solar:pen-2-bold" />
                 <Icon
                   className={styles.function}
@@ -48,9 +52,9 @@ const AddWish = () => {
             </div>
 
             <Input
-              endContent={<div className="text-white">ETH</div>}
+              endContent={<div className="text-white">POL</div>}
               label="Price"
-              placeholder="From 0.01 ETH to 100 ETH"
+              placeholder="From 0.01 ETH to 100 POL"
               type="number"
             />
 
