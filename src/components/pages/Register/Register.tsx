@@ -1,5 +1,5 @@
 import { createAppKit } from "@reown/appkit/react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Input } from "@heroui/input";
 
 import styles from "./styles.module.scss";
@@ -10,6 +10,7 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { Topic, UserTopics } from "@/types/user.ts";
 import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
+import {setUserName} from "@/stores/userSlice.tsx";
 
 createAppKit({
   adapters: [ethersAdapter],
@@ -32,18 +33,25 @@ enum RegistrationState {
   wallet,
 }
 
-// type RegistrationData = {
-//   registrationState: RegistrationState;
-//
-// }
+type RegistrationData = {
+  registrationState: RegistrationState;
+  name: string,
+  chosenTopics: Topic[];
+}
 
 const Register = () => {
   const [currentRegistrationState, setCurrentRegistrationState] =
     useState<RegistrationState>(RegistrationState.telegram);
-
-
-
   const [chosenTopics, setChosenTopics] = useState<Topic[]>([]);
+  // const [name, SetName] = useState<string>();
+
+  useEffect(() =>{
+    if (!localStorage.getItem('registrationData')){
+      return
+    }
+    // const data = JSON.parse(localStorage.getItem('registrationData') | '[]');
+  });
+
   const triggerNewTopic = (topic: Topic): void => {
     setChosenTopics((prevTopics) => {
       const exists = prevTopics.some((t) => t.text === topic.text);
@@ -89,7 +97,12 @@ const Register = () => {
         ) : currentRegistrationState == RegistrationState.info ? (
           <>
             <div className={"w-full flex flex-col gap-10"}>
-              <Input label={"Name"} placeholder={"Your beautiful name"} />
+              <Input
+                label={"Name"}
+                value={name}
+                onValueChange={setUserName}
+                placeholder={"Your beautiful name"}
+              />
               <div className={"flex flex-col gap-4"}>
                 <span className={"text-2xl font-bold"}>Выберите категории</span>
                 <ul className={"grid grid-cols-3 gap-x-0 gap-y-4"}>
