@@ -1,84 +1,93 @@
-import { createAppKit } from "@reown/appkit/react";
-import {useEffect, useState} from "react";
 import { Input } from "@heroui/input";
 
 import styles from "./styles.module.scss";
 
-import { testNetwork } from "@/config/wallet.ts";
-import { projectId, metadata, ethersAdapter } from "@/config/site.ts";
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import { Topic, UserTopics } from "@/types/user.ts";
+import { type Topic, UserTopics } from "@/types/user.ts";
 import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
-import {setUserName} from "@/stores/userSlice.tsx";
-
-createAppKit({
-  adapters: [ethersAdapter],
-  networks: [testNetwork],
-  metadata,
-  projectId,
-  themeMode: "dark",
-  features: {
-    analytics: true,
-  },
-
-  themeVariables: {
-    "--w3m-accent": "#000000",
-  },
-});
+import { useLocalStorage } from "@/hooks/useRegister";
+import { useWalletConnectionState } from "@/hooks/useWallet.ts";
 
 enum RegistrationState {
-  telegram,
-  info,
-  wallet,
+  telegram = 0,
+  info = 1,
+  wallet = 2,
 }
 
 type RegistrationData = {
   registrationState: RegistrationState;
-  name: string,
+  name: string;
   chosenTopics: Topic[];
-}
+};
+
+const defaultRegistrationData: RegistrationData = {
+  registrationState: RegistrationState.telegram,
+  name: "",
+  chosenTopics: [],
+};
+
+const isValidRegistrationData = (value: any): value is RegistrationData => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof value.name === "string" &&
+    Array.isArray(value.chosenTopics) &&
+    typeof value.registrationState === "number" &&
+    value.registrationState >= 0 &&
+    value.registrationState <= 2
+  );
+};
 
 const Register = () => {
-  const [currentRegistrationState, setCurrentRegistrationState] =
-    useState<RegistrationState>(RegistrationState.telegram);
-  const [chosenTopics, setChosenTopics] = useState<Topic[]>([]);
-  // const [name, SetName] = useState<string>();
+  const [registrationData, setRegistrationData, clearRegistrationData] =
+    useLocalStorage("registrationData", defaultRegistrationData, {
+      validator: isValidRegistrationData,
+    });
 
-  useEffect(() =>{
-    if (!localStorage.getItem('registrationData')){
-      return
-    }
-    // const data = JSON.parse(localStorage.getItem('registrationData') | '[]');
-  });
+  const { registrationState, name, chosenTopics } = registrationData;
+  const { isConnected } = useWalletConnectionState();
+
+  console.log(isConnected);
+
+  const updateRegistrationData = (updates: Partial<RegistrationData>) => {
+    setRegistrationData((prev) => ({ ...prev, ...updates }));
+  };
 
   const triggerNewTopic = (topic: Topic): void => {
-    setChosenTopics((prevTopics) => {
-      const exists = prevTopics.some((t) => t.text === topic.text);
+    const newTopics = chosenTopics.some((t) => t.text === topic.text)
+      ? chosenTopics.filter((t) => t.text !== topic.text)
+      : [...chosenTopics, topic];
 
-      if (exists) {
-        return prevTopics.filter((t) => t.text !== topic.text);
-      } else {
-        return [...prevTopics, topic];
-      }
-    });
+    updateRegistrationData({ chosenTopics: newTopics });
   };
 
   const checkTopicExistance = (topic: Topic) => {
     return chosenTopics.some((t) => t.text === topic.text);
   };
 
+  const handleNameChange = (value: string) => {
+    updateRegistrationData({ name: value });
+  };
+
+  const setCurrentRegistrationState = (state: RegistrationState) => {
+    updateRegistrationData({ registrationState: state });
+  };
+
   return (
     <DefaultLayout overlayMode={"header"}>
       <div className={styles.page}>
-        {currentRegistrationState == RegistrationState.telegram ? (
+        {registrationState === RegistrationState.telegram ? (
           <>
             <div
               className={
                 "w-full flex flex-col text-center justify-center items-center"
               }
             >
-              <img alt={"qwe"} src={"/register/register_camera.png"} />
+              <img
+                alt={"registration camera"}
+                src={"/register/register_camera.png"}
+              />
               <span className={"text-[24px] font-regular"}>
                 Start earning money doing what you love to do
               </span>
@@ -94,14 +103,14 @@ const Register = () => {
               Log in via Telegram
             </MyButton>
           </>
-        ) : currentRegistrationState == RegistrationState.info ? (
+        ) : registrationState === RegistrationState.info ? (
           <>
             <div className={"w-full flex flex-col gap-10"}>
               <Input
                 label={"Name"}
-                value={name}
-                onValueChange={setUserName}
                 placeholder={"Your beautiful name"}
+                value={name}
+                onValueChange={handleNameChange}
               />
               <div className={"flex flex-col gap-4"}>
                 <span className={"text-2xl font-bold"}>Выберите категории</span>
@@ -117,16 +126,26 @@ const Register = () => {
                 </ul>
               </div>
             </div>
-            <MyButton
-              className={styles.accentButton}
-              color="vasily"
-              radius="full"
-              onClick={() => {
-                setCurrentRegistrationState(RegistrationState.wallet);
-              }}
-            >
-              Start earning money
-            </MyButton>
+            <div className="flex gap-2">
+              <MyButton
+                className={styles.accentButton}
+                color="vasily"
+                radius="full"
+                onClick={() => {
+                  setCurrentRegistrationState(RegistrationState.wallet);
+                }}
+              >
+                Start earning money
+              </MyButton>
+              <MyButton
+                color="default"
+                radius="full"
+                variant="bordered"
+                onClick={clearRegistrationData}
+              >
+                Clear Data
+              </MyButton>
+            </div>
           </>
         ) : (
           <>
@@ -136,7 +155,10 @@ const Register = () => {
                   "flex flex-col text-center justify-center items-center"
                 }
               >
-                <img alt={"qwe"} src={"/register/register_wallet.png"} />
+                <img
+                  alt={"registration wallet"}
+                  src={"/register/register_wallet.png"}
+                />
                 <span className={"text-[24px] font-regular"}>
                   Firstly, you need to connect your crypto-wallet
                 </span>
@@ -145,13 +167,24 @@ const Register = () => {
                 <appkit-button />
               </div>
             </div>
-            <MyButton
-              className={styles.accentButton}
-              color="vasily"
-              radius="full"
-            >
-              Start earning money
-            </MyButton>
+            <div className="flex gap-2">
+              <MyButton
+                className={styles.accentButton}
+                color={isConnected ? "vasily" : "antivasily"}
+                disabled={!isConnected}
+                radius="full"
+              >
+                Start earning money
+              </MyButton>
+              <MyButton
+                color="default"
+                radius="full"
+                variant="bordered"
+                onClick={clearRegistrationData}
+              >
+                Clear Data
+              </MyButton>
+            </div>
           </>
         )}
       </div>
