@@ -10,6 +10,7 @@ import { mockWishlistData, Wish } from "@/types/wishlist";
 import { useAppDispatch } from "@/stores/hooks.tsx";
 import { setWish } from "@/stores/wishSlice.tsx";
 import { routes } from "@/app/App.routes.ts";
+import {Button} from "@heroui/react";
 
 const WishlistPage = () => {
   const dispatch = useAppDispatch();
@@ -83,6 +84,9 @@ const WishlistPage = () => {
               <WishItem key={wish.id} wish={wish} />
             ))}
           </div>
+        </div>
+        <div className={styles.addBnt}>
+          <Button radius="full" size="lg" />
         </div>
       </div>
     </DefaultLayout>

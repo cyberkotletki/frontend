@@ -1,0 +1,75 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 30px auto 0;
+  padding: 20px;
+  color: white;
+  max-width: 768px;
+}
+
+.course {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.amount {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.balanceItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0px 12px;
+  border-radius: 8px;
+
+  span {
+    font-weight: 500;
+  }
+
+  .usdValue {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    margin: 8px;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0px 24px;
+}
+
+.formGroup {
+  width: 100%;
+}
+
+.currency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+
+  span {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+}
+
+.actions {
+  margin-top: 16px;
+}
