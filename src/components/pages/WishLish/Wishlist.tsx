@@ -86,7 +86,7 @@ const WishlistPage = () => {
 
     return (
       <div
-        className={styles.wish + (wish.is_priority ? "" : ` ${styles.small}`)}
+        className={styles.wish}
         style={{ "--fill-percentage": `${percentage}%` } as React.CSSProperties}
         onClick={() => handleOnWishClick(wish)}
       >

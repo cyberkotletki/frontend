@@ -6,6 +6,7 @@ import styles from "./styles.module.scss";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { routes } from "@/app/App.routes.ts";
+import navigateTo from "@/funcs/navigateTo.ts";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -26,7 +27,12 @@ const HomePage = () => {
         </div>
 
         <div className={styles.buttonContainer}>
-          <MyButton className={`${styles.topButton}`} radius="full" size="xl">
+          <MyButton
+            className={`${styles.topButton}`}
+            radius="full"
+            size="xl"
+            onClick={() => navigateTo("/register")}
+          >
             Start donating
           </MyButton>
           <div className={styles.orDivider}>or</div>

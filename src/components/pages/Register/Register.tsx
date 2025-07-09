@@ -1,6 +1,6 @@
 import { createAppKit } from "@reown/appkit/react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import { Input } from "@heroui/input";
 
 import styles from "./styles.module.scss";
 
@@ -8,7 +8,9 @@ import { testNetwork } from "@/config/wallet.ts";
 import { projectId, metadata, ethersAdapter } from "@/config/site.ts";
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import { routes } from "@/app/App.routes.ts";
+import { Topic, UserTopics } from "@/types/user.ts";
+import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
+import {setUserName} from "@/stores/userSlice.tsx";
 
 createAppKit({
   adapters: [ethersAdapter],
@@ -25,26 +27,55 @@ createAppKit({
   },
 });
 
+enum RegistrationState {
+  telegram,
+  info,
+  wallet,
+}
+
+type RegistrationData = {
+  registrationState: RegistrationState;
+  name: string,
+  chosenTopics: Topic[];
+}
+
 const Register = () => {
-  const navigate = useNavigate();
-  const [loggedInTelegram, setLoggedInTelegram] = useState<boolean>(false);
-  const [walletProvided] = useState<boolean>(false);
-  const loginViaTelegram = () => {
-    setLoggedInTelegram(true);
+  const [currentRegistrationState, setCurrentRegistrationState] =
+    useState<RegistrationState>(RegistrationState.telegram);
+  const [chosenTopics, setChosenTopics] = useState<Topic[]>([]);
+  // const [name, SetName] = useState<string>();
+
+  useEffect(() =>{
+    if (!localStorage.getItem('registrationData')){
+      return
+    }
+    // const data = JSON.parse(localStorage.getItem('registrationData') | '[]');
+  });
+
+  const triggerNewTopic = (topic: Topic): void => {
+    setChosenTopics((prevTopics) => {
+      const exists = prevTopics.some((t) => t.text === topic.text);
+
+      if (exists) {
+        return prevTopics.filter((t) => t.text !== topic.text);
+      } else {
+        return [...prevTopics, topic];
+      }
+    });
   };
 
-  const handleStart = () => {
-    navigate(routes.profile());
+  const checkTopicExistance = (topic: Topic) => {
+    return chosenTopics.some((t) => t.text === topic.text);
   };
 
   return (
     <DefaultLayout overlayMode={"header"}>
       <div className={styles.page}>
-        {!loggedInTelegram ? (
+        {currentRegistrationState == RegistrationState.telegram ? (
           <>
             <div
               className={
-                "flex flex-col text-center justify-center items-center"
+                "w-full flex flex-col text-center justify-center items-center"
               }
             >
               <img alt={"qwe"} src={"/register/register_camera.png"} />
@@ -56,9 +87,45 @@ const Register = () => {
               className={styles.accentButton}
               color="vasily"
               radius="full"
-              onClick={loginViaTelegram}
+              onClick={() => {
+                setCurrentRegistrationState(RegistrationState.info);
+              }}
             >
               Log in via Telegram
+            </MyButton>
+          </>
+        ) : currentRegistrationState == RegistrationState.info ? (
+          <>
+            <div className={"w-full flex flex-col gap-10"}>
+              <Input
+                label={"Name"}
+                value={name}
+                onValueChange={setUserName}
+                placeholder={"Your beautiful name"}
+              />
+              <div className={"flex flex-col gap-4"}>
+                <span className={"text-2xl font-bold"}>Выберите категории</span>
+                <ul className={"grid grid-cols-3 gap-x-0 gap-y-4"}>
+                  {UserTopics.map((item, index) => (
+                    <TopicsCard
+                      key={index}
+                      picked={checkTopicExistance(item)}
+                      topic={item}
+                      onPick={triggerNewTopic}
+                    />
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <MyButton
+              className={styles.accentButton}
+              color="vasily"
+              radius="full"
+              onClick={() => {
+                setCurrentRegistrationState(RegistrationState.wallet);
+              }}
+            >
+              Start earning money
             </MyButton>
           </>
         ) : (
@@ -78,16 +145,13 @@ const Register = () => {
                 <appkit-button />
               </div>
             </div>
-            <div onClick={handleStart}>
               <MyButton
-                className={styles.accentButton}
-                color="vasily"
-                disabled={!walletProvided}
-                radius="full"
+                  className={styles.accentButton}
+                  color="vasily"
+                  radius="full"
               >
-                Start earning money
+                  Start earning money
               </MyButton>
-            </div>
           </>
         )}
       </div>
