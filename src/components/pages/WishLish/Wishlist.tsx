@@ -24,6 +24,7 @@ const WishlistPage = () => {
     return wishes.sort((a, b) => {
       if (a.is_priority && !b.is_priority) return -1;
       if (!a.is_priority && b.is_priority) return 1;
+
       return 0;
     });
   };

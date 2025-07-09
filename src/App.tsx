@@ -1,10 +1,14 @@
 import { AppRouter } from "@/app/AppRouter.tsx";
+import "./styles/globals.scss";
 
 function App() {
   return (
-    <div>
-      <AppRouter />
-    </div>
+    <>
+      <div className={"bg"} />
+      <div>
+        <AppRouter />
+      </div>
+    </>
   );
 }
 /*

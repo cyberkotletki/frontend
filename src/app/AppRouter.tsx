@@ -9,6 +9,7 @@ import WishPage from "../components/pages/Wish/Wish.tsx";
 import { routes } from "./App.routes.ts";
 
 import DonatHistoryPage from "@/components/pages/DonatHistory/DonatHistory.tsx";
+import Register from "@/components/pages/Register/Register.tsx";
 
 export const AppRouter = () => {
   return (
@@ -19,6 +20,7 @@ export const AppRouter = () => {
       <Route element={<WishlistPage />} path={routes.wishlist(":id")} />
       <Route element={<WishPage />} path={routes.wish(":id")} />
       <Route element={<DonatHistoryPage />} path={routes.donathistory()} />
+      <Route element={<Register />} path={routes.register()} />
     </Routes>
   );
 };
