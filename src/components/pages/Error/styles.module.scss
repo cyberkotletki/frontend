@@ -1,0 +1,46 @@
+.wishPage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  color: white;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+  margin: 30px auto 0;
+  padding: 20px;
+  gap: 20px;
+  color: white;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  color: var(--secondary-color);
+  font-size: 96px;
+  font-weight: bold;
+}
+
+.errorVideo {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.welcomeText {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 16px;
+}
