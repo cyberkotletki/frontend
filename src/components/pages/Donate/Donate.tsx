@@ -16,6 +16,7 @@ import styles from "./styles.module.scss";
 import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useGetContract } from "@/hooks/useWallet.ts";
+import Decimal from "decimal.js";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,46 +36,51 @@ const DonateDrawer = () => {
   };
 
   const handleSubmit = async () => {
-    const contract = await getContract();
+    const parsedAmount = new Decimal(amount);
+    const isValidAmount = !parsedAmount.isNaN() && parsedAmount.greaterThanOrEqualTo(0.01);
+    if (!isValidAmount) {
+      alert("Invalid donation amount");
+      return;
+    }
 
-    //тут будет необходимо все данные подргружать и подставлять в структурку!
-    const payment: Payment = {
-      uuid: "1234",
-      paymentUserData: {
-        userName: "bubel_inator",
-        messageText: "bububububu",
-      },
-      paymentInfo: {
-        date: Math.floor(Date.now() / 1000),
-        fromUUID: "375eb399-61f1-4a49-9d48-909dd8c74e52",
-        toUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
-        wishUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
-        toAddress: "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
-        paymentType: 0,
-      },
-    };
+    try {
+      const weiAmount = BigInt(parsedAmount.mul(1e18).toFixed(0));
+      const contract = await getContract();
 
-    const tx = await contract.donate(
-      payment.uuid,
-      payment.paymentUserData,
-      payment.paymentInfo,
-      { value: BigInt(1e17) },
-    );
+      const payment: Payment = {
+        uuid: "1234",
+        paymentUserData: {
+          userName: name,
+          messageText: message,
+        },
+        paymentInfo: {
+          date: Math.floor(Date.now() / 1000),
+          fromUUID: "375eb399-61f1-4a49-9d48-909dd8c74e52",
+          toUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+          wishUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+          toAddress: "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
+          paymentType: 0,
+        },
+      };
 
-    await tx.wait();
-    console.log("payment credited");
+      const tx = await contract.donate(payment.uuid, payment.paymentUserData, payment.paymentInfo, {
+        value: weiAmount,
+      });
 
-    const user = await contract.users(
-      "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
-    );
+      await tx.wait();
+      console.log("payment credited");
 
-    console.log("user: ", user);
-
-    const ownerBalance = await contract.ownerBalance();
-
-    console.log("owner balacne: ", ownerBalance);
-    // onClose();
+      alert("Donation successful");
+      setAmount("");
+      setMessage("");
+      if (!isAnonymous) setName("");
+      onClose();
+    } catch (err) {
+      console.error("Donation failed", err);
+      alert("Something went wrong with the transaction.");
+    }
   };
+
 
   return (
     <div className={styles.donateContainer}>
