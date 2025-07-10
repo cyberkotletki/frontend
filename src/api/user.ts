@@ -2,7 +2,7 @@ import { API_CONFIG } from "../config/api";
 import { HistoryResponse } from "../types/history";
 import { UserProfileResponse } from "../types/user";
 
-import { axiosInstance, currentApiMode, ApiMode } from "./axios";
+import { axiosInstance, currentApiMode } from "./axios";
 
 export const getUserProfile = async (
   streamerUuid: string,
@@ -21,17 +21,22 @@ export const getUserProfile = async (
   }
 };
 
-export const getUserHistory = async (page: number = 1): Promise<HistoryResponse> => {
+export const getUserHistory = async (
+  page: number = 1,
+): Promise<HistoryResponse> => {
   try {
     const url = `${API_CONFIG.ENDPOINTS.USER}/history`;
 
-    console.log(`Fetching history from: ${url}, page: ${page}, mode: ${currentApiMode}`);
+    console.log(
+      `Fetching history from: ${url}, page: ${page}, mode: ${currentApiMode}`,
+    );
 
     const response = await axiosInstance.get(url, {
       params: { page },
     });
 
     console.log("User history data:", response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching user history:", error);

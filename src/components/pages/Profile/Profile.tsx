@@ -43,6 +43,7 @@ const ProfilePage = () => {
               <Icon className={styles.icon} icon="solar:clock-circle-linear" />
               <div className={styles.text}>Transactions history</div>
             </div>
+            {/*
             <div className={styles.option}>
               <Icon
                 className={styles.icon}
@@ -50,6 +51,8 @@ const ProfilePage = () => {
               />
               <div className={styles.text}>Analytics</div>
             </div>
+            */}
+
             <div className={styles.option} onClick={handleWithdrawal}>
               <Icon
                 className={styles.icon}

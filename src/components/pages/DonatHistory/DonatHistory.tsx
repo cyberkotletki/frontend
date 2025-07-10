@@ -1,6 +1,7 @@
 import { Avatar } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
+import { Skeleton } from "@heroui/skeleton";
 
 import styles from "./styles.module.scss";
 
@@ -18,6 +19,7 @@ const DonatHistoryPage = () => {
       setLoading(true);
       try {
         const data = await getUserHistory(currentPage);
+
         setHistoryData(data);
       } catch (error) {
         console.error("Failed to fetch history:", error);
@@ -72,20 +74,42 @@ const DonatHistoryPage = () => {
     setCurrentPage(currentPage + 1);
   };
 
-  const groupedHistory = historyData?.history ? groupByDate(historyData.history) : {};
+  const groupedHistory = historyData?.history
+    ? groupByDate(historyData.history)
+    : {};
 
-  const showPagination = historyData?.history && historyData.history.length === 20;
+  const showPagination =
+    historyData?.history && historyData.history.length === 20;
 
   return (
     <DefaultLayout overlayMode={"header"}>
       <div className={styles.history}>
         <div className={styles.page}>
           {loading ? (
-            <div className={styles.loading}>Loading...</div>
-          ) : historyData?.history?.length === 0 ? (
-            <div className={styles.emptyHistory}>
-              История пуста
+            <div className={styles.skeletonContainer}>
+              {[...Array(5)].map((_, index) => (
+                <div key={index} className={styles.skeletonItem}>
+                  <div className={styles.skeletonAvatar}>
+                    <Skeleton className="w-full h-full rounded-[14px]" />
+                  </div>
+                  <div className={styles.skeletonContent}>
+                    <div className={styles.skeletonHeader}>
+                      <div>
+                        <Skeleton className="h-5 w-24 mb-1" />
+                        <Skeleton className="h-4 w-16" />
+                      </div>
+                      <div className={styles.skeletonAmount}>
+                        <Skeleton className="h-5 w-16 mb-1" />
+                        <Skeleton className="h-3 w-12" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-10 w-full mt-2" />
+                  </div>
+                </div>
+              ))}
             </div>
+          ) : historyData?.history?.length === 0 ? (
+            <div className={styles.emptyHistory}>История пуста</div>
           ) : (
             <>
               {Object.entries(groupedHistory).map(([date, items]) => (
@@ -121,7 +145,9 @@ const DonatHistoryPage = () => {
                               </div>
                             </div>
                             {item.message && (
-                              <div className={styles.message}>{item.message}</div>
+                              <div className={styles.message}>
+                                {item.message}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -147,8 +173,8 @@ const DonatHistoryPage = () => {
                 <div className={styles.pagination}>
                   <button
                     className={styles.paginationButton}
-                    onClick={handlePrevPage}
                     disabled={currentPage <= 1}
+                    onClick={handlePrevPage}
                   >
                     <Icon icon="solar:alt-arrow-left-outline" />
                   </button>
@@ -157,8 +183,8 @@ const DonatHistoryPage = () => {
                   </span>
                   <button
                     className={styles.paginationButton}
-                    onClick={handleNextPage}
                     disabled={historyData?.history?.length < 20}
+                    onClick={handleNextPage}
                   >
                     <Icon icon="solar:alt-arrow-right-outline" />
                   </button>

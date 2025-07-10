@@ -3,7 +3,6 @@
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-
   color: white;
 }
 
@@ -193,4 +192,44 @@
   padding: 40px 0;
   font-size: 16px;
   color: #A1A1AA;
+}
+
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.skeletonItem {
+  background-color: rgba(114, 114, 253, 0.16);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.skeletonAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.skeletonContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.skeletonAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }

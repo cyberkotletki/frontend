@@ -8,7 +8,12 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import Banner from "@/components/elements/Banner/Banner.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks.tsx";
-import { setUserName, addTopic, removeTopic, getUserProfile } from "@/stores/userSlice.tsx";
+import {
+  setUserName,
+  addTopic,
+  removeTopic,
+  getUserProfile,
+} from "@/stores/userSlice.tsx";
 
 const Settings = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +30,7 @@ const Settings = () => {
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+
     setUserNameLocal(value);
     dispatch(setUserName(value));
   };
@@ -34,7 +40,11 @@ const Settings = () => {
   };
 
   const handleAddTopic = () => {
-    if (newTopic.trim() && userProfile?.topics && !userProfile.topics.includes(newTopic.trim())) {
+    if (
+      newTopic.trim() &&
+      userProfile?.topics &&
+      !userProfile.topics.includes(newTopic.trim())
+    ) {
       dispatch(addTopic(newTopic.trim()));
       setNewTopic("");
       setIsAddingTopic(false);

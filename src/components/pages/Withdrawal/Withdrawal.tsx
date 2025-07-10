@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import styles from "./styles.module.scss";
 
+import Spinner from "@/components/elements/Spinner/Spinner";
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 
@@ -52,6 +53,11 @@ const WithdrawalPage = () => {
   return (
     <DefaultLayout overlayMode={"header"}>
       <div className={styles.content}>
+        {isLoading && (
+          <div className={styles.loadingOverlay}>
+            <Spinner size="lg" />
+          </div>
+        )}
         <div className={styles.course}>
           <div className={styles.title}>Available for withdrawal</div>
           <div className={styles.amount}>
