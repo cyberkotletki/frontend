@@ -13,8 +13,10 @@ import { Icon } from "@iconify/react";
 
 import styles from "./styles.module.scss";
 
+import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import { useWalletConnectionState } from "@/hooks/useWallet.ts";
+import { useGetContract } from "@/hooks/useWallet.ts";
+import Decimal from "decimal.js";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,7 +24,7 @@ const DonateDrawer = () => {
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("Anonymous");
   const [message, setMessage] = useState("");
-  const { modal } = useWalletConnectionState();
+  const { getContract } = useGetContract();
 
   const handleAnonymousChange = (checked: boolean) => {
     setIsAnonymous(checked);
@@ -33,11 +35,52 @@ const DonateDrawer = () => {
     }
   };
 
-  const handleSubmit = () => {
-    modal.open({ view: "WalletSend" });
+  const handleSubmit = async () => {
+    const parsedAmount = new Decimal(amount);
+    const isValidAmount = !parsedAmount.isNaN() && parsedAmount.greaterThanOrEqualTo(0.01);
+    if (!isValidAmount) {
+      alert("Invalid donation amount");
+      return;
+    }
 
-    // onClose();
+    try {
+      const weiAmount = BigInt(parsedAmount.mul(1e18).toFixed(0));
+      const contract = await getContract();
+
+      const payment: Payment = {
+        uuid: "1234",
+        paymentUserData: {
+          userName: name,
+          messageText: message,
+        },
+        paymentInfo: {
+          date: Math.floor(Date.now() / 1000),
+          fromUUID: "375eb399-61f1-4a49-9d48-909dd8c74e52",
+          toUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+          wishUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+          toAddress: "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
+          paymentType: 0,
+        },
+      };
+
+      const tx = await contract.donate(payment.uuid, payment.paymentUserData, payment.paymentInfo, {
+        value: weiAmount,
+      });
+
+      await tx.wait();
+      console.log("payment credited");
+
+      alert("Donation successful");
+      setAmount("");
+      setMessage("");
+      if (!isAnonymous) setName("");
+      onClose();
+    } catch (err) {
+      console.error("Donation failed", err);
+      alert("Something went wrong with the transaction.");
+    }
   };
+
 
   return (
     <div className={styles.donateContainer}>

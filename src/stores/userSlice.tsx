@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Decimal from "decimal.js";
 
 import { DEFAULT_USER_STATE, UserProfileResponse } from "@/types/user";
 import { RootState } from "@/stores/store";
@@ -13,11 +14,17 @@ export const userSlice = createSlice({
     setUserProfile: (state, action: PayloadAction<UserProfileResponse>) => {
       state.profile = action.payload;
     },
+    setUserBalance: (state, action: PayloadAction<Decimal>) => {
+      if (state.profile) {
+        state.profile.balance = action.payload;
+      }
+    },
     setUserName: (state, action: PayloadAction<string>) => {
       if (state.profile) {
         state.profile.name = action.payload;
       } else {
         state.profile = {
+          uuid: "",
           name: action.payload,
           banner: "",
           avatar: "",
@@ -25,7 +32,7 @@ export const userSlice = createSlice({
           background_image: null,
           button_background_color: "#FFFFFF",
           button_text_color: "#0F0F0F",
-          balance: 0,
+          balance: new Decimal(0),
           topics: [],
         };
       }
