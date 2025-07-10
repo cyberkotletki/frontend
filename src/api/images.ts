@@ -1,6 +1,5 @@
 import { API_CONFIG } from "../config/api";
-
-import { axiosInstance, useMocks } from "./axios";
+import { axiosInstance } from "./axios";
 
 export type ImageType = "avatar" | "banner" | "background" | "wish";
 
@@ -12,36 +11,7 @@ export const uploadImage = async (
   file: File,
   type: ImageType,
 ): Promise<number> => {
-  if (useMocks) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const img = new Image();
-
-        img.onload = function () {
-          if (type === "avatar" && (img.width < 128 || img.height < 128)) {
-            reject({
-              error:
-                "Изображение типа avatar должно быть минимум 128 на 128 пикселей",
-            });
-          } else {
-            const imageId = Math.floor(Math.random() * 1000) + 1;
-
-            resolve(imageId);
-          }
-        };
-        img.onerror = function () {
-          reject({ error: "Невозможно загрузить изображение" });
-        };
-
-        const objectUrl = URL.createObjectURL(file);
-
-        img.src = objectUrl;
-      }, 700);
-    });
-  }
-
   const formData = new FormData();
-
   formData.append("file", file);
   formData.append("type", type);
 
