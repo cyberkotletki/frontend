@@ -32,7 +32,7 @@ const HomePage = () => {
             size="xl"
             onClick={() => navigate(routes.register())}
           >
-            Start donating
+            Create an account
           </MyButton>
           <div className={styles.orDivider}>or</div>
           <MyButton
@@ -42,7 +42,7 @@ const HomePage = () => {
             size="xl"
             onClick={handleRegisterClick}
           >
-            Become a streamer
+            Log in
           </MyButton>
         </div>
       </div>
