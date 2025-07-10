@@ -2,7 +2,7 @@ import { Checkbox, Input, Textarea } from "@heroui/react";
 import { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Contract } from "ethers";
+import {Contract, ethers} from "ethers";
 
 import styles from "./styles.module.scss";
 
@@ -133,7 +133,7 @@ const AddWish = () => {
       const uuid: string = await sendWishAndGetUUID();
       const transactionWish: WishDto = {
         userUUID: userProfile.uuid,
-        uuid: uuid,
+        uuid: "123",
         currentBalance: 0,
         price: formData.pol_target,
         name: formData.name,
@@ -143,9 +143,21 @@ const AddWish = () => {
       };
 
       const contract: Contract = await getContract();
-      const tx = await contract.addWish(transactionWish);
 
+      console.log(contract);
+      const tx = await contract.addWish([
+        uuid,
+        transactionWish.uuid,
+        transactionWish.currentBalance,
+        ethers.parseEther(transactionWish.price.toString()),
+        transactionWish.name,
+        transactionWish.link,
+        transactionWish.description,
+        transactionWish.completed,
+      ]);
       await tx.wait();
+
+      // await tx.wait();
       console.log("transaction succesfully completed");
     } catch (e) {
       console.error(e);
