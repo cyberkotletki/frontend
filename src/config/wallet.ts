@@ -50,10 +50,10 @@ export const modal = createAppKit({
   projectId,
   themeMode: "dark",
   features: {
-    analytics: true,
+    analytics: false,
   },
   themeVariables: {
-    "--w3m-accent": "#000000",
+    "--w3m-accent": "#57c3d1",
   },
 });
 

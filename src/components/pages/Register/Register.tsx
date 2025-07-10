@@ -264,9 +264,11 @@ const Register = () => {
                   Firstly, you need to connect your crypto-wallet
                 </span>
               </div>
-              <div className={styles.connectToWalletButton}>
-                <appkit-button />
-              </div>
+
+             <div className={'mt-20 w-full flex items-center justify-center'}>
+               <appkit-button />
+             </div>
+
             </div>
             <div className="flex gap-2">
               <MyButton
