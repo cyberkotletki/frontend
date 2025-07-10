@@ -13,8 +13,9 @@ import { Icon } from "@iconify/react";
 
 import styles from "./styles.module.scss";
 
+import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import { useWalletConnectionState } from "@/hooks/useWallet.ts";
+import { useGetContract } from "@/hooks/useWallet.ts";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,7 +23,7 @@ const DonateDrawer = () => {
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("Anonymous");
   const [message, setMessage] = useState("");
-  const { modal } = useWalletConnectionState();
+  const { getContract } = useGetContract();
 
   const handleAnonymousChange = (checked: boolean) => {
     setIsAnonymous(checked);
@@ -33,9 +34,30 @@ const DonateDrawer = () => {
     }
   };
 
-  const handleSubmit = () => {
-    modal.open({ view: "WalletSend" });
+  const handleSubmit = async () => {
+    const contract = await getContract();
 
+    //тут будет необходимо все данные подргружать и подставлять в структурку!
+    const payment: Payment = {
+      uuid: "",
+      paymentUserData: {
+        userName: "bubel_inator",
+        messageText: "bububububu",
+      },
+      paymentInfo: {
+        date: new Date().getDate(),
+        fromUUID: "375eb399-61f1-4a49-9d48-909dd8c74e52",
+        toUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+        wishUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+        toAddress: " 0xB90Dc3A02802b6CcB4A1949d9a0f244f1131b2E9",
+        paymentType: 0,
+      },
+    };
+
+    const tx = await contract.donate(payment);
+
+    await tx.wait();
+    console.log("payment credited");
     // onClose();
   };
 

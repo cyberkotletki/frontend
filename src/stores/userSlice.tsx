@@ -18,6 +18,7 @@ export const userSlice = createSlice({
         state.profile.name = action.payload;
       } else {
         state.profile = {
+          uuid: "",
           name: action.payload,
           banner: "",
           avatar: "",

@@ -1,6 +1,8 @@
 import { Checkbox, Input, Textarea } from "@heroui/react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Contract } from "ethers";
 
 import styles from "./styles.module.scss";
 
@@ -8,11 +10,13 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import Uploader from "@/components/elements/Uploader/Uploader.tsx";
 import { MyButton } from "@/components/custom/MyButton";
 import { createWish } from "@/api/wishlist";
-import { routes } from "@/app/App.routes.ts";
 import { CreateWishRequest } from "@/types/wishlist";
+import { getUserProfile } from "@/stores/userSlice.tsx";
+import { WishDto } from "@/types/transaction-types/wish-dto.ts";
+import { useGetContract } from "@/hooks/useWallet.ts";
 
 const AddWish = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<CreateWishRequest>>({
     name: "",
@@ -24,6 +28,8 @@ const AddWish = () => {
   });
   const [uploadedImageId, setUploadedImageId] = useState<string | null>(null);
   const [isFormValid, setIsFormValid] = useState(false);
+  const { getContract } = useGetContract();
+  const userProfile = useSelector(getUserProfile);
 
   useEffect(() => {
     const isValid = Boolean(
@@ -79,20 +85,11 @@ const AddWish = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const sendWishAndGetUUID = async (): Promise<string> => {
     if (!formData.name || !formData.pol_target || !uploadedImageId) {
       alert("Пожалуйста, заполните все обязательные поля");
-
-      return;
+      throw new Error("fields not filled right");
     }
-
-    if (formData.pol_target <= 0) {
-      alert("Цена должна быть больше нуля");
-
-      return;
-    }
-
-    setIsLoading(true);
 
     try {
       const wishData: CreateWishRequest = {
@@ -103,12 +100,12 @@ const AddWish = () => {
         is_priority: formData.is_priority!,
         image: uploadedImageId,
       };
-
       const response = await createWish(wishData);
 
       console.log("Wish created successfully:", response);
 
-      navigate(routes.wishlist("user123"));
+      return response.wish_uuid;
+      // navigate(routes.wishlist("user123"));
     } catch (error) {
       console.error("Error creating wish:", error);
       alert(
@@ -116,6 +113,50 @@ const AddWish = () => {
       );
     } finally {
       setIsLoading(false);
+    }
+
+    return "";
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.wish_url || !formData.pol_target || !formData.name) {
+      alert("Пожалуйста, заполните все обязательные поля");
+      throw new Error("fields not filled right");
+    }
+
+    if (!userProfile) {
+      throw new Error("user isn't registered");
+    }
+    setIsLoading(true);
+
+    try {
+      const uuid: string = await sendWishAndGetUUID();
+      const transactionWish: WishDto = {
+        userUUID: userProfile.uuid,
+        uuid: uuid,
+        currentBalance: 0,
+        price: formData.pol_target,
+        name: formData.name,
+        link: formData.wish_url,
+        description: formData.description,
+        completed: false,
+      };
+
+      const contract: Contract = await getContract();
+      const tx = await contract.addWish(transactionWish);
+
+      await tx.wait();
+      console.log("transaction succesfully completed");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+
+    if (formData.pol_target <= 0) {
+      alert("Цена должна быть больше нуля");
+
+      return;
     }
   };
 

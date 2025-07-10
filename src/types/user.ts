@@ -80,6 +80,7 @@ export const mockUsers: User[] = [
 ];
 
 export interface UserProfileResponse {
+  uuid: string;
   banner: string;
   name: string;
   background_color: string | null;

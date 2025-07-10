@@ -11,6 +11,7 @@ import { type Topic, UserTopics } from "@/types/user.ts";
 import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
 import { useLocalStorage } from "@/hooks/useLocalStorage.ts";
 import { useGetContract, useWalletConnectionState } from "@/hooks/useWallet.ts";
+import { routes } from "@/app/App.routes.ts";
 
 enum RegistrationState {
   telegram = 0,
@@ -65,20 +66,6 @@ const Register = () => {
     setToTheWaletButtonEnabled(false);
   }, [registrationData]);
 
-  //contract logic
-  // const register = async () => {
-  //
-  //   const contract = await getContract();
-  //   const tx = await contract.registerUser(
-  //     registrationData.name,
-  //     uuidv4(),
-  //     registrationData.chosenTopics,
-  //   );
-  //
-  //   await tx.wait();
-  //   console.log("user registered in contract");
-  //   navigate("/profile");
-  // };
   const register = async () => {
     const contract = await getContract();
 
@@ -95,7 +82,7 @@ const Register = () => {
 
     await tx.wait();
     console.log("user registered");
-    navigate("/profile");
+    navigate(routes.profile());
   };
 
   //functions
