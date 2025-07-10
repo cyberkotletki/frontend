@@ -1,3 +1,5 @@
+import Decimal from "decimal.js";
+
 export type User = {
   uuid: string;
   polygon_wallet: string;
@@ -88,7 +90,7 @@ export interface UserProfileResponse {
   button_background_color: string;
   button_text_color: string;
   avatar: string;
-  balance: number;
+  balance: Decimal;
   topics: string[];
 }
 

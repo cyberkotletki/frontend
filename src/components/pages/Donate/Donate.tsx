@@ -17,7 +17,6 @@ import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useGetContract } from "@/hooks/useWallet.ts";
 
-
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isAnonymous, setIsAnonymous] = useState(true);
@@ -50,9 +49,9 @@ const DonateDrawer = () => {
         fromUUID: "375eb399-61f1-4a49-9d48-909dd8c74e52",
         toUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
         wishUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
-        toAddress: "account_address",
+        toAddress: "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
         paymentType: 0,
-      }
+      },
     };
 
     const tx = await contract.donate(
@@ -65,11 +64,15 @@ const DonateDrawer = () => {
     await tx.wait();
     console.log("payment credited");
 
-    const user = await contract.users("account_address");
-    console.log('user: ', user);
+    const user = await contract.users(
+      "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
+    );
+
+    console.log("user: ", user);
 
     const ownerBalance = await contract.ownerBalance();
-    console.log('owner balacne: ', ownerBalance)
+
+    console.log("owner balacne: ", ownerBalance);
     // onClose();
   };
 

@@ -18,9 +18,8 @@ const ProfilePage = () => {
   const { disconnect } = useDisconnect();
 
   const handleDisconnect = async () => {
-
     await disconnect();
-    localStorage.removeItem('registrationData');
+    localStorage.removeItem("registrationData");
     logout();
     navigateTo(routes.home());
   };
