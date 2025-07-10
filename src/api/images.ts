@@ -1,4 +1,5 @@
 import { API_CONFIG } from "../config/api";
+
 import { axiosInstance } from "./axios";
 
 export type ImageType = "avatar" | "banner" | "background" | "wish";
@@ -12,6 +13,7 @@ export const uploadImage = async (
   type: ImageType,
 ): Promise<number> => {
   const formData = new FormData();
+
   formData.append("file", file);
   formData.append("type", type);
 

@@ -5,5 +5,6 @@ export const API_CONFIG = {
     WISHLIST: "/wishlist",
     UPLOAD_IMAGE: "/static/upload",
     STATIC: "/static",
+    USER: "/user",
   },
 };

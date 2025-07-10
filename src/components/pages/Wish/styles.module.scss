@@ -167,7 +167,7 @@
   align-items: center;
   gap: 10px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(126, 79, 79, 0.05);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -183,10 +183,9 @@
 }
 
 .shareIcon {
-  color: white;
+  color: #ccc;
 }
 
-/* Стили для drawer в глобальном контексте */
 :global {
   .nextui-drawer-content {
     background-color: #1a1a1a !important;
@@ -207,3 +206,4 @@
     background-color: #1a1a1a !important;
   }
 }
+

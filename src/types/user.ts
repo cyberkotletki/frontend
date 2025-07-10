@@ -78,3 +78,25 @@ export const mockUsers: User[] = [
     telegram_id: "555123456",
   },
 ];
+
+export interface UserProfileResponse {
+  banner: string;
+  name: string;
+  background_color: string | null;
+  background_image: string | null;
+  button_background_color: string;
+  button_text_color: string;
+  avatar: string;
+  balance: number;
+  topics: string[];
+}
+
+export interface UserState {
+  isAuthenticated: boolean;
+  profile: UserProfileResponse | null;
+}
+
+export const DEFAULT_USER_STATE: UserState = {
+  isAuthenticated: false,
+  profile: null,
+};

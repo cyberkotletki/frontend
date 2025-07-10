@@ -33,18 +33,16 @@ const WishlistPage = () => {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Получение данных при загрузке компонента
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
         setIsLoading(true);
-        // Получаем ID пользователя из URL или используем фиксированный ID для теста
-        const userId = "user123"; // можно получить из URL или из состояния приложения
+        const userId = "user123";
 
         console.log("Starting wishlist fetch for user:", userId);
 
-        // Загружаем данные через API
         const response = await getWishlist(userId);
+
         console.log("Wishlist response in component:", response);
 
         if (
@@ -62,7 +60,6 @@ const WishlistPage = () => {
       } catch (error) {
         console.error("Error loading wishlist:", error);
         alert("Произошла ошибка при загрузке списка желаний");
-        // В случае ошибки используем моковые данные для демонстрации
         setWishes(mockWishlistData.wishes);
       } finally {
         setIsLoading(false);
