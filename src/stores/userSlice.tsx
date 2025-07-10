@@ -39,7 +39,6 @@ export const userSlice = createSlice({
     },
     addTopic: (state, action: PayloadAction<string>) => {
       if (state.profile) {
-        // Проверяем, что топик еще не добавлен
         if (!state.profile.topics.includes(action.payload)) {
           state.profile.topics.push(action.payload);
         }

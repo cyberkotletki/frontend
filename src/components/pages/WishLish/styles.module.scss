@@ -367,3 +367,12 @@
 .shareIcon {
   color: white;
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 50px 0;
+  min-height: 200px;
+}

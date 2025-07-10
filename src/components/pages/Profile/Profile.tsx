@@ -11,7 +11,6 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
-import navigateTo from "@/funcs/navigateTo.ts";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const ProfilePage = () => {
     await disconnect();
     localStorage.removeItem("registrationData");
     logout();
-    navigateTo(routes.home());
+    navigate(routes.home());
   };
 
   const handleTransactionHistory = () => {
@@ -54,6 +53,7 @@ const ProfilePage = () => {
               <Icon className={styles.icon} icon="solar:clock-circle-linear" />
               <div className={styles.text}>Transactions history</div>
             </div>
+            {/*
             <div className={styles.option}>
               <Icon
                 className={styles.icon}
@@ -61,6 +61,8 @@ const ProfilePage = () => {
               />
               <div className={styles.text}>Analytics</div>
             </div>
+            */}
+
             <div className={styles.option} onClick={handleWithdrawal}>
               <Icon
                 className={styles.icon}

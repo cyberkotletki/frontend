@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
@@ -8,16 +8,29 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import Banner from "@/components/elements/Banner/Banner.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks.tsx";
-import { setUserName, addTopic, removeTopic } from "@/stores/userSlice.tsx";
+import {
+  setUserName,
+  addTopic,
+  removeTopic,
+  getUserProfile,
+} from "@/stores/userSlice.tsx";
 
 const Settings = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
+  const userProfile = useAppSelector(getUserProfile); // Изменено с user на userProfile
   const [newTopic, setNewTopic] = useState("");
   const [isAddingTopic, setIsAddingTopic] = useState(false);
-  const [userName, setUserNameLocal] = useState(user.name);
+  const [userName, setUserNameLocal] = useState(userProfile?.name || ""); // Добавлена проверка на null/undefined
 
-  const handleNameChange = (value: string) => {
+  useEffect(() => {
+    if (userProfile?.name) {
+      setUserNameLocal(userProfile.name);
+    }
+  }, [userProfile]);
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
     setUserNameLocal(value);
     dispatch(setUserName(value));
   };
@@ -27,7 +40,11 @@ const Settings = () => {
   };
 
   const handleAddTopic = () => {
-    if (newTopic.trim() && !user.topics.includes(newTopic.trim())) {
+    if (
+      newTopic.trim() &&
+      userProfile?.topics &&
+      !userProfile.topics.includes(newTopic.trim())
+    ) {
       dispatch(addTopic(newTopic.trim()));
       setNewTopic("");
       setIsAddingTopic(false);
@@ -50,7 +67,7 @@ const Settings = () => {
               className={styles.nameInput}
               label="User Name"
               value={userName}
-              onValueChange={handleNameChange}
+              onChange={handleNameChange}
             />
           </div>
 
@@ -60,7 +77,7 @@ const Settings = () => {
             </div>
 
             <div className={styles.chipsContainer}>
-              {user.topics.map((topic, index) => (
+              {userProfile?.topics?.map((topic, index) => (
                 <div key={index} className={styles.chip}>
                   <span className={styles.chipText}>{topic}</span>
                   <button

@@ -12,6 +12,7 @@ import {
 
 import styles from "./styles.module.scss";
 
+import Spinner from "@/components/elements/Spinner/Spinner";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Banner from "@/components/elements/Banner/Banner";
 import { mockWishlistData, Wish } from "@/types/wishlist";
@@ -177,7 +178,7 @@ const WishlistPage = () => {
         <Banner mode="full" />
         <div className={styles.content}>
           {isLoading ? (
-            <div className={styles.loading}>Loading wishes...</div>
+            <Spinner fullPage size="lg" />
           ) : (
             <div className={styles.wishlist}>
               {sortWishesByPriority(wishes).map((wish) => (

@@ -3,7 +3,6 @@
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-
   color: white;
 }
 
@@ -12,7 +11,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 700px;
-  margin: 0 auto;
+  margin-top: 50px;
   padding: 20px;
   gap: 30px;
 }
@@ -139,4 +138,98 @@
   font-size: 16px;
   font-weight: 600;
   color: white;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(114, 114, 253, 0.36);
+  color: white;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+    background-color: rgba(114, 114, 253, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: rgba(114, 114, 253, 0.2);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.pageNumber {
+  font-size: 14px;
+  color: #A1A1AA;
+}
+
+.loading,
+.emptyHistory {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 40px 0;
+  font-size: 16px;
+  color: #A1A1AA;
+}
+
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.skeletonItem {
+  background-color: rgba(114, 114, 253, 0.16);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.skeletonAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.skeletonContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.skeletonAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
