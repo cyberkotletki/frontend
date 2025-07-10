@@ -14,6 +14,7 @@ import { Icon } from "@iconify/react";
 import styles from "./styles.module.scss";
 
 import { MyButton } from "@/components/custom/MyButton.tsx";
+import { useWalletConnectionState } from "@/hooks/useWallet.ts";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -21,6 +22,7 @@ const DonateDrawer = () => {
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("Anonymous");
   const [message, setMessage] = useState("");
+  const { modal } = useWalletConnectionState();
 
   const handleAnonymousChange = (checked: boolean) => {
     setIsAnonymous(checked);
@@ -32,8 +34,9 @@ const DonateDrawer = () => {
   };
 
   const handleSubmit = () => {
-    console.log("Submitted donation:", { amount, name, message, isAnonymous });
-    onClose();
+    modal.open({ view: "WalletSend" });
+
+    // onClose();
   };
 
   return (

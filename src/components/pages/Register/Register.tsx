@@ -1,4 +1,7 @@
 import { Input } from "@heroui/input";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import styles from "./styles.module.scss";
 
@@ -6,8 +9,8 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { type Topic, UserTopics } from "@/types/user.ts";
 import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
-import { useLocalStorage } from "@/hooks/useRegister";
-import { useWalletConnectionState } from "@/hooks/useWallet.ts";
+import { useLocalStorage } from "@/hooks/useLocalStorage.ts";
+import { useGetContract, useWalletConnectionState } from "@/hooks/useWallet.ts";
 
 enum RegistrationState {
   telegram = 0,
@@ -40,15 +43,62 @@ const isValidRegistrationData = (value: any): value is RegistrationData => {
 };
 
 const Register = () => {
+  //reactive states and variables
   const [registrationData, setRegistrationData, clearRegistrationData] =
     useLocalStorage("registrationData", defaultRegistrationData, {
       validator: isValidRegistrationData,
     });
-
+  const [toTheWaletButtonEnabled, setToTheWaletButtonEnabled] =
+    useState<boolean>(false);
   const { registrationState, name, chosenTopics } = registrationData;
   const { isConnected } = useWalletConnectionState();
+  const navigate = useNavigate();
+  const { getContract } = useGetContract();
 
-  console.log(isConnected);
+  //hooks
+  useEffect(() => {
+    if (registrationData.name != "" && chosenTopics.length > 0) {
+      setToTheWaletButtonEnabled(true);
+
+      return;
+    }
+    setToTheWaletButtonEnabled(false);
+  }, [registrationData]);
+
+  //contract logic
+  // const register = async () => {
+  //
+  //   const contract = await getContract();
+  //   const tx = await contract.registerUser(
+  //     registrationData.name,
+  //     uuidv4(),
+  //     registrationData.chosenTopics,
+  //   );
+  //
+  //   await tx.wait();
+  //   console.log("user registered in contract");
+  //   navigate("/profile");
+  // };
+  const register = async () => {
+    const contract = await getContract();
+
+    console.log({
+      name: registrationData.name,
+      uuid: uuidv4(),
+      topics: registrationData.chosenTopics.map((t) => t.text),
+    });
+    const tx = await contract.registerUser(
+      registrationData.name,
+      uuidv4(),
+      registrationData.chosenTopics.map((item) => item.text),
+    );
+
+    await tx.wait();
+    console.log("user registered");
+    navigate("/profile");
+  };
+
+  //functions
 
   const updateRegistrationData = (updates: Partial<RegistrationData>) => {
     setRegistrationData((prev) => ({ ...prev, ...updates }));
@@ -81,7 +131,7 @@ const Register = () => {
           <>
             <div
               className={
-                "w-full flex flex-col text-center justify-center items-center"
+                "mt-20 w-full flex flex-col text-center justify-center items-center"
               }
             >
               <img
@@ -105,10 +155,11 @@ const Register = () => {
           </>
         ) : registrationState === RegistrationState.info ? (
           <>
-            <div className={"w-full flex flex-col gap-10"}>
+            <div className={"w-full mt-20 flex flex-col gap-10"}>
               <Input
                 label={"Name"}
                 placeholder={"Your beautiful name"}
+                required={true}
                 value={name}
                 onValueChange={handleNameChange}
               />
@@ -129,7 +180,8 @@ const Register = () => {
             <div className="flex gap-2">
               <MyButton
                 className={styles.accentButton}
-                color="vasily"
+                color={toTheWaletButtonEnabled ? "vasily" : "antivasily"}
+                disabled={!toTheWaletButtonEnabled}
                 radius="full"
                 onClick={() => {
                   setCurrentRegistrationState(RegistrationState.wallet);
@@ -173,6 +225,7 @@ const Register = () => {
                 color={isConnected ? "vasily" : "antivasily"}
                 disabled={!isConnected}
                 radius="full"
+                onPress={register}
               >
                 Start earning money
               </MyButton>
