@@ -133,7 +133,7 @@ const AddWish = () => {
       const uuid: string = await sendWishAndGetUUID();
       const transactionWish: WishDto = {
         userUUID: userProfile.uuid,
-        uuid: "123",
+        uuid: uuid,
         currentBalance: 0,
         price: formData.pol_target,
         name: formData.name,

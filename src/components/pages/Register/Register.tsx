@@ -1,10 +1,15 @@
 import { Input } from "@heroui/input";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { addToast } from "@heroui/toast";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 import styles from "./styles.module.scss";
 
+import {
+  TelegramLoginButton,
+  TelegramUser,
+} from "@/components/elements/TelegramAuth/TelegramAuth.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { type Topic, UserTopics } from "@/types/user.ts";
@@ -12,6 +17,7 @@ import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
 import { useLocalStorage } from "@/hooks/useLocalStorage.ts";
 import { useGetContract, useWalletConnectionState } from "@/hooks/useWallet.ts";
 import { routes } from "@/app/App.routes.ts";
+import { postRegisterUser, postVerifyTelegram } from "@/api/auth.ts";
 
 enum RegistrationState {
   telegram = 0,
@@ -49,12 +55,43 @@ const Register = () => {
     useLocalStorage("registrationData", defaultRegistrationData, {
       validator: isValidRegistrationData,
     });
+
+  //уже поздно менять название))))
   const [toTheWaletButtonEnabled, setToTheWaletButtonEnabled] =
     useState<boolean>(false);
   const { registrationState, name, chosenTopics } = registrationData;
   const { isConnected } = useWalletConnectionState();
   const navigate = useNavigate();
   const { getContract } = useGetContract();
+
+  const { address } = useAppKitAccount();
+
+  const [verified, setVerified] = useState<boolean>(true); //TODO: change default verfiication state to false
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
+
+  const handleVerifyingTelegram = async (): Promise<void> => {
+    if (!tgUser) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const resp = await postVerifyTelegram(tgUser);
+
+      if (!resp) {
+        addToast({
+          title: "wrong authentication, try again",
+        });
+
+        return;
+      }
+      setVerified(true);
+    } catch (e: any) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   //hooks
   useEffect(() => {
@@ -66,23 +103,37 @@ const Register = () => {
     setToTheWaletButtonEnabled(false);
   }, [registrationData]);
 
-  const register = async () => {
-    const contract = await getContract();
+  const register = async (): Promise<void> => {
+    try {
+      setIsLoading(true)
+      if (address && chosenTopics && name) {
+        const uuid: string = await postRegisterUser({
+          polygon_wallet: address,
+          topics: chosenTopics.map((item) => item.text),
+          name: name,
+        });
+        const contract = await getContract();
 
-    console.log({
-      name: registrationData.name,
-      uuid: uuidv4(),
-      topics: registrationData.chosenTopics.map((t) => t.text),
-    });
-    const tx = await contract.registerUser(
-      registrationData.name,
-      uuidv4(),
-      registrationData.chosenTopics.map((item) => item.text),
-    );
+        console.log({
+          name: registrationData.name,
+          uuid: uuid,
+          topics: registrationData.chosenTopics.map((t) => t.text),
+        });
+        const tx = await contract.registerUser(
+          registrationData.name,
+          uuid,
+          registrationData.chosenTopics.map((item) => item.text),
+        );
 
-    await tx.wait();
-    console.log("user registered");
-    navigate(routes.profile());
+        await tx.wait();
+        console.log("user registered");
+        navigate(routes.profile());
+      }
+    } catch (e: any) {
+      console.error("failed to register user ", e);
+    } finally {
+      setIsLoading(false)
+    }
   };
 
   //functions
@@ -129,10 +180,21 @@ const Register = () => {
                 Start earning money doing what you love to do
               </span>
             </div>
+
+            <TelegramLoginButton
+              botName="donly_test_bot"
+              onAuth={(tguser) => {
+                setTgUser(tguser);
+                handleVerifyingTelegram();
+                setCurrentRegistrationState(RegistrationState.info);
+              }}
+            />
             <MyButton
               className={styles.accentButton}
-              color="vasily"
+              color={verified ? "vasily" : "antivasily"}
+              disabled={!verified}
               radius="full"
+              isLoading={isLoading}
               onClick={() => {
                 setCurrentRegistrationState(RegistrationState.info);
               }}
@@ -211,6 +273,7 @@ const Register = () => {
                 className={styles.accentButton}
                 color={isConnected ? "vasily" : "antivasily"}
                 disabled={!isConnected}
+                isLoading={isLoading}
                 radius="full"
                 onPress={register}
               >

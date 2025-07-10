@@ -30,3 +30,15 @@ export const useRealBackend = currentApiMode === ApiMode.REAL_BACKEND;
 export const usePostman = currentApiMode === ApiMode.POSTMAN;
 
 console.log(`API Mode: ${currentApiMode}, Base URL: ${getBaseUrl()}`);
+
+export class ApiError extends Error {
+  status?: number;
+  data?: any;
+
+  constructor(message: string, status?: number, data?: any) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.data = data;
+  }
+}

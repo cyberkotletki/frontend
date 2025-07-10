@@ -2,6 +2,8 @@ import { Button, cn } from "@heroui/react";
 import { Image } from "@heroui/image";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAppKitAccount } from "@reown/appkit/react";
+import Decimal from "decimal.js";
 
 import styles from "./styles.module.scss";
 
@@ -14,9 +16,7 @@ import {
 } from "@/stores/userSlice";
 import { UserTopics } from "@/types/user";
 import { useGetContract } from "@/hooks/useWallet.ts";
-import {useAppKitAccount} from "@reown/appkit/react";
 import toPOL from "@/funcs/toPOL.ts";
-import Decimal from "decimal.js";
 
 const BackIcon = () => {
   return (
@@ -42,12 +42,12 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const userProfile = useAppSelector(getUserProfileSelector);
   const [balance, setBalance] = useState<Decimal>(new Decimal(0));
-  const {address} = useAppKitAccount();
+  const { address } = useAppKitAccount();
   const { getContract } = useGetContract();
 
   useEffect(() => {
     async function fetchBalance() {
-      const contract = await getContract()
+      const contract = await getContract();
       const balance = (await contract.users(address)).currentBalance;
 
       setBalance(toPOL(balance));

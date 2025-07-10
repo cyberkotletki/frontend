@@ -40,6 +40,7 @@
     "react-dom": "18.3.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "6.23.0",
+    "react-telegram-login": "^1.1.2",
     "tailwind-variants": "0.3.0",
     "tailwindcss": "3.4.16",
     "uuid": "^11.1.0"
