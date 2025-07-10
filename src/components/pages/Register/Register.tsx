@@ -1,5 +1,5 @@
 import { createAppKit } from "@reown/appkit/react";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@heroui/input";
 
 import styles from "./styles.module.scss";
@@ -10,7 +10,7 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { Topic, UserTopics } from "@/types/user.ts";
 import { TopicsCard } from "@/components/elements/TopicsCard/TopicsCard.tsx";
-import {setUserName} from "@/stores/userSlice.tsx";
+import { setUserName } from "@/stores/userSlice.tsx";
 
 createAppKit({
   adapters: [ethersAdapter],
@@ -35,9 +35,9 @@ enum RegistrationState {
 
 type RegistrationData = {
   registrationState: RegistrationState;
-  name: string,
+  name: string;
   chosenTopics: Topic[];
-}
+};
 
 const Register = () => {
   const [currentRegistrationState, setCurrentRegistrationState] =
@@ -45,9 +45,9 @@ const Register = () => {
   const [chosenTopics, setChosenTopics] = useState<Topic[]>([]);
   // const [name, SetName] = useState<string>();
 
-  useEffect(() =>{
-    if (!localStorage.getItem('registrationData')){
-      return
+  useEffect(() => {
+    if (!localStorage.getItem("registrationData")) {
+      return;
     }
     // const data = JSON.parse(localStorage.getItem('registrationData') | '[]');
   });
@@ -99,9 +99,9 @@ const Register = () => {
             <div className={"w-full flex flex-col gap-10"}>
               <Input
                 label={"Name"}
+                placeholder={"Your beautiful name"}
                 value={name}
                 onValueChange={setUserName}
-                placeholder={"Your beautiful name"}
               />
               <div className={"flex flex-col gap-4"}>
                 <span className={"text-2xl font-bold"}>Выберите категории</span>
@@ -145,13 +145,13 @@ const Register = () => {
                 <appkit-button />
               </div>
             </div>
-              <MyButton
-                  className={styles.accentButton}
-                  color="vasily"
-                  radius="full"
-              >
-                  Start earning money
-              </MyButton>
+            <MyButton
+              className={styles.accentButton}
+              color="vasily"
+              radius="full"
+            >
+              Start earning money
+            </MyButton>
           </>
         )}
       </div>

@@ -82,6 +82,7 @@ const WishPage = () => {
 
   const handleCopyLink = () => {
     const wishUrl = `${window.location.origin}/wish/${wish.id}`;
+
     navigator.clipboard
       .writeText(wishUrl)
       .then(() => {
@@ -182,11 +183,11 @@ const WishPage = () => {
         {/* Edit Drawer */}
         <Drawer
           backdrop="blur"
+          className={styles.drawerContent}
           isOpen={isEditOpen}
           placement="bottom"
           size="3xl"
           onClose={onEditClose}
-          className={styles.drawerContent}
         >
           <DrawerContent>
             <DrawerHeader className={styles.drawerHeader}>
@@ -204,80 +205,83 @@ const WishPage = () => {
                 </div>
                 <div className={styles.formGroup}>
                   <Checkbox
+                    classNames={{
+                      label: "text-white",
+                    }}
                     defaultSelected={wish.is_priority}
                     size="lg"
                     onChange={(isSelected) =>
                       setEditedWish({ ...editedWish, is_priority: isSelected })
                     }
-                    classNames={{
-                      label: "text-white",
-                    }}
                   >
                     Priority wish
                   </Checkbox>
                 </div>
                 <div className={styles.formGroup}>
                   <Input
+                    classNames={{
+                      input: "text-white",
+                      inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
+                      label: "text-white",
+                    }}
+                    defaultValue={wish.name}
                     label="Name"
                     placeholder="Enter wish name"
-                    defaultValue={wish.name}
                     onChange={(e) =>
                       setEditedWish({ ...editedWish, name: e.target.value })
                     }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Input
                     classNames={{
                       input: "text-white",
                       inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
                       label: "text-white",
                     }}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
+                    defaultValue={wish.description}
                     label="Description"
                     placeholder="Enter wish description"
-                    defaultValue={wish.description}
                     onChange={(e) =>
-                      setEditedWish({ ...editedWish, description: e.target.value })
+                      setEditedWish({
+                        ...editedWish,
+                        description: e.target.value,
+                      })
                     }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Input
                     classNames={{
                       input: "text-white",
                       inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
                       label: "text-white",
                     }}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
+                    defaultValue={wish.wish_url}
                     label="Link to item"
                     placeholder="https://example.com/item"
-                    defaultValue={wish.wish_url}
                     onChange={(e) =>
                       setEditedWish({ ...editedWish, wish_url: e.target.value })
                     }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Input
                     classNames={{
                       input: "text-white",
                       inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
                       label: "text-white",
                     }}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
-                    label="Target amount (ETH)"
-                    type="number"
-                    placeholder="1.0"
                     defaultValue={wish.pol_target.toString()}
+                    label="Target amount (ETH)"
+                    placeholder="1.0"
+                    type="number"
                     onChange={(e) =>
                       setEditedWish({
                         ...editedWish,
                         pol_target: parseFloat(e.target.value),
                       })
                     }
-                    classNames={{
-                      input: "text-white",
-                      inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
-                      label: "text-white",
-                    }}
                   />
                 </div>
               </div>
@@ -308,11 +312,11 @@ const WishPage = () => {
         {/* Share Drawer */}
         <Drawer
           backdrop="blur"
+          className={styles.drawerContent}
           isOpen={isShareOpen}
           placement="bottom"
           size="3xl"
           onClose={onShareClose}
-          className={styles.drawerContent}
         >
           <DrawerContent>
             <DrawerHeader className={styles.drawerHeader}>
@@ -325,8 +329,8 @@ const WishPage = () => {
                   onClick={() => handleShare("twitter")}
                 >
                   <Icon
-                    icon="mdi:twitter"
                     className={styles.shareIcon}
+                    icon="mdi:twitter"
                     width={32}
                   />
                   <span>Twitter</span>
@@ -336,8 +340,8 @@ const WishPage = () => {
                   onClick={() => handleShare("facebook")}
                 >
                   <Icon
-                    icon="mdi:facebook"
                     className={styles.shareIcon}
+                    icon="mdi:facebook"
                     width={32}
                   />
                   <span>Facebook</span>
@@ -347,16 +351,16 @@ const WishPage = () => {
                   onClick={() => handleShare("telegram")}
                 >
                   <Icon
-                    icon="mdi:telegram"
                     className={styles.shareIcon}
+                    icon="mdi:telegram"
                     width={32}
                   />
                   <span>Telegram</span>
                 </div>
                 <div className={styles.shareOption} onClick={handleCopyLink}>
                   <Icon
-                    icon="mdi:content-copy"
                     className={styles.shareIcon}
+                    icon="mdi:content-copy"
                     width={32}
                   />
                   <span>{linkCopied ? "Copied!" : "Copy Link"}</span>

@@ -21,7 +21,7 @@ export type Topic = {
 
 export const UserTopics: Topic[] = [
   { emoji: "🌱", text: "IRL" },
-  { emoji: "🎮", text: "Gayming" },
+  { emoji: "🎮", text: "Gaming" },
   { emoji: "🎵", text: "Music" },
   { emoji: "🎙️", text: "ASMR" },
   { emoji: "🎨", text: "Creative" },
