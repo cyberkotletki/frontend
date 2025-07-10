@@ -3,17 +3,27 @@ import { createAppKit } from "@reown/appkit/react";
 
 import { ethersAdapter, projectId, metadata } from "./site";
 
-export const net = (): AppKitNetwork => {
-  const url = import.meta.env.VITE_TESTNET_URL;
+export type WalletConfiguration = {
+  net: AppKitNetwork;
+  chainId: number;
+}
 
-  if (!url) {
+
+const net = (): AppKitNetwork => {
+  const url = import.meta.env.VITE_NETWORK_TESTNET_URL;
+  const chainID = import.meta.env.VITE_NETWORK_CHAIN_ID;
+  const networkName = import.meta.env.VITE_NETWORK_NAME;
+  const blockExplorerURL = import.meta.env.VITE_NETWORK_EXPLORER_URL;
+
+
+  if (!url || !chainID || !networkName || !blockExplorerURL) {
     throw new Error("TESTNET_URL is not defined");
   }
 
   return defineChain({
-    id: 80002,
-    name: "Amoy",
-    caipNetworkId: "eip155:80002",
+    id: parseInt(chainID),
+    name: networkName,
+    caipNetworkId: `eip155:${chainID}`,
     chainNamespace: "eip155",
     nativeCurrency: {
       decimals: 18,
@@ -26,12 +36,14 @@ export const net = (): AppKitNetwork => {
       },
     },
     blockExplorers: {
-      default: { name: "Explorer", url: "https://amoy.polygonscan.com" },
+      default: { name: "Explorer", url: blockExplorerURL },
     },
   }) as AppKitNetwork;
 };
 
-const modal = createAppKit({
+
+
+export const modal = createAppKit({
   adapters: [ethersAdapter],
   networks: [net()],
   metadata,
@@ -45,4 +57,4 @@ const modal = createAppKit({
   },
 });
 
-export default modal;
+
