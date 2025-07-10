@@ -1,7 +1,14 @@
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { Button, useDisclosure, Drawer, DrawerContent, DrawerHeader, DrawerBody } from "@heroui/react";
+import { useState, useEffect } from "react";
+import {
+  Button,
+  useDisclosure,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+} from "@heroui/react";
 
 import styles from "./styles.module.scss";
 
@@ -11,13 +18,56 @@ import { mockWishlistData, Wish } from "@/types/wishlist";
 import { useAppDispatch } from "@/stores/hooks.tsx";
 import { setWish } from "@/stores/wishSlice.tsx";
 import { routes } from "@/app/App.routes.ts";
+import { getWishlist } from "@/api/wishlist";
 
 const WishlistPage = () => {
   const dispatch = useAppDispatch();
   const [, setSelectedWish] = useState<Wish | null>(null);
   const navigate = useNavigate();
-  const { isOpen: isShareOpen, onOpen: onShareOpen, onClose: onShareClose } = useDisclosure();
+  const {
+    isOpen: isShareOpen,
+    onOpen: onShareOpen,
+    onClose: onShareClose,
+  } = useDisclosure();
   const [linkCopied, setLinkCopied] = useState(false);
+  const [wishes, setWishes] = useState<Wish[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        setIsLoading(true);
+        const userId = "user123";
+
+        console.log("Starting wishlist fetch for user:", userId);
+
+        const response = await getWishlist(userId);
+
+        console.log("Wishlist response in component:", response);
+
+        if (
+          response &&
+          response.wishes &&
+          Array.isArray(response.wishes) &&
+          response.wishes.length > 0
+        ) {
+          console.log("Setting wishes in state:", response.wishes);
+          setWishes(response.wishes);
+        } else {
+          console.warn("No wishes found in response or empty array");
+          setWishes([]);
+        }
+      } catch (error) {
+        console.error("Error loading wishlist:", error);
+        alert("Произошла ошибка при загрузке списка желаний");
+        setWishes(mockWishlistData.wishes);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWishlist();
+  }, []);
 
   const calculatePercentage = (current: number, target: number): number => {
     return Math.min(Math.round((current / target) * 100), 100);
@@ -35,7 +85,7 @@ const WishlistPage = () => {
   const handleOnWishClick = (wish: Wish) => {
     dispatch(setWish(wish));
     setSelectedWish(wish);
-    navigate(routes.wish(wish.id));
+    navigate(routes.wish(wish.uuid));
   };
 
   const handleAddBtnClick = () => {
@@ -49,13 +99,15 @@ const WishlistPage = () => {
 
   const handleCopyLink = () => {
     const wishlistUrl = window.location.href;
-    navigator.clipboard.writeText(wishlistUrl)
+
+    navigator.clipboard
+      .writeText(wishlistUrl)
       .then(() => {
         setLinkCopied(true);
         setTimeout(() => setLinkCopied(false), 2000);
       })
-      .catch(err => {
-        console.error('Failed to copy link: ', err);
+      .catch((err) => {
+        console.error("Failed to copy link: ", err);
       });
   };
 
@@ -71,7 +123,7 @@ const WishlistPage = () => {
           url: wishlistUrl,
         });
       } catch (err) {
-        console.error('Share failed:', err);
+        console.error("Share failed:", err);
         handleCopyLink();
       }
     } else {
@@ -124,11 +176,20 @@ const WishlistPage = () => {
       <div className={styles.wishlistPage}>
         <Banner mode="full" />
         <div className={styles.content}>
-          <div className={styles.wishlist}>
-            {sortWishesByPriority(mockWishlistData.wishes).map((wish) => (
-              <WishItem key={wish.id} wish={wish} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className={styles.loading}>Loading wishes...</div>
+          ) : (
+            <div className={styles.wishlist}>
+              {sortWishesByPriority(wishes).map((wish) => (
+                <WishItem key={wish.uuid} wish={wish} />
+              ))}
+              {wishes.length === 0 && (
+                <div className={styles.emptyState}>
+                  No wishes found. Add your first wish!
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className={styles.btnGroup}>
           <div className={styles.actionBtn}>
@@ -138,7 +199,10 @@ const WishlistPage = () => {
               size="lg"
               onPress={handleAddBtnClick}
             >
-              <Icon className={styles.actionIcon} icon="solar:add-circle-linear" />
+              <Icon
+                className={styles.actionIcon}
+                icon="solar:add-circle-linear"
+              />
             </Button>
           </div>
           <div className={styles.actionBtn}>
@@ -156,11 +220,11 @@ const WishlistPage = () => {
         {/* Share Drawer */}
         <Drawer
           backdrop="blur"
+          className={styles.drawerContent}
           isOpen={isShareOpen}
           placement="bottom"
           size="3xl"
           onClose={onShareClose}
-          className={styles.drawerContent}
         >
           <DrawerContent>
             <DrawerHeader className={styles.drawerHeader}>
@@ -168,21 +232,46 @@ const WishlistPage = () => {
             </DrawerHeader>
             <DrawerBody>
               <div className={styles.shareOptions}>
-                <div className={styles.shareOption} onClick={() => handleShare('twitter')}>
-                  <Icon icon="mdi:twitter" className={styles.shareIcon} width={32} />
+                <div
+                  className={styles.shareOption}
+                  onClick={() => handleShare("twitter")}
+                >
+                  <Icon
+                    className={styles.shareIcon}
+                    icon="mdi:twitter"
+                    width={32}
+                  />
                   <span>Twitter</span>
                 </div>
-                <div className={styles.shareOption} onClick={() => handleShare('facebook')}>
-                  <Icon icon="mdi:facebook" className={styles.shareIcon} width={32} />
+                <div
+                  className={styles.shareOption}
+                  onClick={() => handleShare("facebook")}
+                >
+                  <Icon
+                    className={styles.shareIcon}
+                    icon="mdi:facebook"
+                    width={32}
+                  />
                   <span>Facebook</span>
                 </div>
-                <div className={styles.shareOption} onClick={() => handleShare('telegram')}>
-                  <Icon icon="mdi:telegram" className={styles.shareIcon} width={32} />
+                <div
+                  className={styles.shareOption}
+                  onClick={() => handleShare("telegram")}
+                >
+                  <Icon
+                    className={styles.shareIcon}
+                    icon="mdi:telegram"
+                    width={32}
+                  />
                   <span>Telegram</span>
                 </div>
                 <div className={styles.shareOption} onClick={handleCopyLink}>
-                  <Icon icon="mdi:content-copy" className={styles.shareIcon} width={32} />
-                  <span>{linkCopied ? 'Copied!' : 'Copy Link'}</span>
+                  <Icon
+                    className={styles.shareIcon}
+                    icon="mdi:content-copy"
+                    width={32}
+                  />
+                  <span>{linkCopied ? "Copied!" : "Copy Link"}</span>
                 </div>
               </div>
             </DrawerBody>

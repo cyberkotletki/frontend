@@ -5,10 +5,7 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerBody,
-  DrawerFooter,
   useDisclosure,
-  Input,
-  Checkbox,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
@@ -19,9 +16,9 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import Banner from "@/components/elements/Banner/Banner.tsx";
 import { useAppSelector } from "@/stores/hooks.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import { mockWishlistData, Wish } from "@/types/wishlist";
+import { mockWishlistData } from "@/types/wishlist";
 import DonateDrawer from "@/components/pages/Donate/Donate.tsx";
-import Uploader from "@/components/elements/Uploader/Uploader.tsx";
+import EditWishDrawer from "@/components/pages/EditWish/EditWishDrawer.tsx";
 
 const WishPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,19 +26,13 @@ const WishPage = () => {
   const wishFromStore = useAppSelector((state) => state.wish.wish);
 
   const wish =
-    wishFromStore || mockWishlistData.wishes.find((w) => w.id === id);
+    wishFromStore || mockWishlistData.wishes.find((w) => w.uuid === id);
 
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure();
   const {
     isOpen: isShareOpen,
     onOpen: onShareOpen,
     onClose: onShareClose,
   } = useDisclosure();
-  const [editedWish, setEditedWish] = useState<Partial<Wish>>(wish || {});
   const [linkCopied, setLinkCopied] = useState(false);
 
   if (!wish) {
@@ -53,11 +44,6 @@ const WishPage = () => {
       </DefaultLayout>
     );
   }
-
-  const handleEditBtnClick = () => {
-    setEditedWish(wish);
-    onEditOpen();
-  };
 
   const handleShareBtnClick = () => {
     onShareOpen();
@@ -75,13 +61,8 @@ const WishPage = () => {
     }
   };
 
-  const handleSaveEdit = () => {
-    console.log("Saving edited wish:", editedWish);
-    onEditClose();
-  };
-
   const handleCopyLink = () => {
-    const wishUrl = `${window.location.origin}/wish/${wish.id}`;
+    const wishUrl = `${window.location.origin}/wish/${wish.uuid}`;
 
     navigator.clipboard
       .writeText(wishUrl)
@@ -95,7 +76,7 @@ const WishPage = () => {
   };
 
   const handleShare = async (platform: string) => {
-    const wishUrl = `${window.location.origin}/wish/${wish.id}`;
+    const wishUrl = `${window.location.origin}/wish/${wish.uuid}`;
     const shareText = `Check out my wish: ${wish.name}`;
 
     if (navigator.share) {
@@ -114,6 +95,10 @@ const WishPage = () => {
     }
 
     onShareClose();
+  };
+
+  const handleEditSuccess = () => {
+    console.log("Wish updated successfully!");
   };
 
   return (
@@ -149,7 +134,7 @@ const WishPage = () => {
             <img
               alt={wish.name}
               className={styles.wishImage}
-              src="/example.png"
+              src={wish.image || "/example.png"}
             />
           </div>
 
@@ -168,205 +153,94 @@ const WishPage = () => {
           </div>
         </div>
         <div className={styles.btnGroup}>
-          <div className={styles.actionBtn} onClick={handleEditBtnClick}>
-            <Button isIconOnly radius="full" size="lg">
-              <Icon className={styles.actionIcon} icon="solar:pen-bold" />
-            </Button>
+          <div className={styles.actionBtn}>
+            <EditWishDrawer
+              isPriority={wish.is_priority}
+              wishUuid={wish.uuid}
+              onSuccess={handleEditSuccess}
+            />
           </div>
-          <div className={styles.actionBtn} onClick={handleShareBtnClick}>
-            <Button isIconOnly radius="full" size="lg">
+          <div className={styles.actionBtn}>
+            <Button isIconOnly radius="full" size="lg" onPress={onShareOpen}>
               <Icon className={styles.actionIcon} icon="solar:share-bold" />
             </Button>
           </div>
         </div>
 
-        {/* Edit Drawer */}
-        <Drawer
-          backdrop="blur"
-          className={styles.drawerContent}
-          isOpen={isEditOpen}
-          placement="bottom"
-          size="3xl"
-          onClose={onEditClose}
-        >
-          <DrawerContent>
-            <DrawerHeader className={styles.drawerHeader}>
-              <div>Edit Wish</div>
-            </DrawerHeader>
-            <DrawerBody>
-              <div className={styles.editForm}>
-                <div className={styles.formGroup}>
-                  <Uploader
-                    defaultImage="/example.png"
-                    onImageUploaded={(url) =>
-                      setEditedWish({ ...editedWish, image_url: url })
-                    }
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Checkbox
-                    classNames={{
-                      label: "text-white",
-                    }}
-                    defaultSelected={wish.is_priority}
-                    size="lg"
-                    onChange={(isSelected) =>
-                      setEditedWish({ ...editedWish, is_priority: isSelected })
-                    }
-                  >
-                    Priority wish
-                  </Checkbox>
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
-                    classNames={{
-                      input: "text-white",
-                      inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
-                      label: "text-white",
-                    }}
-                    defaultValue={wish.name}
-                    label="Name"
-                    placeholder="Enter wish name"
-                    onChange={(e) =>
-                      setEditedWish({ ...editedWish, name: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
-                    classNames={{
-                      input: "text-white",
-                      inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
-                      label: "text-white",
-                    }}
-                    defaultValue={wish.description}
-                    label="Description"
-                    placeholder="Enter wish description"
-                    onChange={(e) =>
-                      setEditedWish({
-                        ...editedWish,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
-                    classNames={{
-                      input: "text-white",
-                      inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
-                      label: "text-white",
-                    }}
-                    defaultValue={wish.wish_url}
-                    label="Link to item"
-                    placeholder="https://example.com/item"
-                    onChange={(e) =>
-                      setEditedWish({ ...editedWish, wish_url: e.target.value })
-                    }
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <Input
-                    classNames={{
-                      input: "text-white",
-                      inputWrapper: "bg-[#2a2a2a] border-[#3a3a3a]",
-                      label: "text-white",
-                    }}
-                    defaultValue={wish.pol_target.toString()}
-                    label="Target amount (ETH)"
-                    placeholder="1.0"
-                    type="number"
-                    onChange={(e) =>
-                      setEditedWish({
-                        ...editedWish,
-                        pol_target: parseFloat(e.target.value),
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </DrawerBody>
-            <DrawerFooter className={styles.drawerFooter}>
-              <div className={styles.footerButtons}>
-                <MyButton
-                  className={styles.footerButton}
-                  color="antivasily"
-                  radius="full"
-                  onClick={onEditClose}
-                >
-                  Cancel
-                </MyButton>
-                <MyButton
-                  className={styles.footerButton}
-                  color="vasily"
-                  radius="full"
-                  onClick={handleSaveEdit}
-                >
-                  Save
-                </MyButton>
-              </div>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-
         {/* Share Drawer */}
         <Drawer
-          backdrop="blur"
-          className={styles.drawerContent}
           isOpen={isShareOpen}
           placement="bottom"
-          size="3xl"
-          onClose={onShareClose}
+          onOpenChange={onShareClose}
         >
-          <DrawerContent>
-            <DrawerHeader className={styles.drawerHeader}>
-              <div>Share Wish</div>
-            </DrawerHeader>
-            <DrawerBody>
-              <div className={styles.shareOptions}>
-                <div
-                  className={styles.shareOption}
-                  onClick={() => handleShare("twitter")}
-                >
-                  <Icon
-                    className={styles.shareIcon}
-                    icon="mdi:twitter"
-                    width={32}
-                  />
-                  <span>Twitter</span>
-                </div>
-                <div
-                  className={styles.shareOption}
-                  onClick={() => handleShare("facebook")}
-                >
-                  <Icon
-                    className={styles.shareIcon}
-                    icon="mdi:facebook"
-                    width={32}
-                  />
-                  <span>Facebook</span>
-                </div>
-                <div
-                  className={styles.shareOption}
-                  onClick={() => handleShare("telegram")}
-                >
-                  <Icon
-                    className={styles.shareIcon}
-                    icon="mdi:telegram"
-                    width={32}
-                  />
-                  <span>Telegram</span>
-                </div>
-                <div className={styles.shareOption} onClick={handleCopyLink}>
-                  <Icon
-                    className={styles.shareIcon}
-                    icon="mdi:content-copy"
-                    width={32}
-                  />
-                  <span>{linkCopied ? "Copied!" : "Copy Link"}</span>
-                </div>
-              </div>
-            </DrawerBody>
+          <DrawerContent className={styles.drawerContent}>
+            {(onClose) => (
+              <>
+                <DrawerHeader className={styles.drawerHeader}>
+                  <div>Share Wish</div>
+                </DrawerHeader>
+                <DrawerBody>
+                  <div className={styles.shareOptions}>
+                    <div
+                      className={styles.shareOption}
+                      onClick={() => {
+                        handleShare("twitter");
+                        onClose();
+                      }}
+                    >
+                      <Icon
+                        className={styles.shareIcon}
+                        icon="mdi:twitter"
+                        width={32}
+                      />
+                      <span>Twitter</span>
+                    </div>
+                    <div
+                      className={styles.shareOption}
+                      onClick={() => {
+                        handleShare("facebook");
+                        onClose();
+                      }}
+                    >
+                      <Icon
+                        className={styles.shareIcon}
+                        icon="mdi:facebook"
+                        width={32}
+                      />
+                      <span>Facebook</span>
+                    </div>
+                    <div
+                      className={styles.shareOption}
+                      onClick={() => {
+                        handleShare("telegram");
+                        onClose();
+                      }}
+                    >
+                      <Icon
+                        className={styles.shareIcon}
+                        icon="mdi:telegram"
+                        width={32}
+                      />
+                      <span>Telegram</span>
+                    </div>
+                    <div
+                      className={styles.shareOption}
+                      onClick={() => {
+                        handleCopyLink();
+                        onClose();
+                      }}
+                    >
+                      <Icon
+                        className={styles.shareIcon}
+                        icon="mdi:content-copy"
+                        width={32}
+                      />
+                      <span>{linkCopied ? "Copied!" : "Copy Link"}</span>
+                    </div>
+                  </div>
+                </DrawerBody>
+              </>
+            )}
           </DrawerContent>
         </Drawer>
       </div>

@@ -1,0 +1,118 @@
+.editWishContainer {
+  display: flex;
+  width: 100%;
+}
+
+.drawerContent {
+  background-color: #1a1a1a !important;
+  color: white !important;
+  z-index: 1000 !important;
+}
+
+.drawerHeader {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white !important;
+}
+
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.switchContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.switchLabel {
+  font-size: 14px;
+  color: white;
+  font-weight: 500;
+}
+
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.formGroup {
+  width: 100%;
+}
+
+.actionIcon {
+  font-size: 1.5rem;
+}
+
+.footerButtons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.footerButton {
+  flex: 1;
+}
+
+.drawerFooter {
+  padding: 1rem;
+}
+
+:global {
+  .nextui-drawer-content {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+  }
+
+  .nextui-drawer-header {
+    background-color: #1a1a1a !important;
+    color: white !important;
+  }
+
+  .nextui-drawer-body {
+    background-color: #1a1a1a !important;
+    color: white !important;
+  }
+
+  .nextui-drawer-footer {
+    background-color: #1a1a1a !important;
+    color: white !important;
+  }
+
+  .h-drawer-content {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+  }
+
+  .h-drawer-header {
+    background-color: #1a1a1a !important;
+    color: white !important;
+  }
+
+  .h-drawer-body {
+    background-color: #1a1a1a !important;
+    color: white !important;
+  }
+
+  .h-drawer-footer {
+    background-color: #1a1a1a !important;
+    color: white !important;
+  }
+
+  /* Стили для чекбокса */
+  .h-checkbox, .h-checkbox-label, .nextui-checkbox-label {
+    color: white !important;
+  }
+}

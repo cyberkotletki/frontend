@@ -1,5 +1,5 @@
 export interface Wish {
-  id: string;
+  uuid: string;
   wish_url: string | null;
   name: string;
   description: string | null;
@@ -13,10 +13,23 @@ export interface WishlistResponse {
   wishes: Wish[];
 }
 
+export interface CreateWishRequest {
+  wish_url?: string;
+  name: string;
+  description?: string;
+  image: string;
+  pol_target: number;
+  is_priority: boolean;
+}
+
+export interface CreateWishResponse {
+  wish_uuid: string;
+}
+
 export const mockWishlistData: WishlistResponse = {
   wishes: [
     {
-      id: "0197ec91-c0ee-729e-a85f-0d421763b998",
+      uuid: "0197ec91-c0ee-729e-a85f-0d421763b998",
       wish_url: "https://ozon.com/gaming-headset",
       name: "Gaming Headset Pro",
       description: "High-quality gaming headset with surround sound",
@@ -26,7 +39,7 @@ export const mockWishlistData: WishlistResponse = {
       is_priority: true,
     },
     {
-      id: "0197ec91-c0ee-729e-a85f-0d421763b999",
+      uuid: "0197ec91-c0ee-729e-a85f-0d421763b999",
       wish_url: "https://amazon.com/mechanical-keyboard",
       name: "Mechanical Keyboard RGB",
       description: "Professional mechanical keyboard with RGB lighting",
@@ -36,7 +49,7 @@ export const mockWishlistData: WishlistResponse = {
       is_priority: false,
     },
     {
-      id: "0197ec91-c0ee-729e-a85f-0d421763b996",
+      uuid: "0197ec91-c0ee-729e-a85f-0d421763b996",
       wish_url: null,
       name: "New Monitor 4K",
       description: null,
@@ -46,7 +59,7 @@ export const mockWishlistData: WishlistResponse = {
       is_priority: true,
     },
     {
-      id: "0197ec91-c0ee-729e-a85f-0d421763b997",
+      uuid: "0197ec91-c0ee-729e-a85f-0d421763b997",
       wish_url: "https://store.com/webcam",
       name: "Streaming Webcam HD",
       description: "Professional webcam for streaming and video calls",
