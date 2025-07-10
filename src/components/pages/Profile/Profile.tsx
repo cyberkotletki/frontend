@@ -11,7 +11,6 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
-import navigateTo from "@/funcs/navigateTo.ts";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const ProfilePage = () => {
     await disconnect();
     localStorage.removeItem("registrationData");
     logout();
-    navigateTo(routes.home());
+    navigate(routes.home());
   };
 
   const handleTransactionHistory = () => {

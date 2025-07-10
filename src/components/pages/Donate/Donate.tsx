@@ -10,13 +10,13 @@ import {
 import { Switch } from "@heroui/react";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
+import Decimal from "decimal.js";
 
 import styles from "./styles.module.scss";
 
 import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useGetContract } from "@/hooks/useWallet.ts";
-import Decimal from "decimal.js";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,9 +37,12 @@ const DonateDrawer = () => {
 
   const handleSubmit = async () => {
     const parsedAmount = new Decimal(amount);
-    const isValidAmount = !parsedAmount.isNaN() && parsedAmount.greaterThanOrEqualTo(0.01);
+    const isValidAmount =
+      !parsedAmount.isNaN() && parsedAmount.greaterThanOrEqualTo(0.01);
+
     if (!isValidAmount) {
       alert("Invalid donation amount");
+
       return;
     }
 
@@ -63,9 +66,14 @@ const DonateDrawer = () => {
         },
       };
 
-      const tx = await contract.donate(payment.uuid, payment.paymentUserData, payment.paymentInfo, {
-        value: weiAmount,
-      });
+      const tx = await contract.donate(
+        payment.uuid,
+        payment.paymentUserData,
+        payment.paymentInfo,
+        {
+          value: weiAmount,
+        },
+      );
 
       await tx.wait();
       console.log("payment credited");
@@ -80,7 +88,6 @@ const DonateDrawer = () => {
       alert("Something went wrong with the transaction.");
     }
   };
-
 
   return (
     <div className={styles.donateContainer}>
