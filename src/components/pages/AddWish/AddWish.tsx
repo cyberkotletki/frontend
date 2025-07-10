@@ -2,7 +2,7 @@ import { Checkbox, Input, Textarea } from "@heroui/react";
 import { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {Contract, ethers} from "ethers";
+import { Contract, ethers } from "ethers";
 
 import styles from "./styles.module.scss";
 
@@ -155,6 +155,7 @@ const AddWish = () => {
         transactionWish.description,
         transactionWish.completed,
       ]);
+
       await tx.wait();
 
       // await tx.wait();

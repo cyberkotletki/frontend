@@ -1,6 +1,7 @@
 import { Divider } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
+import { useDisconnect } from "@reown/appkit/react";
 
 import Banner from "../../elements/Banner/Banner.tsx";
 
@@ -9,9 +10,20 @@ import styles from "./styles.module.scss";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
+import { logout } from "@/stores/userSlice.tsx";
+import navigateTo from "@/funcs/navigateTo.ts";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const { disconnect } = useDisconnect();
+
+  const handleDisconnect = async () => {
+
+    await disconnect();
+    localStorage.removeItem('registrationData');
+    logout();
+    navigateTo(routes.home());
+  };
 
   const handleTransactionHistory = () => {
     navigate(routes.donathistory());
@@ -71,7 +83,13 @@ const ProfilePage = () => {
             </div>
           </div>
           <div className={styles.signOutBtn}>
-            <MyButton className="w-full" color="danger" radius="full" size="xl">
+            <MyButton
+              className="w-full"
+              color="danger"
+              radius="full"
+              size="xl"
+              onClick={handleDisconnect}
+            >
               Sign out
             </MyButton>
           </div>
