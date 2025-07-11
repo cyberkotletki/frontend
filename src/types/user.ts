@@ -98,6 +98,7 @@ export interface UserProfileResponse {
   avatar: string;
   balance: Decimal;
   topics: string[];
+  address: string;
 }
 
 export interface UserState {

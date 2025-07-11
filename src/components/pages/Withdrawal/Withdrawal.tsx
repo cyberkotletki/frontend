@@ -2,7 +2,6 @@ import { cn } from "@heroui/react";
 import { Input } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useAppKitAccount } from "@reown/appkit/react";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Decimal from "decimal.js";
 
@@ -33,7 +32,6 @@ const WithdrawalPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { getContract } = useGetContract();
   const { address } = useAppKitAccount();
-  const dispatch = useDispatch();
   const userProfile = useSelector(getUserProfile);
   const [currentBalance, setCurrentBalance] = useState<Decimal>(
     userProfile?.balance ? userProfile.balance : new Decimal(0),
@@ -71,7 +69,7 @@ const WithdrawalPage = () => {
     const weiAmount = BigInt(parsed.mul(1e18).toFixed(0)); // или toDecimalPlaces(0)
 
     try {
-      const tx = await contract.withdraw("qweqwe", "12", weiAmount);
+      const tx = await contract.withdraw("00", userProfile?.uuid, weiAmount);
 
       await tx.wait();
     } catch (e) {

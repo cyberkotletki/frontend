@@ -20,6 +20,7 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useGetContract } from "@/hooks/useWallet.ts";
 import { useUserProfile } from "@/hooks/useUserProfile.ts";
 import { getUserProfile } from "@/api/user.ts";
+import { UserProfileResponse } from "@/types/user.ts";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,7 +63,7 @@ const DonateDrawer = () => {
         return;
       }
 
-      const profile = await getUserProfile(toUUID);
+      const profile: UserProfileResponse = await getUserProfile(toUUID);
 
       const payment: Payment = {
         uuid: "1234",
@@ -75,7 +76,7 @@ const DonateDrawer = () => {
           fromUUID: userProfile?.uuid || "",
           toUUID: toUUID,
           wishUUID: wishUUID,
-          toAddress: "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
+          toAddress: profile.address,
           paymentType: 0,
         },
       };

@@ -14,7 +14,7 @@ export const postVerifyTelegram = async (
 ): Promise<boolean> => {
   try {
     const resp = await axiosInstance.post(
-      `${API_CONFIG.ENDPOINTS.STREAMER}/telegram`,
+      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}/telegram`,
       tg,
     );
 
@@ -41,7 +41,7 @@ export const postRegisterUser = async (user: UserDTO): Promise<string> => {
 
   try {
     const resp = await axiosInstance.post<RegisterUserResponse>(
-      `${API_CONFIG.ENDPOINTS.USER}/streamer/register`,
+      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}/streamer/register`,
       user,
       {
         headers,
@@ -71,10 +71,13 @@ export const loginUsingTelegramHeaders = async (): Promise<any> => {
   }
 
   try {
-    return await fetch(`${API_CONFIG.ENDPOINTS.USER}/streamer/login`, {
-      method: "POST",
-      headers,
-    });
+    return await fetch(
+      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}/streamer/login`,
+      {
+        method: "POST",
+        headers,
+      },
+    );
   } catch (e: any) {
     throw new ApiError(
       "failed to login",
