@@ -105,7 +105,7 @@ const Register = () => {
 
   const register = async (): Promise<void> => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       if (address && chosenTopics && name) {
         const uuid: string = await postRegisterUser({
           polygon_wallet: address,
@@ -132,7 +132,7 @@ const Register = () => {
     } catch (e: any) {
       console.error("failed to register user ", e);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -193,8 +193,8 @@ const Register = () => {
               className={styles.accentButton}
               color={verified ? "vasily" : "antivasily"}
               disabled={!verified}
-              radius="full"
               isLoading={isLoading}
+              radius="full"
               onClick={() => {
                 setCurrentRegistrationState(RegistrationState.info);
               }}
@@ -265,10 +265,9 @@ const Register = () => {
                 </span>
               </div>
 
-             <div className={'mt-20 w-full flex items-center justify-center'}>
-               <appkit-button />
-             </div>
-
+              <div className={"mt-20 w-full flex items-center justify-center"}>
+                <appkit-button />
+              </div>
             </div>
             <div className="flex gap-2">
               <MyButton

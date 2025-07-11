@@ -6,15 +6,13 @@ import { ethersAdapter, projectId, metadata } from "./site";
 export type WalletConfiguration = {
   net: AppKitNetwork;
   chainId: number;
-}
-
+};
 
 const net = (): AppKitNetwork => {
   const url = import.meta.env.VITE_NETWORK_TESTNET_URL;
   const chainID = import.meta.env.VITE_NETWORK_CHAIN_ID;
   const networkName = import.meta.env.VITE_NETWORK_NAME;
   const blockExplorerURL = import.meta.env.VITE_NETWORK_EXPLORER_URL;
-
 
   if (!url || !chainID || !networkName || !blockExplorerURL) {
     throw new Error("TESTNET_URL is not defined");
@@ -41,8 +39,6 @@ const net = (): AppKitNetwork => {
   }) as AppKitNetwork;
 };
 
-
-
 export const modal = createAppKit({
   adapters: [ethersAdapter],
   networks: [net()],
@@ -56,5 +52,3 @@ export const modal = createAppKit({
     "--w3m-accent": "#57c3d1",
   },
 });
-
-
