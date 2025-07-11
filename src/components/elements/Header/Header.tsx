@@ -57,20 +57,6 @@ const Header = () => {
 */
   const isStreamer = !!userProfile;
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const streamerUuid = "c35281bd-4740-48e4-b4b3-af05bad16383";
-        const profileData = await getUserProfile(streamerUuid);
-
-        dispatch(setUserProfile(profileData));
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-
-    fetchUserProfile();
-  }, [dispatch]);
 
   const handleBackClick = () => {
     navigate(-1);

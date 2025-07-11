@@ -16,8 +16,6 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const fetchInProgressRef = useRef(false);
 
-
-
   const applyUserAppearanceSettings = (profile: UserProfileResponse) => {
     if (profile.background_color) {
       document.documentElement.style.setProperty(
@@ -40,16 +38,19 @@ const UserProvider = ({ children }: UserProviderProps) => {
         const currentUserInfo = await getCurrentUserProfile();
 
         if (currentUserInfo && currentUserInfo.streamer_uuid) {
-          const fullProfile = await getUserProfile(
-            currentUserInfo.streamer_uuid,
-          );
+          const fullProfile = await getUserProfile(currentUserInfo.streamer_uuid);
 
           if (fullProfile) {
-            dispatch(setUserProfile(fullProfile));
+            const profileWithUuid = {
+              ...fullProfile,
+              uuid: currentUserInfo.streamer_uuid,
+            };
 
-            updateUserProfile(fullProfile);
+            dispatch(setUserProfile(profileWithUuid));
 
-            applyUserAppearanceSettings(fullProfile);
+            updateUserProfile(profileWithUuid);
+
+            applyUserAppearanceSettings(profileWithUuid);
           }
         } else if (userProfile) {
           dispatch(setUserProfile(userProfile));
@@ -64,6 +65,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
     };
 
     fetchUserProfile();
+
   }, []);
 
   return <>{children}</>;

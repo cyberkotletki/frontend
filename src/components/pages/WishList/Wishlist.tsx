@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Button,
@@ -25,6 +25,7 @@ const WishlistPage = () => {
   const dispatch = useAppDispatch();
   const [, setSelectedWish] = useState<Wish | null>(null);
   const navigate = useNavigate();
+  const { id: userId } = useParams<{ id: string }>();
   const {
     isOpen: isShareOpen,
     onOpen: onShareOpen,
@@ -36,9 +37,14 @@ const WishlistPage = () => {
 
   useEffect(() => {
     const fetchWishlist = async () => {
+      if (!userId) {
+        console.error("User ID not provided in URL");
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
-        const userId = "user123";
 
         console.log("Starting wishlist fetch for user:", userId);
 
@@ -68,7 +74,7 @@ const WishlistPage = () => {
     };
 
     fetchWishlist();
-  }, []);
+  }, [userId]);
 
   const calculatePercentage = (current: number, target: number): number => {
     return Math.min(Math.round((current / target) * 100), 100);

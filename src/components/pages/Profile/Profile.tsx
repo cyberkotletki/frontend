@@ -11,13 +11,14 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
-import {useUserProfile} from "@/hooks/useUserProfile.ts";
+import { useUserProfile } from "@/hooks/useUserProfile.ts";
+import { useAppSelector } from "@/stores/hooks";
+import { getUserProfile as getUserProfileSelector } from "@/stores/userSlice";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { disconnect } = useDisconnect();
-  // const {userProfile} = useUserProfile()
-
+  const userProfile = useAppSelector(getUserProfileSelector);
 
   const handleDisconnect = async () => {
     await disconnect();
@@ -32,7 +33,15 @@ const ProfilePage = () => {
   };
 
   const handleMyWishes = () => {
-    navigate(routes.wishlist("user123"));
+    console.log("userProfile:", userProfile);
+    console.log("userProfile.uuid:", userProfile?.uuid);
+
+    if (userProfile?.uuid) {
+      console.log("Navigating to wishlist with UUID:", userProfile.uuid);
+      navigate(routes.wishlist(userProfile.uuid));
+    } else {
+      console.warn("User UUID not available. UserProfile:", userProfile);
+    }
   };
 
   const handleSettings = () => {
@@ -42,8 +51,6 @@ const ProfilePage = () => {
   const handleWithdrawal = () => {
     navigate(routes.withdrawal());
   };
-
-
 
   return (
     <DefaultLayout overlayMode={"banner_compact"}>
@@ -100,3 +107,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
