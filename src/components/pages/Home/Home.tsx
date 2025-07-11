@@ -33,7 +33,7 @@ const HomePage = () => {
           description: "something went wrong",
         });
       } else {
-        const profile = await getUserProfile(resp);
+        const profile = await getUserProfile();
 
         updateUserProfile(profile);
         navigate(routes.profile());

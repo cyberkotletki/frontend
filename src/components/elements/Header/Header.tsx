@@ -57,7 +57,11 @@ const Header = () => {
   };
 
   const handleAvatarClick = () => {
-    navigate(routes.profile());
+    if (userProfile) {
+      navigate(routes.profile());
+    } else {
+      navigate(routes.home());
+    }
   };
 
   const getTopicEmoji = (topicName: string): string => {
@@ -81,23 +85,16 @@ const Header = () => {
           </span>
         )}
 
-        <div className={styles.avatar} onClick={handleAvatarClick}>
-          {userProfile ? (
+        {userProfile && (
+          <div className={styles.avatar} onClick={handleAvatarClick}>
             <Icon
               className={styles.avatarImage}
               height={40}
               icon="solar:user-linear"
               width={40}
             />
-          ) : (
-            <Icon
-              className={styles.avatarImage}
-              height={40}
-              icon="solar:user-linear"
-              width={40}
-            />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
