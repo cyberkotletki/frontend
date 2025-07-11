@@ -10,7 +10,7 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import { routes } from "@/app/App.routes.ts";
 import { loginUsingTelegramHeaders } from "@/api/auth.ts";
 import { useUserProfile } from "@/hooks/useUserProfile.ts";
-import { getUserProfile } from "@/api/user.ts";
+import { getUserProfile, getCurrentUserProfile } from "@/api/user.ts";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -33,12 +33,13 @@ const HomePage = () => {
           description: "something went wrong",
         });
       } else {
-        console.log("Login response data:", resp.data);
+        const currentUser = await getCurrentUserProfile();
 
-        const streamerUuid = resp.data?.streamer_uuid;
-        const profile = await getUserProfile(streamerUuid);
+        if (currentUser?.streamer_uuid) {
+          const profile = await getUserProfile(currentUser.streamer_uuid);
+          updateUserProfile(profile);
+        }
 
-        updateUserProfile(profile);
         navigate(routes.profile());
       }
     } catch (e) {
