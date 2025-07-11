@@ -1,9 +1,9 @@
 import { Button, cn } from "@heroui/react";
-import { Image } from "@heroui/image";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppKitAccount } from "@reown/appkit/react";
 import Decimal from "decimal.js";
+import { Icon } from "@iconify/react";
 
 import styles from "./styles.module.scss";
 
@@ -103,19 +103,17 @@ const Header = () => {
 
         <div className={styles.avatar} onClick={handleAvatarClick}>
           {userProfile ? (
-            <Image
-              alt={userProfile.name}
+            <Icon
               className={styles.avatarImage}
               height={40}
-              src={userProfile.avatar}
+              icon="solar:user-linear"
               width={40}
             />
           ) : (
-            <Image
-              alt="User Avatar"
+            <Icon
               className={styles.avatarImage}
               height={40}
-              src="/logo.png"
+              icon="solar:user-linear"
               width={40}
             />
           )}

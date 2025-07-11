@@ -14,9 +14,10 @@ import styles from "../styles.module.scss";
 
 import { MyButton } from "@/components/custom/MyButton";
 import Uploader from "@/components/elements/Uploader/Uploader";
-import { uploadImage } from "@/api/images";
+import { uploadImage, getImageUrl } from "@/api/images";
 import { updateUserAppearance, AppearanceSettings } from "@/api/user";
 import { UserProfileResponse } from "@/types/user";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface ColorPickerProps {
   color: string;
@@ -52,23 +53,30 @@ interface AppearanceTabProps {
 }
 
 const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
+  const { updatePartialUserProfile } = useUserProfile();
   const [bannerImage, setBannerImage] = useState<number | null>(null);
   const [avatarImage, setAvatarImage] = useState<number | null>(null);
   const [username, setUsername] = useState(userProfile?.name || "Username");
-  const [backgroundColor, setBackgroundColor] = useState("#1E1E1E");
+  const [backgroundColor, setBackgroundColor] = useState(
+    userProfile?.background_color || "#1E1E1E",
+  );
   const [backgroundImage, setBackgroundImage] = useState<number | null>(null);
-  const [buttonBgColor, setButtonBgColor] = useState("#7272FD");
-  const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
+  const [buttonBgColor, setButtonBgColor] = useState(
+    userProfile?.button_background_color || "#7272FD",
+  );
+  const [buttonTextColor, setButtonTextColor] = useState(
+    userProfile?.button_text_color || "#FFFFFF",
+  );
   const [isChanged, setIsChanged] = useState(false);
 
   const initialStateRef = useRef({
     bannerImage: null as number | null,
     avatarImage: null as number | null,
     username: userProfile?.name || "Username",
-    backgroundColor: "#1E1E1E",
+    backgroundColor: userProfile?.background_color || "#1E1E1E",
     backgroundImage: null as number | null,
-    buttonBgColor: "#7272FD",
-    buttonTextColor: "#FFFFFF",
+    buttonBgColor: userProfile?.button_background_color || "#7272FD",
+    buttonTextColor: userProfile?.button_text_color || "#FFFFFF",
   });
 
   const [tempBackgroundColor, setTempBackgroundColor] = useState("#1E1E1E");
@@ -118,9 +126,33 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
     }
   }, [isButtonStyleOpen, buttonBgColor, buttonTextColor]);
 
+  useEffect(() => {
+    if (userProfile) {
+      setUsername(userProfile.name || "Username");
+      setBackgroundColor(userProfile.background_color || "#1E1E1E");
+      setButtonBgColor(userProfile.button_background_color || "#7272FD");
+      setButtonTextColor(userProfile.button_text_color || "#FFFFFF");
+
+      initialStateRef.current = {
+        bannerImage: null,
+        avatarImage: null,
+        username: userProfile.name || "Username",
+        backgroundColor: userProfile.background_color || "#1E1E1E",
+        backgroundImage: null,
+        buttonBgColor: userProfile.button_background_color || "#7272FD",
+        buttonTextColor: userProfile.button_text_color || "#FFFFFF",
+      };
+    } else {
+      setButtonBgColor("#7272FD");
+      setButtonTextColor("#FFFFFF");
+      initialStateRef.current.buttonBgColor = "#7272FD";
+      initialStateRef.current.buttonTextColor = "#FFFFFF";
+    }
+  }, [userProfile]);
+
   const handleBannerUpload = async (file: File) => {
     try {
-      const response = await uploadImage(file);
+      const response = await uploadImage(file, "banner");
 
       setBannerImage(response.id);
       setIsChanged(true);
@@ -132,7 +164,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
 
   const handleAvatarUpload = async (file: File) => {
     try {
-      const response = await uploadImage(file);
+      const response = await uploadImage(file, "avatar");
 
       setAvatarImage(response.id);
       setIsChanged(true);
@@ -144,7 +176,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
 
   const handleBackgroundImageUpload = async (file: File) => {
     try {
-      const response = await uploadImage(file);
+      const response = await uploadImage(file, "background");
 
       setBackgroundImage(response.id);
       setIsChanged(true);
@@ -203,7 +235,13 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         payload.background_color = backgroundColor;
       }
 
-      await updateUserAppearance(payload);
+      if (userProfile?.topics) {
+        payload.topics = userProfile.topics;
+      }
+
+      const updatedProfile = await updateUserAppearance(payload);
+
+      updatePartialUserProfile(updatedProfile);
 
       initialStateRef.current = {
         bannerImage,
@@ -282,7 +320,16 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         <h2 className={styles.sectionTitle}>Banner</h2>
         <div className={styles.bannerContainer}>
           <div className={styles.bannerPreview}>
-            <img alt="Banner" src="/example.png" />
+            <img
+              alt="Banner"
+              src={
+                bannerImage
+                  ? getImageUrl(bannerImage)
+                  : userProfile?.banner
+                    ? getImageUrl(userProfile.banner)
+                    : "/example.png"
+              }
+            />
             <button className={styles.editBannerBtn} onClick={onBannerOpen}>
               <Icon className={styles.editIcon} icon="solar:pen-bold" />
               Change banner
@@ -296,7 +343,16 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         <div className={styles.profileSection}>
           <div className={styles.avatarContainer}>
             <div className={styles.avatar}>
-              <img alt="Avatar" src="/example.png" />
+              <img
+                alt="Avatar"
+                src={
+                  avatarImage
+                    ? getImageUrl(avatarImage)
+                    : userProfile?.avatar
+                      ? getImageUrl(userProfile.avatar)
+                      : "/example.png"
+                }
+              />
               <button className={styles.editAvatarBtn} onClick={onAvatarOpen}>
                 <Icon className={styles.editIcon} icon="solar:pen-bold" />
               </button>
@@ -326,18 +382,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
               vasily
             </MyButton>
           </div>
-          <div className={styles.buttonPreview}>
-            <MyButton
-              color="custom"
-              radius="md"
-              style={{
-                backgroundColor: buttonBgColor,
-                color: buttonTextColor,
-              }}
-            >
-              antivasily
-            </MyButton>
-          </div>
+
           <button
             className={styles.editButtonStyleBtn}
             onClick={onButtonStyleOpen}
@@ -353,7 +398,12 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
           className={styles.backgroundPreview}
           style={{
             backgroundColor: backgroundColor,
-            backgroundImage: backgroundImage ? `url('/example.png')` : "none",
+            backgroundImage:
+              backgroundImage && userProfile?.background_image
+                ? `url('${getImageUrl(backgroundImage)}')`
+                : userProfile?.background_image
+                  ? `url('${getImageUrl(userProfile.background_image)}')`
+                  : "none",
           }}
         >
           <button
@@ -590,8 +640,8 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
                   color="custom"
                   radius="full"
                   style={{
-                    backgroundColor: tempButtonBgColor,
-                    color: tempButtonTextColor,
+                    backgroundColor: tempButtonBgColor || "#7272FD",
+                    color: tempButtonTextColor || "#FFFFFF",
                   }}
                 >
                   Button Preview
