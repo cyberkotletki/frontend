@@ -21,7 +21,10 @@ export const AppRouter = () => {
       <Route element={<AddWish />} path={routes.addwish()} />
       <Route element={<ProfilePage />} path={routes.profile()} />
       <Route element={<WishlistPage />} path={routes.wishlist(":id")} />
-      <Route element={<WishPage />} path={routes.wish(":id")} />
+      <Route
+        element={<WishPage />}
+        path={routes.wish(":wishlistId", ":wishId")}
+      />
       <Route element={<Settings />} path={routes.settings()} />
       <Route element={<DonatHistoryPage />} path={routes.donathistory()} />
       <Route element={<WithdrawalPage />} path={routes.withdrawal()} />

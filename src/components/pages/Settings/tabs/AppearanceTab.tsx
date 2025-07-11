@@ -9,6 +9,7 @@ import {
   Input,
   Divider,
 } from "@heroui/react";
+import { addToast } from "@heroui/toast";
 
 import styles from "../styles.module.scss";
 
@@ -259,10 +260,16 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       );
 
       setIsChanged(false);
-      alert("Appearance settings saved");
+      addToast({
+        title: "Settings saved!",
+        description: "Your profile has been updated with new style",
+      });
     } catch (error) {
       console.error("Error saving settings:", error);
-      alert("Error saving settings");
+      addToast({
+        title: "Save error",
+        description: "Failed to save appearance settings",
+      });
     }
   };
 

@@ -11,6 +11,7 @@ import {
 } from "@heroui/react";
 
 import styles from "./styles.module.scss";
+
 import Spinner from "@/components/elements/Spinner/Spinner";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Banner from "@/components/elements/Banner/Banner";
@@ -91,7 +92,7 @@ const WishlistPage = () => {
   const handleOnWishClick = (wish: Wish) => {
     dispatch(setWish(wish));
     setSelectedWish(wish);
-    navigate(routes.wish(wish.uuid));
+    navigate(routes.wish(userId!, wish.uuid));
   };
 
   const handleAddBtnClick = () => {

@@ -10,6 +10,7 @@ import { setUserName, addTopic, removeTopic } from "@/stores/userSlice.tsx";
 import { UserProfileResponse } from "@/types/user";
 import { updateUserAppearance } from "@/api/user";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { useToast } from "@/hooks/useToast";
 
 interface AccountTabProps {
   userProfile: UserProfileResponse | null;
@@ -18,6 +19,7 @@ interface AccountTabProps {
 
 const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
   const { updatePartialUserProfile } = useUserProfile();
+  const { addToast } = useToast();
   const [newTopic, setNewTopic] = useState("");
   const [isAddingTopic, setIsAddingTopic] = useState(false);
   const [userName, setUserNameLocal] = useState(userProfile?.name || "");
@@ -66,14 +68,19 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
       });
 
       dispatch(setUserName(userName));
-
       updatePartialUserProfile(updatedProfile);
-
       setIsChanged(false);
-      alert("Account settings saved successfully");
+
+      addToast({
+        title: "Settings saved!",
+        description: "Your data has been successfully updated",
+      });
     } catch (error) {
       console.error("Error saving account settings:", error);
-      alert("Error saving account settings");
+      addToast({
+        title: "Save error",
+        description: "Failed to save settings. Please try again",
+      });
     }
   };
 

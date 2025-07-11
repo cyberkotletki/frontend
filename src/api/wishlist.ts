@@ -83,3 +83,27 @@ export const editWish = async (editData: EditWishRequest): Promise<void> => {
     throw error;
   }
 };
+
+export const getWishFromWishlist = async (
+  wishlistId: string,
+  wishId: string,
+): Promise<any> => {
+  try {
+    console.log("Requesting wish from wishlist:", { wishlistId, wishId });
+
+    const wishlistResponse = await getWishlist(wishlistId);
+
+    const wish = wishlistResponse.wishes.find((w) => w.uuid === wishId);
+
+    if (!wish) {
+      throw new Error(
+        `Wish with id ${wishId} not found in wishlist ${wishlistId}`,
+      );
+    }
+
+    return wish;
+  } catch (error) {
+    console.error("Error fetching wish from wishlist:", error);
+    throw error;
+  }
+};

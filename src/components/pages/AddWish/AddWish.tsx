@@ -1,8 +1,8 @@
 import { Checkbox, Input, Textarea } from "@heroui/react";
 import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
+import { addToast } from "@heroui/toast";
 
 import styles from "./styles.module.scss";
 
@@ -16,7 +16,6 @@ import { WishDto } from "@/types/transaction-types/wish-dto.ts";
 import { useGetContract } from "@/hooks/useWallet.ts";
 
 const AddWish = () => {
-  // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<CreateWishRequest>>({
     name: "",
@@ -24,9 +23,8 @@ const AddWish = () => {
     wish_url: "",
     pol_target: 0.01,
     is_priority: false,
-    image: "",
   });
-  const [uploadedImageId, setUploadedImageId] = useState<string | null>(null);
+  const [uploadedImageId, setUploadedImageId] = useState<number | null>(null);
   const [isFormValid, setIsFormValid] = useState(false);
   const { getContract } = useGetContract();
   const userProfile = useSelector(getUserProfile);
@@ -36,7 +34,7 @@ const AddWish = () => {
       formData.name &&
         formData.pol_target &&
         formData.pol_target > 0 &&
-        uploadedImageId,
+        uploadedImageId !== null,
     );
 
     setIsFormValid(isValid);
@@ -78,107 +76,167 @@ const AddWish = () => {
 
   const handleImageUploaded = (imageUrl: string, imageId: number) => {
     console.log("Image uploaded in AddWish:", imageUrl, imageId);
-    setUploadedImageId(String(imageId));
-    setFormData((prev) => ({
-      ...prev,
-      image: String(imageId),
-    }));
+    setUploadedImageId(imageId);
   };
 
   const sendWishAndGetUUID = async (): Promise<string> => {
-    if (!formData.name || !formData.pol_target || !uploadedImageId) {
-      alert("Пожалуйста, заполните все обязательные поля");
+    if (!formData.name || !formData.pol_target || uploadedImageId === null) {
+      addToast({
+        title: "Fill all fields",
+        description: "Please fill all required fields before adding a wish",
+      });
       throw new Error("fields not filled right");
     }
 
     try {
       const wishData: CreateWishRequest = {
         name: formData.name!,
-        description: formData.description,
-        wish_url: formData.wish_url,
+        description: formData.description || undefined,
+        wish_url: formData.wish_url || undefined,
         pol_target: formData.pol_target!,
         is_priority: formData.is_priority!,
         image: uploadedImageId,
       };
+
       const response = await createWish(wishData);
 
       console.log("Wish created successfully:", response);
 
       return response.wish_uuid;
-      // navigate(routes.wishlist("user123"));
     } catch (error) {
       console.error("Error creating wish:", error);
-      alert(
-        "Произошла ошибка при создании желания. Пожалуйста, попробуйте снова.",
-      );
-    } finally {
-      setIsLoading(false);
+      addToast({
+        title: "Error creating wish",
+        description: "Failed to create wish. Check connection and try again",
+      });
+      throw error;
     }
-
-    return "";
   };
 
   const handleSubmit = async () => {
-    if (!formData.wish_url || !formData.pol_target || !formData.name) {
-      alert("Пожалуйста, заполните все обязательные поля");
-      throw new Error("fields not filled right");
+    if (!formData.name || !formData.pol_target || uploadedImageId === null) {
+      addToast({
+        title: "Fill all fields",
+        description: "Please fill all required fields",
+      });
+
+      return;
     }
 
     if (!userProfile) {
-      throw new Error("user isn't registered");
+      addToast({
+        title: "Authorization error",
+        description: "User not registered. Please sign in to the system",
+      });
+
+      return;
+    }
+
+    if (formData.pol_target <= 0) {
+      addToast({
+        title: "Invalid price",
+        description: "Price must be greater than zero",
+      });
+
+      return;
     }
     setIsLoading(true);
 
     try {
       const uuid: string = await sendWishAndGetUUID();
-      const transactionWish: WishDto = {
-        userUUID: userProfile.uuid,
-        uuid: uuid,
-        currentBalance: 0,
-        price: formData.pol_target,
-        name: formData.name,
-        link: formData.wish_url,
-        description: formData.description,
-        completed: false,
-      };
 
-      const contract: Contract = await getContract();
+      addToast({
+        title: "Wish created!",
+        description: "Your wish has been successfully added to the system",
+      });
 
-      console.log(contract);
-      const tx = await contract.addWish([
-        uuid,
-        transactionWish.uuid,
-        transactionWish.currentBalance,
-        ethers.parseEther(transactionWish.price.toString()),
-        transactionWish.name,
-        transactionWish.link,
-        transactionWish.description,
-        transactionWish.completed,
-      ]);
+      try {
+        const contract = await getContract();
 
-      await tx.wait();
+        if (!contract) {
+          console.warn("Contract not available, but API creation succeeded");
+          addToast({
+            title: "Partially ready",
+            description:
+              "Wish created, blockchain registration will be completed later",
+          });
+          setFormData({
+            name: "",
+            description: "",
+            wish_url: "",
+            pol_target: 0.01,
+            is_priority: false,
+          });
+          setUploadedImageId(null);
 
-      // await tx.wait();
-      console.log("transaction succesfully completed");
-    } catch (e) {
-      console.error(e);
+          return;
+        }
+
+        // Затем добавляем в блокчейн
+        const transactionWish: WishDto = {
+          userUUID: userProfile.uuid,
+          uuid: uuid,
+          currentBalance: 0,
+          price: formData.pol_target,
+          name: formData.name,
+          link: formData.wish_url || "",
+          description: formData.description || "",
+          completed: false,
+        };
+
+        console.log("Adding wish to blockchain:", transactionWish);
+
+        const tx = await contract.addWish([
+          uuid,
+          transactionWish.uuid,
+          transactionWish.currentBalance,
+          ethers.parseEther(transactionWish.price.toString()),
+          transactionWish.name,
+          transactionWish.link,
+          transactionWish.description,
+          transactionWish.completed,
+        ]);
+
+        await tx.wait();
+        console.log("Wish successfully added to blockchain");
+
+        addToast({
+          title: "All set! ",
+          description: "Wish fully added to system and blockchain",
+        });
+      } catch (blockchainError) {
+        console.warn(
+          "Blockchain operation failed, but API creation succeeded:",
+          blockchainError,
+        );
+        addToast({
+          title: "Almost ready!",
+          description:
+            "Wish created, blockchain part will be completed automatically - Blockchain operation failed",
+        });
+      }
+
+      setFormData({
+        name: "",
+        description: "",
+        wish_url: "",
+        pol_target: 0.01,
+        is_priority: false,
+      });
+      setUploadedImageId(null);
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      addToast({
+        title: "Something went wrong",
+        description: "Please try again in a few seconds",
+      });
     } finally {
       setIsLoading(false);
-    }
-
-    if (formData.pol_target <= 0) {
-      alert("Цена должна быть больше нуля");
-
-      return;
     }
   };
 
   const handleDeleteImage = () => {
     setUploadedImageId(null);
-    setFormData((prev) => ({
-      ...prev,
-      image: "",
-    }));
   };
 
   return (
@@ -187,14 +245,15 @@ const AddWish = () => {
         <div className={styles.content}>
           <div className={styles.form}>
             <h2 className={styles.formTitle}>Add new wish</h2>
+
             <Input
-              isRequired
-              label="Link"
+              label="Link (Optional)"
               name="wish_url"
               placeholder="Enter your wish link"
               value={formData.wish_url || ""}
               onChange={handleInputChange}
             />
+
             <Input
               isRequired
               label="Name"
@@ -203,8 +262,9 @@ const AddWish = () => {
               value={formData.name || ""}
               onChange={handleInputChange}
             />
+
             <Textarea
-              label="Description"
+              label="Description (Optional)"
               minRows={3}
               name="description"
               placeholder="Enter the description of your wish"
@@ -218,6 +278,7 @@ const AddWish = () => {
             />
 
             <Input
+              isRequired
               endContent={<div className="text-white">POL</div>}
               label="Price"
               min="0.01"

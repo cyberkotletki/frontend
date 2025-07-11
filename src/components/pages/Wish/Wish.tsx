@@ -8,21 +8,27 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import styles from "./styles.module.scss";
 
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import Banner from "@/components/elements/Banner/Banner.tsx";
-import { useAppSelector } from "@/stores/hooks.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import DonateDrawer from "@/components/pages/Donate/Donate.tsx";
 import EditWishDrawer from "@/components/pages/EditWish/EditWishDrawer.tsx";
+import { getWishFromWishlist } from "@/api/wishlist.ts";
 
 const WishPage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { wishlistId, wishId } = useParams<{
+    wishlistId: string;
+    wishId: string;
+  }>();
   const navigate = useNavigate();
-  const wishFromStore = useAppSelector((state) => state.wish.wish);
+
+  const [wish, setWish] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     isOpen: isShareOpen,
@@ -31,7 +37,46 @@ const WishPage = () => {
   } = useDisclosure();
   const [linkCopied, setLinkCopied] = useState(false);
 
-  if (!wishFromStore || wishFromStore.uuid !== id) {
+  useEffect(() => {
+    const fetchWish = async () => {
+      if (!wishlistId || !wishId) {
+        setError("Invalid URL parameters");
+        setLoading(false);
+
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const fetchedWish = await getWishFromWishlist(wishlistId, wishId);
+
+        setWish(fetchedWish);
+      } catch (_err) {
+        setError("Failed to load wish. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWish();
+  }, [wishlistId, wishId]);
+
+  if (loading) {
+    return (
+      <DefaultLayout overlayMode={"header"}>
+        <div className={styles.content}>
+          <div className={styles.loadingState}>
+            <Icon height={64} icon="solar:loading-linear" width={64} />
+            <h2>Loading Wish...</h2>
+          </div>
+        </div>
+      </DefaultLayout>
+    );
+  }
+
+  if (error || !wish) {
     return (
       <DefaultLayout overlayMode={"header"}>
         <div className={styles.content}>
@@ -52,8 +97,6 @@ const WishPage = () => {
     );
   }
 
-  const wish = wishFromStore;
-
   const handleShareBtnClick = () => {
     onShareOpen();
   };
@@ -71,7 +114,7 @@ const WishPage = () => {
   };
 
   const handleCopyLink = () => {
-    const wishUrl = `${window.location.origin}/wish/${wish.uuid}`;
+    const wishUrl = `${window.location.origin}/wishlist/${wishlistId}/wish/${wishId}`;
 
     navigator.clipboard
       .writeText(wishUrl)
@@ -85,7 +128,7 @@ const WishPage = () => {
   };
 
   const handleShare = async (platform: string) => {
-    const wishUrl = `${window.location.origin}/wish/${wish.uuid}`;
+    const wishUrl = `${window.location.origin}/wishlist/${wishlistId}/wish/${wishId}`;
     const shareText = `Check out my wish: ${wish.name}`;
 
     if (navigator.share) {

@@ -17,7 +17,7 @@ export interface CreateWishRequest {
   wish_url?: string;
   name: string;
   description?: string;
-  image: string;
+  image: number;
   pol_target: number;
   is_priority: boolean;
 }
