@@ -11,11 +11,10 @@ import {
 } from "@heroui/react";
 
 import styles from "./styles.module.scss";
-
 import Spinner from "@/components/elements/Spinner/Spinner";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Banner from "@/components/elements/Banner/Banner";
-import { mockWishlistData, Wish } from "@/types/wishlist";
+import { Wish } from "@/types/wishlist";
 import { useAppDispatch } from "@/stores/hooks.tsx";
 import { setWish } from "@/stores/wishSlice.tsx";
 import { routes } from "@/app/App.routes.ts";
@@ -40,6 +39,7 @@ const WishlistPage = () => {
       if (!userId) {
         console.error("User ID not provided in URL");
         setIsLoading(false);
+
         return;
       }
 
@@ -66,8 +66,7 @@ const WishlistPage = () => {
         }
       } catch (error) {
         console.error("Error loading wishlist:", error);
-        alert("Произошла ошибка при загрузке списка желаний");
-        setWishes(mockWishlistData.wishes);
+        setWishes([]);
       } finally {
         setIsLoading(false);
       }

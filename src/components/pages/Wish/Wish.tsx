@@ -16,7 +16,6 @@ import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import Banner from "@/components/elements/Banner/Banner.tsx";
 import { useAppSelector } from "@/stores/hooks.tsx";
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import { mockWishlistData } from "@/types/wishlist";
 import DonateDrawer from "@/components/pages/Donate/Donate.tsx";
 import EditWishDrawer from "@/components/pages/EditWish/EditWishDrawer.tsx";
 
@@ -25,9 +24,6 @@ const WishPage = () => {
   const navigate = useNavigate();
   const wishFromStore = useAppSelector((state) => state.wish.wish);
 
-  const wish =
-    wishFromStore || mockWishlistData.wishes.find((w) => w.uuid === id);
-
   const {
     isOpen: isShareOpen,
     onOpen: onShareOpen,
@@ -35,15 +31,28 @@ const WishPage = () => {
   } = useDisclosure();
   const [linkCopied, setLinkCopied] = useState(false);
 
-  if (!wish) {
+  if (!wishFromStore || wishFromStore.uuid !== id) {
     return (
       <DefaultLayout overlayMode={"header"}>
         <div className={styles.content}>
-          <div>Wish not found</div>
+          <div className={styles.errorState}>
+            <Icon height={64} icon="solar:sad-circle-linear" width={64} />
+            <h2>Wish not found</h2>
+            <p>Please select a wish from the wishlist to view details.</p>
+            <MyButton
+              color="primary"
+              radius="full"
+              onClick={() => navigate(-1)}
+            >
+              Go Back
+            </MyButton>
+          </div>
         </div>
       </DefaultLayout>
     );
   }
+
+  const wish = wishFromStore;
 
   const handleShareBtnClick = () => {
     onShareOpen();

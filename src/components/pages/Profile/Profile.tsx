@@ -11,7 +11,6 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
-import { useUserProfile } from "@/hooks/useUserProfile.ts";
 import { useAppSelector } from "@/stores/hooks";
 import { getUserProfile as getUserProfileSelector } from "@/stores/userSlice";
 
@@ -107,4 +106,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-

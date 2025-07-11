@@ -83,17 +83,3 @@ export const editWish = async (editData: EditWishRequest): Promise<void> => {
     throw error;
   }
 };
-
-export const getWishDetails = async (wishId: string) => {
-  try {
-    const response = await axiosInstance.get(
-      `${API_CONFIG.ENDPOINTS.WISHLIST}/${wishId}`,
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching wish details:", error);
-
-    return null;
-  }
-};

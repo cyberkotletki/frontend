@@ -1,4 +1,5 @@
 import { retrieveRawInitData } from "@telegram-apps/sdk";
+
 import { TelegramUser } from "@/components/elements/TelegramAuth/TelegramAuth.tsx";
 import { ApiError, axiosInstance } from "@/api/axios.ts";
 import { API_CONFIG } from "@/config/api.ts";

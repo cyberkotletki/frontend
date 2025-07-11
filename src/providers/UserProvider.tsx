@@ -38,7 +38,9 @@ const UserProvider = ({ children }: UserProviderProps) => {
         const currentUserInfo = await getCurrentUserProfile();
 
         if (currentUserInfo && currentUserInfo.streamer_uuid) {
-          const fullProfile = await getUserProfile(currentUserInfo.streamer_uuid);
+          const fullProfile = await getUserProfile(
+            currentUserInfo.streamer_uuid,
+          );
 
           if (fullProfile) {
             const profileWithUuid = {
@@ -65,7 +67,6 @@ const UserProvider = ({ children }: UserProviderProps) => {
     };
 
     fetchUserProfile();
-
   }, []);
 
   return <>{children}</>;

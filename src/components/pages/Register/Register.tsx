@@ -66,7 +66,7 @@ const Register = () => {
 
   const { address } = useAppKitAccount();
 
-  const [verified, setVerified] = useState<boolean>(true); //TODO: change default verfiication state to false
+  const [verified, setVerified] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
 
@@ -297,4 +297,3 @@ const Register = () => {
 };
 
 export default Register;
-

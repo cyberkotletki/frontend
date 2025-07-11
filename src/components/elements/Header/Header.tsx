@@ -1,6 +1,6 @@
 import { Button, cn } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppKitAccount } from "@reown/appkit/react";
 import Decimal from "decimal.js";
 import { Icon } from "@iconify/react";
@@ -8,15 +8,10 @@ import { Icon } from "@iconify/react";
 import styles from "./styles.module.scss";
 
 import { routes } from "@/app/App.routes.ts";
-import { getUserProfile } from "@/api/user";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import {
-  getUserProfile as getUserProfileSelector,
-  setUserProfile,
-} from "@/stores/userSlice";
+import { getUserProfile as getUserProfileSelector } from "@/stores/userSlice";
 import { UserTopics } from "@/types/user";
 import { useGetContract } from "@/hooks/useWallet.ts";
-import toPOL from "@/funcs/toPOL.ts";
 
 const BackIcon = () => {
   return (
@@ -44,7 +39,7 @@ const Header = () => {
   const [balance, setBalance] = useState<Decimal>(new Decimal(0));
   const { address } = useAppKitAccount();
   const { getContract } = useGetContract();
-/*
+  /*
   useEffect(() => {
     async function fetchBalance() {
       const contract = await getContract();
@@ -56,7 +51,6 @@ const Header = () => {
   }, [getContract]);
 */
   const isStreamer = !!userProfile;
-
 
   const handleBackClick = () => {
     navigate(-1);
