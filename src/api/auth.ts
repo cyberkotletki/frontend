@@ -58,7 +58,7 @@ export const postRegisterUser = async (user: UserDTO): Promise<string> => {
   }
 };
 
-export const loginUsingTelegramHeaders = async (): Promise<void> => {
+export const loginUsingTelegramHeaders = async (): Promise<any> => {
   const initDataRaw = retrieveRawInitData();
 
   let headers = {};
@@ -70,7 +70,7 @@ export const loginUsingTelegramHeaders = async (): Promise<void> => {
   }
 
   try {
-    await fetch(`${API_CONFIG.ENDPOINTS.USER}/streamer/login`, {
+    return await fetch(`${API_CONFIG.ENDPOINTS.USER}/streamer/login`, {
       method: "POST",
       headers,
     });
