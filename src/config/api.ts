@@ -6,5 +6,6 @@ export const API_CONFIG = {
     UPLOAD_IMAGE: "/static/upload",
     STATIC: "/static",
     USER: "/user",
+    STREAMER: "/streamer",
   },
 };
