@@ -16,8 +16,6 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const fetchInProgressRef = useRef(false);
 
-
-
   const applyUserAppearanceSettings = (profile: UserProfileResponse) => {
     if (profile.background_color) {
       document.documentElement.style.setProperty(

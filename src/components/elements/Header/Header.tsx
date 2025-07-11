@@ -16,7 +16,6 @@ import {
 } from "@/stores/userSlice";
 import { UserTopics } from "@/types/user";
 import { useGetContract } from "@/hooks/useWallet.ts";
-import toPOL from "@/funcs/toPOL.ts";
 
 const BackIcon = () => {
   return (
@@ -44,7 +43,7 @@ const Header = () => {
   const [balance, setBalance] = useState<Decimal>(new Decimal(0));
   const { address } = useAppKitAccount();
   const { getContract } = useGetContract();
-/*
+  /*
   useEffect(() => {
     async function fetchBalance() {
       const contract = await getContract();
@@ -53,7 +52,7 @@ const Header = () => {
       setBalance(toPOL(balance));
     }
     fetchBalance();
-  }, [getContract]);
+  }, []);
 */
   const isStreamer = !!userProfile;
 
