@@ -33,7 +33,10 @@ const HomePage = () => {
           description: "something went wrong",
         });
       } else {
-        const profile = await getUserProfile(resp);
+        console.log("Login response data:", resp.data);
+
+        const streamerUuid = resp.data?.streamer_uuid;
+        const profile = await getUserProfile(streamerUuid);
 
         updateUserProfile(profile);
         navigate(routes.profile());
