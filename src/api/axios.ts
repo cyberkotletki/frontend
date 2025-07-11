@@ -3,11 +3,11 @@ import axios from "axios";
 import { API_CONFIG } from "../config/api";
 
 export enum ApiMode {
-  REAL_BACKEND = "realBackend",
+  REAL_BACKEND = "backend",
   POSTMAN = "postman",
 }
 
-export const currentApiMode = ApiMode.POSTMAN;
+export const currentApiMode = import.meta.env.VITE_API_MODE;
 
 const getBaseUrl = () => {
   switch (currentApiMode) {
