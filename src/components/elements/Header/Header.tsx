@@ -44,7 +44,7 @@ const Header = () => {
   const [balance, setBalance] = useState<Decimal>(new Decimal(0));
   const { address } = useAppKitAccount();
   const { getContract } = useGetContract();
-
+/*
   useEffect(() => {
     async function fetchBalance() {
       const contract = await getContract();
@@ -54,7 +54,7 @@ const Header = () => {
     }
     fetchBalance();
   }, [getContract]);
-
+*/
   const isStreamer = !!userProfile;
 
   useEffect(() => {
