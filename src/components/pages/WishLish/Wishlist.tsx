@@ -222,11 +222,11 @@ const WishlistPage = () => {
         <Drawer
           backdrop="blur"
           className={styles.drawerContent}
+          hideCloseButton={true}
           isOpen={isShareOpen}
           placement="bottom"
           size="3xl"
           onClose={onShareClose}
-          hideCloseButton={true}
         >
           <DrawerContent>
             <DrawerHeader className={styles.drawerHeader}>

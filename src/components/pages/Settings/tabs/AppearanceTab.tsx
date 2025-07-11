@@ -30,17 +30,17 @@ const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
       {label && <div className={styles.colorPickerLabel}>{label}</div>}
       <div className={styles.colorPicker}>
         <Input
+          className={styles.colorInput}
           type="color"
           value={color}
           onChange={(e) => onChange(e.target.value)}
-          className={styles.colorInput}
         />
         <Input
+          className={styles.colorText}
+          placeholder="#RRGGBB"
           type="text"
           value={color}
           onChange={(e) => onChange(e.target.value)}
-          className={styles.colorText}
-          placeholder="#RRGGBB"
         />
       </div>
     </div>
@@ -121,6 +121,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
   const handleBannerUpload = async (file: File) => {
     try {
       const response = await uploadImage(file);
+
       setBannerImage(response.id);
       setIsChanged(true);
       onBannerClose();
@@ -132,6 +133,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
   const handleAvatarUpload = async (file: File) => {
     try {
       const response = await uploadImage(file);
+
       setAvatarImage(response.id);
       setIsChanged(true);
       onAvatarClose();
@@ -143,6 +145,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
   const handleBackgroundImageUpload = async (file: File) => {
     try {
       const response = await uploadImage(file);
+
       setBackgroundImage(response.id);
       setIsChanged(true);
     } catch (error) {
@@ -152,7 +155,10 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
 
   const applyBackgroundSettings = () => {
     setBackgroundColor(tempBackgroundColor);
-    document.documentElement.style.setProperty('--background-color', tempBackgroundColor);
+    document.documentElement.style.setProperty(
+      "--background-color",
+      tempBackgroundColor,
+    );
     setIsChanged(true);
     onBackgroundClose();
   };
@@ -209,7 +215,10 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         buttonTextColor,
       };
 
-      document.documentElement.style.setProperty('--background-color', backgroundColor);
+      document.documentElement.style.setProperty(
+        "--background-color",
+        backgroundColor,
+      );
 
       setIsChanged(false);
       alert("Appearance settings saved");
@@ -225,7 +234,10 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
     setUsername(initialStateRef.current.username);
     setBackgroundColor(initialStateRef.current.backgroundColor);
 
-    document.documentElement.style.setProperty('--background-color', initialStateRef.current.backgroundColor);
+    document.documentElement.style.setProperty(
+      "--background-color",
+      initialStateRef.current.backgroundColor,
+    );
 
     setBackgroundImage(initialStateRef.current.backgroundImage);
     setButtonBgColor(initialStateRef.current.buttonBgColor);
@@ -235,7 +247,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
 
   useEffect(() => {
     const currentBgColor = getComputedStyle(document.documentElement)
-      .getPropertyValue('--background-color')
+      .getPropertyValue("--background-color")
       .trim();
 
     if (currentBgColor) {
@@ -256,7 +268,10 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
     setButtonBgColor(defaultSettings.buttonBgColor);
     setButtonTextColor(defaultSettings.buttonTextColor);
 
-    document.documentElement.style.setProperty('--background-color', defaultSettings.backgroundColor);
+    document.documentElement.style.setProperty(
+      "--background-color",
+      defaultSettings.backgroundColor,
+    );
 
     setIsChanged(true);
   };
@@ -267,9 +282,9 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         <h2 className={styles.sectionTitle}>Banner</h2>
         <div className={styles.bannerContainer}>
           <div className={styles.bannerPreview}>
-            <img src="/example.png" alt="Banner" />
+            <img alt="Banner" src="/example.png" />
             <button className={styles.editBannerBtn} onClick={onBannerOpen}>
-              <Icon icon="solar:pen-bold" className={styles.editIcon} />
+              <Icon className={styles.editIcon} icon="solar:pen-bold" />
               Change banner
             </button>
           </div>
@@ -281,15 +296,15 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         <div className={styles.profileSection}>
           <div className={styles.avatarContainer}>
             <div className={styles.avatar}>
-              <img src="/example.png" alt="Avatar" />
+              <img alt="Avatar" src="/example.png" />
               <button className={styles.editAvatarBtn} onClick={onAvatarOpen}>
-                <Icon icon="solar:pen-bold" className={styles.editIcon} />
+                <Icon className={styles.editIcon} icon="solar:pen-bold" />
               </button>
             </div>
             <div className={styles.usernameContainer}>
               <h3 className={styles.username}>{username}</h3>
               <button className={styles.editNameBtn} onClick={onUsernameOpen}>
-                <Icon icon="solar:pen-bold" className={styles.editIcon} />
+                <Icon className={styles.editIcon} icon="solar:pen-bold" />
               </button>
             </div>
           </div>
@@ -353,10 +368,10 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       <div className={styles.tabActionButtons}>
         <MyButton
           color="primary"
+          disabled={!isChanged}
           radius="full"
           size="lg"
           onClick={handleSave}
-          disabled={!isChanged}
         >
           Save
         </MyButton>
@@ -371,11 +386,11 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       </div>
 
       <Drawer
+        hideCloseButton={true}
         isOpen={isBannerOpen}
-        onClose={onBannerClose}
         placement="bottom"
         size="3xl"
-        hideCloseButton={true}
+        onClose={onBannerClose}
       >
         <DrawerContent className={styles.drawerContent}>
           <DrawerHeader className={styles.drawerHeader}>
@@ -384,8 +399,8 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
           <DrawerBody>
             <Uploader
               type="banner"
-              onUpload={handleBannerUpload}
               onCancel={onBannerClose}
+              onUpload={handleBannerUpload}
             />
             <div className={styles.drawerButtons}>
               <MyButton
@@ -400,11 +415,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
               >
                 Save
               </MyButton>
-              <MyButton
-                color="danger"
-                radius="full"
-                onClick={onBannerClose}
-              >
+              <MyButton color="danger" radius="full" onClick={onBannerClose}>
                 Cancel
               </MyButton>
             </div>
@@ -413,11 +424,11 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       </Drawer>
 
       <Drawer
+        hideCloseButton={true}
         isOpen={isAvatarOpen}
-        onClose={onAvatarClose}
         placement="bottom"
         size="3xl"
-        hideCloseButton={true}
+        onClose={onAvatarClose}
       >
         <DrawerContent className={styles.drawerContent}>
           <DrawerHeader className={styles.drawerHeader}>
@@ -426,8 +437,8 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
           <DrawerBody>
             <Uploader
               type="avatar"
-              onUpload={handleAvatarUpload}
               onCancel={onAvatarClose}
+              onUpload={handleAvatarUpload}
             />
             <div className={styles.drawerButtons}>
               <MyButton
@@ -442,11 +453,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
               >
                 Save
               </MyButton>
-              <MyButton
-                color="danger"
-                radius="full"
-                onClick={onAvatarClose}
-              >
+              <MyButton color="danger" radius="full" onClick={onAvatarClose}>
                 Cancel
               </MyButton>
             </div>
@@ -455,11 +462,11 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       </Drawer>
 
       <Drawer
+        hideCloseButton={true}
         isOpen={isUsernameOpen}
-        onClose={onUsernameClose}
         placement="bottom"
         size="3xl"
-        hideCloseButton={true}
+        onClose={onUsernameClose}
       >
         <DrawerContent className={styles.drawerContent}>
           <DrawerHeader className={styles.drawerHeader}>
@@ -468,13 +475,13 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
           <DrawerBody>
             <div className={styles.drawerForm}>
               <Input
+                className={styles.input}
                 label="Username"
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
                   setIsChanged(true);
                 }}
-                className={styles.input}
               />
               <div className={styles.drawerButtons}>
                 <MyButton
@@ -498,11 +505,11 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       </Drawer>
 
       <Drawer
+        hideCloseButton={true}
         isOpen={isBackgroundOpen}
-        onClose={cancelBackgroundSettings}
         placement="bottom"
         size="3xl"
-        hideCloseButton={true}
+        onClose={cancelBackgroundSettings}
       >
         <DrawerContent className={styles.drawerContent}>
           <DrawerHeader className={styles.drawerHeader}>
@@ -550,11 +557,11 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
       </Drawer>
 
       <Drawer
+        hideCloseButton={true}
         isOpen={isButtonStyleOpen}
-        onClose={cancelButtonSettings}
         placement="bottom"
         size="3xl"
-        hideCloseButton={true}
+        onClose={cancelButtonSettings}
       >
         <DrawerContent className={styles.drawerContent}>
           <DrawerHeader className={styles.drawerHeader}>
@@ -564,18 +571,18 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
             <div className={styles.drawerForm}>
               <ColorPicker
                 color={tempButtonBgColor}
+                label="Button Background Color"
                 onChange={(color) => {
                   setTempButtonBgColor(color);
                 }}
-                label="Button Background Color"
               />
 
               <ColorPicker
                 color={tempButtonTextColor}
+                label="Button Text Color"
                 onChange={(color) => {
                   setTempButtonTextColor(color);
                 }}
-                label="Button Text Color"
               />
 
               <div className={styles.buttonPreviewLarge}>

@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import { Input } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { Dispatch } from "@reduxjs/toolkit";
 
 import styles from "../styles.module.scss";
 
 import { MyButton } from "@/components/custom/MyButton.tsx";
-import {
-  setUserName,
-  addTopic,
-  removeTopic,
-} from "@/stores/userSlice.tsx";
+import { setUserName, addTopic, removeTopic } from "@/stores/userSlice.tsx";
 import { UserProfileResponse } from "@/types/user";
-import { Dispatch } from "@reduxjs/toolkit";
 
 interface AccountTabProps {
   userProfile: UserProfileResponse | null;
@@ -61,11 +57,11 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
         <div className={styles.formGroup}>
           <label className={styles.label}>Username</label>
           <Input
-            type="text"
+            className={styles.input}
             placeholder="Enter username"
+            type="text"
             value={userName}
             onChange={handleNameChange}
-            className={styles.input}
           />
         </div>
 
@@ -101,11 +97,11 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
           {isAddingTopic ? (
             <div className={styles.addTopicForm}>
               <Input
-                type="text"
+                className={styles.topicInput}
                 placeholder="Category name"
+                type="text"
                 value={newTopic}
                 onChange={(e) => setNewTopic(e.target.value)}
-                className={styles.topicInput}
               />
               <div className={styles.addTopicActions}>
                 <MyButton color="primary" radius="sm" onClick={handleAddTopic}>

@@ -103,11 +103,11 @@ const DonateDrawer = () => {
       <Drawer
         backdrop="blur"
         className={styles.drawerContent}
+        hideCloseButton={true}
         isOpen={isOpen}
         placement="bottom"
         size="3xl"
         onClose={onClose}
-        hideCloseButton={true}
       >
         <DrawerContent>
           <DrawerHeader className={styles.header}>

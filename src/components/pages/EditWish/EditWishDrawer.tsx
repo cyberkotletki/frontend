@@ -107,10 +107,10 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
       </Button>
 
       <Drawer
+        hideCloseButton={true}
         isOpen={isOpen}
         placement="bottom"
         onOpenChange={onOpenChange}
-        hideCloseButton={true}
       >
         <DrawerContent className={styles.drawerContent}>
           {(onClose) => (

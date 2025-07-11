@@ -55,10 +55,13 @@ export interface AppearanceSettings {
 }
 
 export const updateUserAppearance = async (
-  settings: AppearanceSettings
+  settings: AppearanceSettings,
 ): Promise<any> => {
   try {
-    const response = await axiosInstance.put(`${API_CONFIG.ENDPOINTS.USER}`, settings);
+    const response = await axiosInstance.put(
+      `${API_CONFIG.ENDPOINTS.USER}`,
+      settings,
+    );
 
     console.log("Updated appearance settings:", response.data);
 

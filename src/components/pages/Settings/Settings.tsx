@@ -1,21 +1,14 @@
-import { useState, useEffect } from "react";
-import { Input, Tabs, Tab, Divider } from "@heroui/react";
-import { Icon } from "@iconify/react";
+import { useState } from "react";
+import { Tabs, Tab } from "@heroui/react";
 
 import styles from "./styles.module.scss";
+import AppearanceTab from "./tabs/AppearanceTab";
+import AccountTab from "./tabs/AccountTab";
 
 import DefaultLayout from "@/layouts/DefaultLayout.tsx";
 import Banner from "@/components/elements/Banner/Banner.tsx";
-import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks.tsx";
-import {
-  setUserName,
-  addTopic,
-  removeTopic,
-  getUserProfile,
-} from "@/stores/userSlice.tsx";
-import AppearanceTab from "./tabs/AppearanceTab";
-import AccountTab from "./tabs/AccountTab";
+import { getUserProfile } from "@/stores/userSlice.tsx";
 
 const Settings = () => {
   const dispatch = useAppDispatch();
@@ -29,15 +22,15 @@ const Settings = () => {
 
         <div className={styles.content}>
           <Tabs
-            selectedKey={activeTab}
-            onSelectionChange={setActiveTab as any}
             className={styles.tabs}
             color="primary"
+            selectedKey={activeTab}
+            onSelectionChange={setActiveTab as any}
           >
-            <Tab key="account" title="Account Settings" className={styles.tab}>
-              <AccountTab userProfile={userProfile} dispatch={dispatch} />
+            <Tab key="account" className={styles.tab} title="Account Settings">
+              <AccountTab dispatch={dispatch} userProfile={userProfile} />
             </Tab>
-            <Tab key="appearance" title="Appearance" className={styles.tab}>
+            <Tab key="appearance" className={styles.tab} title="Appearance">
               <AppearanceTab userProfile={userProfile} />
             </Tab>
           </Tabs>
