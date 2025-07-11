@@ -11,14 +11,18 @@ import { MyButton } from "@/components/custom/MyButton.tsx";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
+import {useUserProfile} from "@/hooks/useUserProfile.ts";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { disconnect } = useDisconnect();
+  // const {userProfile} = useUserProfile()
+
 
   const handleDisconnect = async () => {
     await disconnect();
     localStorage.removeItem("registrationData");
+    localStorage.setItem("logout", "true");
     logout();
     navigate(routes.home());
   };
@@ -38,6 +42,8 @@ const ProfilePage = () => {
   const handleWithdrawal = () => {
     navigate(routes.withdrawal());
   };
+
+
 
   return (
     <DefaultLayout overlayMode={"banner_compact"}>

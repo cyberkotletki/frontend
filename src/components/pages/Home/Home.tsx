@@ -1,14 +1,42 @@
 import { Image } from "@heroui/image";
 import { useNavigate } from "react-router-dom";
+import { addToast } from "@heroui/toast";
+import { useState } from "react";
 
 import styles from "./styles.module.scss";
 
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { routes } from "@/app/App.routes.ts";
+import { loginUsingTelegramHeaders } from "@/api/auth.ts";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const resp = await loginUsingTelegramHeaders();
+
+      if (resp.status === 404) {
+        addToast({
+          title: "account doesn't exist title",
+          description: "Toast displayed successfully",
+        });
+      } else if (resp.status != 200) {
+        addToast({
+          title: "Oops..",
+          description: "something went wrong",
+        });
+      } else {
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleRegisterClick = () => {
     navigate(routes.register());
@@ -38,9 +66,10 @@ const HomePage = () => {
           <MyButton
             className={`${styles.bottomButton}`}
             color="antivasily"
+            isLoading={isLoading}
             radius="full"
             size="xl"
-            onClick={handleRegisterClick}
+            onClick={handleLogin}
           >
             Log in
           </MyButton>
