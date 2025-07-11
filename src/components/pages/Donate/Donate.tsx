@@ -5,21 +5,21 @@ import {
   DrawerBody,
   DrawerFooter,
   useDisclosure,
-  Input, useUser,
+  Input,
 } from "@heroui/react";
 import { Switch } from "@heroui/react";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import Decimal from "decimal.js";
+import { useSearchParams } from "react-router-dom";
 
 import styles from "./styles.module.scss";
 
 import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useGetContract } from "@/hooks/useWallet.ts";
-import {useUserProfile} from "@/hooks/useUserProfile.ts";
-import {useSearchParams} from "react-router-dom";
-import {getUserProfile} from "@/api/user.ts";
+import { useUserProfile } from "@/hooks/useUserProfile.ts";
+import { getUserProfile } from "@/api/user.ts";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,7 +28,7 @@ const DonateDrawer = () => {
   const [name, setName] = useState("Anonymous");
   const [message, setMessage] = useState("");
   const { getContract } = useGetContract();
-  const {userProfile} = useUserProfile();
+  const { userProfile } = useUserProfile();
   const [searchParams] = useSearchParams();
 
   const toUUID = searchParams.get("uuid");
@@ -58,12 +58,11 @@ const DonateDrawer = () => {
       const weiAmount = BigInt(parsedAmount.mul(1e18).toFixed(0));
       const contract = await getContract();
 
-      if (!toUUID || !wishUUID){
+      if (!toUUID || !wishUUID) {
         return;
       }
 
       const profile = await getUserProfile(toUUID);
-
 
       const payment: Payment = {
         uuid: "1234",
