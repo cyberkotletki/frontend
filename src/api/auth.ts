@@ -1,7 +1,7 @@
 import { retrieveRawInitData } from "@telegram-apps/sdk";
 
 import { TelegramUser } from "@/components/elements/TelegramAuth/TelegramAuth.tsx";
-import { ApiError, axiosInstance } from "@/api/axios.ts";
+import { ApiError, axiosInstance, currentApiMode, ApiMode } from "@/api/axios.ts";
 import { API_CONFIG } from "@/config/api.ts";
 import { UserDTO } from "@/types/user.ts";
 
@@ -60,24 +60,32 @@ export const postRegisterUser = async (user: UserDTO): Promise<string> => {
 };
 
 export const loginUsingTelegramHeaders = async (): Promise<any> => {
-  const initDataRaw = retrieveRawInitData();
+  let headers: Record<string, string> = {};
 
-  let headers = {};
+  try {
+    const initDataRaw = retrieveRawInitData();
 
-  if (initDataRaw) {
-    headers = {
-      Authorization: `tma ${initDataRaw}`,
-    };
+    if (initDataRaw) {
+      headers["Authorization"] = `tma ${initDataRaw}`;
+    }
+  } catch {
+    // ...
   }
 
   try {
-    return await fetch(
-      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.USER}/streamer/login`,
+    const resp = await axiosInstance.post(
+      `${API_CONFIG.ENDPOINTS.USER}/streamer/login`,
+      {},
       {
-        method: "POST",
         headers,
-      },
+      }
     );
+
+    if (currentApiMode === ApiMode.POSTMAN && resp.data?.token) {
+      localStorage.setItem('jwt_token', resp.data.token);
+    }
+
+    return resp;
   } catch (e: any) {
     throw new ApiError(
       "failed to login",

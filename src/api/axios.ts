@@ -24,6 +24,7 @@ export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: currentApiMode === ApiMode.REAL_BACKEND,
 });
 
 export const useRealBackend = currentApiMode === ApiMode.REAL_BACKEND;
