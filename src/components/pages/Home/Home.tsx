@@ -22,12 +22,14 @@ const HomePage = () => {
     try {
       const resp = await loginUsingTelegramHeaders();
 
-      if (resp.status === 404) {
+      const status = resp.status;
+
+      if (status === 404) {
         addToast({
           title: "account doesn't exist title",
           description: "Toast displayed successfully",
         });
-      } else if (resp.status !== 200 && resp.status !== 204) {
+      } else if (status !== 200 && status !== 204) {
         addToast({
           title: "Oops..",
           description: "something went wrong",
@@ -44,6 +46,10 @@ const HomePage = () => {
       }
     } catch (e) {
       console.error(e);
+      addToast({
+        title: "Oops..",
+        description: "something went wrong",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -87,4 +93,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
