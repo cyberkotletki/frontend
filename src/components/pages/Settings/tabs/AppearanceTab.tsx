@@ -644,7 +644,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
 
               <div className={styles.buttonPreviewLarge}>
                 <MyButton
-                  color="custom"
+                  color="vasily"
                   radius="full"
                   style={{
                     backgroundColor: tempButtonBgColor || "#7272FD",

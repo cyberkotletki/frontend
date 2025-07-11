@@ -8,6 +8,8 @@ RUN npm i
 
 COPY . .
 
-EXPOSE 3000
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+EXPOSE 4173
+
+CMD ["npm", "run", "preview"]

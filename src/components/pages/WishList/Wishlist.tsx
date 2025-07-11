@@ -36,7 +36,6 @@ const WishlistPage = () => {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams] = useSearchParams();
-  const uuid = searchParams.get("uuid");
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -121,7 +120,7 @@ const WishlistPage = () => {
       });
   };
 
-  const handleShare = async (platform: string) => {
+  const handleShare = async (_platform: string) => {
     const wishlistUrl = window.location.href;
     const shareText = "Check out my wishlist!";
 

@@ -10,7 +10,6 @@ class Routes {
     `/wishlist/${wishlistId}/wish/${wishId}` as const;
   wishlist = (id: string) => `/wishlist/${id}` as const;
   withdrawal = () => "/withdrawal" as const;
-  // TODO: ID profile
   profile = () => "/profile" as const;
   error = () => "/error" as const;
 }

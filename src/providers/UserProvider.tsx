@@ -13,7 +13,7 @@ interface UserProviderProps {
 const UserProvider = ({ children }: UserProviderProps) => {
   const dispatch = useAppDispatch();
   const { userProfile, updateUserProfile } = useUserProfile();
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const fetchInProgressRef = useRef(false);
 
   const applyUserAppearanceSettings = (profile: UserProfileResponse) => {

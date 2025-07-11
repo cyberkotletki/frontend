@@ -72,7 +72,7 @@ export const loginUsingTelegramHeaders = async (): Promise<any> => {
 
   try {
     return await fetch(
-      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}/streamer/login`,
+      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.USER}/streamer/login`,
       {
         method: "POST",
         headers,
