@@ -11,12 +11,15 @@ import { Switch } from "@heroui/react";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import Decimal from "decimal.js";
+import { useSearchParams } from "react-router-dom";
 
 import styles from "./styles.module.scss";
 
 import { Payment } from "@/types/payments";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { useGetContract } from "@/hooks/useWallet.ts";
+import { useUserProfile } from "@/hooks/useUserProfile.ts";
+import { getUserProfile } from "@/api/user.ts";
 
 const DonateDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,6 +28,11 @@ const DonateDrawer = () => {
   const [name, setName] = useState("Anonymous");
   const [message, setMessage] = useState("");
   const { getContract } = useGetContract();
+  const { userProfile } = useUserProfile();
+  const [searchParams] = useSearchParams();
+
+  const toUUID = searchParams.get("uuid");
+  const wishUUID = searchParams.get("wish");
 
   const handleAnonymousChange = (checked: boolean) => {
     setIsAnonymous(checked);
@@ -50,6 +58,12 @@ const DonateDrawer = () => {
       const weiAmount = BigInt(parsedAmount.mul(1e18).toFixed(0));
       const contract = await getContract();
 
+      if (!toUUID || !wishUUID) {
+        return;
+      }
+
+      const profile = await getUserProfile(toUUID);
+
       const payment: Payment = {
         uuid: "1234",
         paymentUserData: {
@@ -58,9 +72,9 @@ const DonateDrawer = () => {
         },
         paymentInfo: {
           date: Math.floor(Date.now() / 1000),
-          fromUUID: "375eb399-61f1-4a49-9d48-909dd8c74e52",
-          toUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
-          wishUUID: "9f1494c6-2261-43fe-8392-7cecc5a9587b",
+          fromUUID: userProfile?.uuid || "",
+          toUUID: toUUID,
+          wishUUID: wishUUID,
           toAddress: "0x40c3e0f50f0f144b0da906398fc743fb3017e8ff",
           paymentType: 0,
         },

@@ -13,10 +13,7 @@ interface BannerProps {
   showName?: boolean;
 }
 
-const Banner = ({
-  mode = "compact",
-  showName = true,
-}: BannerProps) => {
+const Banner = ({ mode = "compact", showName = true }: BannerProps) => {
   const [searchParams] = useSearchParams();
   const uuid = searchParams.get("uuid");
 

@@ -9,10 +9,13 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { routes } from "@/app/App.routes.ts";
 import { loginUsingTelegramHeaders } from "@/api/auth.ts";
+import { useUserProfile } from "@/hooks/useUserProfile.ts";
+import { getUserProfile } from "@/api/user.ts";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { updateUserProfile } = useUserProfile();
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -30,16 +33,16 @@ const HomePage = () => {
           description: "something went wrong",
         });
       } else {
+        const profile = await getUserProfile(resp);
+
+        updateUserProfile(profile);
+        navigate(routes.profile());
       }
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleRegisterClick = () => {
-    navigate(routes.register());
   };
 
   return (
