@@ -107,6 +107,7 @@ const DonateDrawer = () => {
         placement="bottom"
         size="3xl"
         onClose={onClose}
+        hideCloseButton={true}
       >
         <DrawerContent>
           <DrawerHeader className={styles.header}>

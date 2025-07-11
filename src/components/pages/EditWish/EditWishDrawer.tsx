@@ -106,7 +106,12 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
         <Icon className={styles.actionIcon} icon="solar:pen-bold" />
       </Button>
 
-      <Drawer isOpen={isOpen} placement="bottom" onOpenChange={onOpenChange}>
+      <Drawer
+        isOpen={isOpen}
+        placement="bottom"
+        onOpenChange={onOpenChange}
+        hideCloseButton={true}
+      >
         <DrawerContent className={styles.drawerContent}>
           {(onClose) => (
             <>

@@ -43,3 +43,28 @@ export const getUserHistory = async (
     throw error;
   }
 };
+
+export interface AppearanceSettings {
+  banner?: number;
+  name?: string;
+  background_color?: string;
+  background_image?: number;
+  button_background_color?: string;
+  button_text_color?: string;
+  avatar?: number;
+}
+
+export const updateUserAppearance = async (
+  settings: AppearanceSettings
+): Promise<any> => {
+  try {
+    const response = await axiosInstance.put(`${API_CONFIG.ENDPOINTS.USER}`, settings);
+
+    console.log("Updated appearance settings:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating appearance:", error);
+    throw error;
+  }
+};
