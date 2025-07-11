@@ -27,7 +27,7 @@ const HomePage = () => {
           title: "account doesn't exist title",
           description: "Toast displayed successfully",
         });
-      } else if (resp.status != 200) {
+      } else if (resp.status != 204) {
         addToast({
           title: "Oops..",
           description: "something went wrong",
