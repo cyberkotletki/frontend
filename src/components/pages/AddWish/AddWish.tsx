@@ -90,13 +90,15 @@ const AddWish = () => {
 
     try {
       const wishData: CreateWishRequest = {
-        name: formData.name!,
-        description: formData.description || undefined,
+        name: formData.name,
+        description: formData.description || "",
         wish_url: formData.wish_url || undefined,
-        pol_target: formData.pol_target!,
-        is_priority: formData.is_priority!,
+        pol_target: formData.pol_target,
+        is_priority: formData.is_priority || false,
         image: uploadedImageId,
       };
+
+      console.log("Sending wish data:", wishData);
 
       const response = await createWish(wishData);
 

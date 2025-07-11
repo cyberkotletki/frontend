@@ -35,9 +35,13 @@ const HomePage = () => {
           description: "something went wrong",
         });
       } else {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         const currentUser = await getCurrentUserProfile();
 
         if (currentUser?.streamer_uuid) {
+          localStorage.setItem('streamer_uuid', currentUser.streamer_uuid);
+
           const profile = await getUserProfile(currentUser.streamer_uuid);
           updateUserProfile(profile);
         }

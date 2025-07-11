@@ -15,8 +15,6 @@ export const getCurrentUserProfile =
         `${API_CONFIG.ENDPOINTS.USER}/me`,
       );
 
-      console.log("Current user profile data:", response.data);
-
       return response.data;
     } catch (error) {
       console.error("Error fetching current user profile:", error);
@@ -33,8 +31,6 @@ export const getUserProfile = async (
       params: streamerUuid ? { streamer_uuid: streamerUuid } : {},
     });
 
-    console.log("User profile data:", response.data);
-
     return response.data;
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -48,15 +44,9 @@ export const getUserHistory = async (
   try {
     const url = `${API_CONFIG.ENDPOINTS.USER}/history`;
 
-    console.log(
-      `Fetching history from: ${url}, page: ${page}, mode: ${currentApiMode}`,
-    );
-
     const response = await axiosInstance.get(url, {
       params: { page },
     });
-
-    console.log("User history data:", response.data);
 
     return response.data;
   } catch (error) {
@@ -84,8 +74,6 @@ export const updateUserAppearance = async (
       `${API_CONFIG.ENDPOINTS.USER}`,
       settings,
     );
-
-    console.log("Updated appearance settings:", response.data);
 
     return response.data;
   } catch (error) {

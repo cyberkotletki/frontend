@@ -14,20 +14,12 @@ export interface EditWishRequest {
 }
 
 export const getWishlist = async (
-  userId: string,
+  streamerUuid: string,
 ): Promise<WishlistResponse> => {
   try {
-    console.log("Requesting wishlist for user:", userId);
-    console.log(
-      "Request URL:",
-      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}?userId=${userId}`,
-    );
-
     const response = await axiosInstance.get(API_CONFIG.ENDPOINTS.WISHLIST, {
-      params: { userId },
+      params: { streamer_uuid: streamerUuid },
     });
-
-    console.log("Wishlist response data:", response.data);
 
     if (!response.data || !response.data.wishes) {
       console.error("Invalid response format, wishes array not found");

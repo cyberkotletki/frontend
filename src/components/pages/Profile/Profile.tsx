@@ -12,6 +12,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
 import { useUserProfile } from "@/hooks/useUserProfile.ts";
+import { getCurrentUserProfile } from "@/api/user.ts";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -30,8 +31,29 @@ const ProfilePage = () => {
     navigate(routes.donathistory());
   };
 
-  const handleMyWishes = () => {
-    navigate(routes.wishlist("user123"));
+  const handleMyWishes = async () => {
+    let streamerUuidFromStorage = localStorage.getItem('streamer_uuid');
+
+    if (!streamerUuidFromStorage) {
+      try {
+        const currentUser = await getCurrentUserProfile();
+
+        if (currentUser?.streamer_uuid) {
+          localStorage.setItem('streamer_uuid', currentUser.streamer_uuid);
+          streamerUuidFromStorage = currentUser.streamer_uuid;
+        }
+      } catch (error) {
+        console.error("Error fetching /me:", error);
+      }
+    }
+
+    const streamerUuid = streamerUuidFromStorage || userProfile?.uuid;
+
+    if (streamerUuid) {
+      navigate(routes.wishlist(streamerUuid));
+    } else {
+      console.error("Streamer UUID not available");
+    }
   };
 
   const handleSettings = () => {

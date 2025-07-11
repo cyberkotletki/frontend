@@ -81,10 +81,6 @@ export const loginUsingTelegramHeaders = async (): Promise<any> => {
       }
     );
 
-    if (currentApiMode === ApiMode.POSTMAN && resp.data?.token) {
-      localStorage.setItem('jwt_token', resp.data.token);
-    }
-
     return resp;
   } catch (e: any) {
     throw new ApiError(
