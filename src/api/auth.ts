@@ -27,15 +27,20 @@ export const postVerifyTelegram = async (
 export const postRegisterUser = async (user: UserDTO): Promise<string> => {
   const initDataRaw = retrieveRawInitData();
 
+  let headers = {};
+
+  if (initDataRaw) {
+    headers = {
+      Authorization: `tma ${initDataRaw}`,
+    };
+
+  }
+
   try {
     const resp = await axiosInstance.post(
       `${API_CONFIG.ENDPOINTS.USER}/streamer/register`,
       user,
-      {
-        headers: {
-          Authorization: `tma ${initDataRaw}`,
-        },
-      },
+      headers,
     );
 
     return resp.data;
@@ -51,12 +56,19 @@ export const postRegisterUser = async (user: UserDTO): Promise<string> => {
 export const loginUsingTelegramHeaders = async (): Promise<void> => {
   const initDataRaw = retrieveRawInitData();
 
+  let headers = {};
+
+  if (initDataRaw) {
+    headers = {
+      Authorization: `tma ${initDataRaw}`,
+    };
+
+  }
+
   try {
     await fetch(`${API_CONFIG.ENDPOINTS.USER}/streamer/login`, {
       method: "POST",
-      headers: {
-        Authorization: `tma ${initDataRaw}`,
-      },
+      headers,
     });
   } catch (e: any) {
     throw new ApiError(
