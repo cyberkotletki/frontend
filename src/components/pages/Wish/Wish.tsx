@@ -237,34 +237,6 @@ const WishPage = () => {
                     <div
                       className={styles.shareOption}
                       onClick={() => {
-                        handleShare("twitter");
-                        onClose();
-                      }}
-                    >
-                      <Icon
-                        className={styles.shareIcon}
-                        icon="mdi:twitter"
-                        width={32}
-                      />
-                      <span>Twitter</span>
-                    </div>
-                    <div
-                      className={styles.shareOption}
-                      onClick={() => {
-                        handleShare("facebook");
-                        onClose();
-                      }}
-                    >
-                      <Icon
-                        className={styles.shareIcon}
-                        icon="mdi:facebook"
-                        width={32}
-                      />
-                      <span>Facebook</span>
-                    </div>
-                    <div
-                      className={styles.shareOption}
-                      onClick={() => {
                         handleShare("telegram");
                         onClose();
                       }}

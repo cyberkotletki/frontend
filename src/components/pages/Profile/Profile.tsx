@@ -12,14 +12,11 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import { routes } from "@/app/App.routes.ts";
 import { logout } from "@/stores/userSlice.tsx";
 import { useUserProfile } from "@/hooks/useUserProfile.ts";
-import { useAppSelector } from "@/stores/hooks";
-import { getUserProfile as getUserProfileSelector } from "@/stores/userSlice";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { disconnect } = useDisconnect();
   const { userProfile } = useUserProfile();
-  const userProfile = useAppSelector(getUserProfileSelector);
 
   const handleDisconnect = async () => {
     await disconnect();
@@ -72,16 +69,6 @@ const ProfilePage = () => {
               <Icon className={styles.icon} icon="solar:clock-circle-linear" />
               <div className={styles.text}>Transactions history</div>
             </div>
-            {/*
-            <div className={styles.option}>
-              <Icon
-                className={styles.icon}
-                icon="solar:diagram-up-bold-duotone"
-              />
-              <div className={styles.text}>Analytics</div>
-            </div>
-            */}
-
             <div className={styles.option} onClick={handleWithdrawal}>
               <Icon
                 className={styles.icon}
