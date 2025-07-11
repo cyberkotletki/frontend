@@ -1,17 +1,15 @@
 import { Button, cn } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAppKitAccount } from "@reown/appkit/react";
 import Decimal from "decimal.js";
 import { Icon } from "@iconify/react";
 
 import styles from "./styles.module.scss";
 
 import { routes } from "@/app/App.routes.ts";
-import { useAppDispatch, useAppSelector } from "@/stores/hooks";
+import { useAppSelector } from "@/stores/hooks";
 import { getUserProfile as getUserProfileSelector } from "@/stores/userSlice";
-import { UserTopics } from "@/types/user";
-import { useGetContract } from "@/hooks/useWallet.ts";
+
 
 const BackIcon = () => {
   return (
@@ -34,11 +32,9 @@ const BackIcon = () => {
 
 const Header = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const userProfile = useAppSelector(getUserProfileSelector);
-  const [balance, setBalance] = useState<Decimal>(new Decimal(0));
-  const { address } = useAppKitAccount();
-  const { getContract } = useGetContract();
+  const [balance] = useState<Decimal>(new Decimal(0));
+
   /*
   useEffect(() => {
     async function fetchBalance() {
@@ -60,11 +56,6 @@ const Header = () => {
     navigate(routes.profile());
   };
 
-  const getTopicEmoji = (topicName: string): string => {
-    const topic = UserTopics.find((t) => t.text === topicName);
-
-    return topic ? topic.emoji : "🌍";
-  };
 
   return (
     <div className={styles.header}>

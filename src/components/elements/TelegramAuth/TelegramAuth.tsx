@@ -1,7 +1,8 @@
 import { useEffect } from "react";
+import "@/types/global.d.ts"
 
 type Props = {
-  botName: string; // your bot's username without @
+  botName: string;
   onAuth: (user: TelegramUser) => void;
 };
 
@@ -35,6 +36,7 @@ export const TelegramLoginButton = ({ botName, onAuth }: Props) => {
     document.getElementById("telegram-login-button")?.appendChild(script);
 
     return () => {
+      // @ts-ignore
       delete window.onTelegramAuth;
     };
   }, [botName, onAuth]);

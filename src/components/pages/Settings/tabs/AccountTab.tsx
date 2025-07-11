@@ -100,9 +100,9 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Balance</label>
+          <span className={styles.label}>Balance</span>
           <div className={styles.balanceValue}>
-            {userProfile?.balance || 0} ETH
+            {userProfile?.balance.toString() || 0} ETH
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useParams } from "react-router-dom";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Button,
@@ -35,7 +35,7 @@ const WishlistPage = () => {
   const [linkCopied, setLinkCopied] = useState(false);
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchParams] = useSearchParams();
+
 
   useEffect(() => {
     const fetchWishlist = async () => {
