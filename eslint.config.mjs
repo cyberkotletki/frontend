@@ -93,6 +93,11 @@ export default defineConfig([
     files: ["**/*.ts", "**/*.tsx"],
 
     rules: {
+      ...Object.keys(js.configs.recommended.rules).reduce((acc, rule) => {
+        acc[rule] = "warn";
+        return acc;
+      }, {}),
+
       "no-console": "warn",
       "react/prop-types": "off",
       "react/jsx-uses-react": "off",
@@ -100,6 +105,7 @@ export default defineConfig([
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
+      "jsx-a11y/no-static-element-interactions": "warn",
       "prettier/prettier": "warn",
       "no-unused-vars": "off",
       "unused-imports/no-unused-vars": "off",

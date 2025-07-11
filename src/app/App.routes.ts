@@ -6,10 +6,12 @@ class Routes {
   donathistory = () => "/history" as const;
   register = () => "/register" as const;
   settings = () => "/settings" as const;
-  wish = (id: string) => `/wish/${id}` as const;
+  wish = (wishlistId: string, wishId: string) =>
+    `/wishlist/${wishlistId}/wish/${wishId}` as const;
   wishlist = (id: string) => `/wishlist/${id}` as const;
   withdrawal = () => "/withdrawal" as const;
   profile = () => "/profile" as const;
+  error = () => "/error" as const;
 }
 
 export const routes = new Routes();

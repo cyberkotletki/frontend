@@ -1,8 +1,15 @@
-import { Button } from "@heroui/react";
-import { Image } from "@heroui/image";
+import { Button, cn } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Decimal from "decimal.js";
+import { Icon } from "@iconify/react";
 
 import styles from "./styles.module.scss";
+
+import { routes } from "@/app/App.routes.ts";
+import { useAppSelector } from "@/stores/hooks";
+import { getUserProfile as getUserProfileSelector } from "@/stores/userSlice";
+
 
 const BackIcon = () => {
   return (
@@ -25,11 +32,34 @@ const BackIcon = () => {
 
 const Header = () => {
   const navigate = useNavigate();
-  const isStreamer = false;
+  const userProfile = useAppSelector(getUserProfileSelector);
+  const [balance] = useState<Decimal>(new Decimal(0));
+
+  /*
+  useEffect(() => {
+    async function fetchBalance() {
+      const contract = await getContract();
+      const balance = (await contract.users(address)).currentBalance;
+
+      setBalance(toPOL(balance));
+    }
+    fetchBalance();
+  }, []);
+*/
+  const isStreamer = !!userProfile;
 
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  const handleAvatarClick = () => {
+    if (userProfile) {
+      navigate(routes.profile());
+    } else {
+      navigate(routes.home());
+    }
+  };
+
 
   return (
     <div className={styles.header}>
@@ -40,10 +70,22 @@ const Header = () => {
       />
 
       <div className={styles.profileInfo}>
-        {isStreamer && <div className={styles.count}>300$</div>}
-        <div className={styles.avatar}>
-          <Image alt="User Avatar" height={40} src="/logo.png" width={40} />
-        </div>
+        {isStreamer && userProfile && (
+          <span className={cn(styles.balance, "font-bold")}>
+            {balance.toString()} POL
+          </span>
+        )}
+
+        {userProfile && (
+          <div className={styles.avatar} onClick={handleAvatarClick}>
+            <Icon
+              className={styles.avatarImage}
+              height={40}
+              icon="solar:user-linear"
+              width={40}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
