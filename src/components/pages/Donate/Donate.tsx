@@ -91,7 +91,6 @@ const DonateDrawer = () => {
       );
 
       await tx.wait();
-      console.log("payment credited");
 
       alert("Donation successful");
       setAmount("");

@@ -6,6 +6,7 @@ export type ImageType = "avatar" | "banner" | "background" | "wish";
 
 export interface UploadImageResponse {
   id: number;
+  uuid: string;
 }
 
 export const uploadImage = async (

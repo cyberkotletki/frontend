@@ -24,7 +24,7 @@ const AddWish = () => {
     pol_target: 0.01,
     is_priority: false,
   });
-  const [uploadedImageId, setUploadedImageId] = useState<number | null>(null);
+  const [uploadedImageUuid, setUploadedImageUuid] = useState<string | null>(null);
   const [isFormValid, setIsFormValid] = useState(false);
   const { getContract } = useGetContract();
   const userProfile = useSelector(getUserProfile);
@@ -34,18 +34,11 @@ const AddWish = () => {
       formData.name &&
         formData.pol_target &&
         formData.pol_target > 0 &&
-        uploadedImageId !== null,
+        uploadedImageUuid !== null,
     );
 
     setIsFormValid(isValid);
-    console.log("Form validation:", {
-      name: Boolean(formData.name),
-      pol_target: Boolean(formData.pol_target),
-      pol_target_value: formData.pol_target,
-      uploadedImageId,
-      isValid,
-    });
-  }, [formData.name, formData.pol_target, uploadedImageId]);
+  }, [formData.name, formData.pol_target, uploadedImageUuid]); // Обновили зависимость
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -74,13 +67,15 @@ const AddWish = () => {
     }));
   };
 
-  const handleImageUploaded = (imageUrl: string, imageId: number) => {
-    console.log("Image uploaded in AddWish:", imageUrl, imageId);
-    setUploadedImageId(imageId);
+  const handleImageUploaded = (imageUrl: string, imageUuid?: string) => {
+    // Устанавливаем imageUuid только если он валидный
+    if (imageUuid !== undefined && imageUuid !== null) {
+      setUploadedImageUuid(imageUuid); // Сохраняем UUID
+    }
   };
 
   const sendWishAndGetUUID = async (): Promise<string> => {
-    if (!formData.name || !formData.pol_target || uploadedImageId === null) {
+    if (!formData.name || !formData.pol_target || uploadedImageUuid === null) {
       addToast({
         title: "Fill all fields",
         description: "Please fill all required fields before adding a wish",
@@ -95,14 +90,10 @@ const AddWish = () => {
         wish_url: formData.wish_url || undefined,
         pol_target: formData.pol_target,
         is_priority: formData.is_priority || false,
-        image: uploadedImageId,
+        image: uploadedImageUuid, // Отправляем UUID изображения напрямую
       };
 
-      console.log("Sending wish data:", wishData);
-
       const response = await createWish(wishData);
-
-      console.log("Wish created successfully:", response);
 
       return response.wish_uuid;
     } catch (error) {
@@ -116,7 +107,7 @@ const AddWish = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name || !formData.pol_target || uploadedImageId === null) {
+    if (!formData.name || !formData.pol_target || uploadedImageUuid === null) {
       addToast({
         title: "Fill all fields",
         description: "Please fill all required fields",
@@ -169,7 +160,7 @@ const AddWish = () => {
             pol_target: 0.01,
             is_priority: false,
           });
-          setUploadedImageId(null);
+          setUploadedImageUuid(null);
 
           return;
         }
@@ -186,8 +177,6 @@ const AddWish = () => {
           completed: false,
         };
 
-        console.log("Adding wish to blockchain:", transactionWish);
-
         const tx = await contract.addWish([
           uuid,
           transactionWish.uuid,
@@ -200,7 +189,6 @@ const AddWish = () => {
         ]);
 
         await tx.wait();
-        console.log("Wish successfully added to blockchain");
 
         addToast({
           title: "All set! ",
@@ -225,7 +213,7 @@ const AddWish = () => {
         pol_target: 0.01,
         is_priority: false,
       });
-      setUploadedImageId(null);
+      setUploadedImageUuid(null);
     } catch (error) {
       console.error("Error in handleSubmit:", error);
       addToast({
@@ -238,7 +226,7 @@ const AddWish = () => {
   };
 
   const handleDeleteImage = () => {
-    setUploadedImageId(null);
+    setUploadedImageUuid(null);
   };
 
   return (

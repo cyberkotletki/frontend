@@ -7,13 +7,10 @@ import styles from "./styles.module.scss";
 import { getImageUrl, ImageType, uploadImage } from "@/api/images";
 
 interface UploaderProps {
-  onImageUploaded?: (imageUrl: string, imageId: number) => void;
+  onImageUploaded?: (imageUrl: string, imageUuid: string) => void;
   onImageDeleted?: () => void;
   defaultImage?: string;
   type?: ImageType;
-  // onCancel?: () => void;
-  // onDelete?: () => void;
-  // onUpload?: () => void;
 }
 
 const Uploader: React.FC<UploaderProps> = ({
@@ -55,16 +52,10 @@ const Uploader: React.FC<UploaderProps> = ({
         const localPreviewUrl = e.target?.result as string;
 
         setPreviewUrl(localPreviewUrl);
-
-        if (onImageUploaded) {
-          const tempId = Math.floor(Math.random() * 10000) + 1;
-
-          onImageUploaded(localPreviewUrl, tempId);
-        }
       };
       reader.readAsDataURL(file);
     },
-    [onImageUploaded],
+    [],
   );
 
   const processFile = useCallback(
@@ -81,12 +72,12 @@ const Uploader: React.FC<UploaderProps> = ({
       setError(null);
 
       try {
-        const imageId = await uploadImage(file, type);
+        const response = await uploadImage(file, type);
 
-        const imageUrl = getImageUrl(imageId.id);
+        const imageUrl = getImageUrl(response.id);
 
         if (onImageUploaded) {
-          onImageUploaded(imageUrl, imageId.id);
+          onImageUploaded(imageUrl, response.uuid);
         }
       } catch (err: any) {
         console.error("Error uploading image:", err);

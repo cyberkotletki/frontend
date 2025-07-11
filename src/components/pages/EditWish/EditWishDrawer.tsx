@@ -43,7 +43,6 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
   };
 
   const handleImageUploaded = (imageUrl: string, imageId: number) => {
-    console.log("Image uploaded in EditWish:", imageUrl, imageId);
     // setUploadedImageId(String(imageId));
     setEditedData((prev) => ({
       ...prev,
@@ -75,8 +74,6 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
       };
 
       await editWish(requestData);
-      console.log("Wish edited successfully");
-
       if (onSuccess) {
         onSuccess();
       }

@@ -59,7 +59,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
           applyUserAppearanceSettings(userProfile);
         }
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        // E...кк
       } finally {
         setIsLoading(false);
         fetchInProgressRef.current = false;

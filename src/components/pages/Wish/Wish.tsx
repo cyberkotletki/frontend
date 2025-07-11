@@ -97,7 +97,6 @@ const WishPage = () => {
     );
   }
 
-
   const calculatePercentage = (current: number, target: number): number => {
     return Math.min(Math.round((current / target) * 100), 100);
   };
@@ -147,7 +146,7 @@ const WishPage = () => {
   };
 
   const handleEditSuccess = () => {
-    console.log("Wish updated successfully!");
+    // Wish updated successfully
   };
 
   return (

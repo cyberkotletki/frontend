@@ -49,11 +49,7 @@ const WishlistPage = () => {
       try {
         setIsLoading(true);
 
-        console.log("Starting wishlist fetch for user:", userId);
-
         const response = await getWishlist(userId);
-
-        console.log("Wishlist response in component:", response);
 
         if (
           response &&
@@ -61,14 +57,11 @@ const WishlistPage = () => {
           Array.isArray(response.wishes) &&
           response.wishes.length > 0
         ) {
-          console.log("Setting wishes in state:", response.wishes);
           setWishes(response.wishes);
         } else {
-          console.warn("No wishes found in response or empty array");
           setWishes([]);
         }
       } catch (error) {
-        console.error("Error loading wishlist:", error);
         setWishes([]);
       } finally {
         setIsLoading(false);
@@ -98,7 +91,6 @@ const WishlistPage = () => {
   };
 
   const handleAddBtnClick = () => {
-    console.log("Navigating to addwish route");
     navigate(routes.addwish());
   };
 

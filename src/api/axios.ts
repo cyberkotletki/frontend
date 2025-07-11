@@ -44,7 +44,6 @@ axiosInstance.interceptors.response.use(
 export const useRealBackend = currentApiMode === ApiMode.REAL_BACKEND;
 export const usePostman = currentApiMode === ApiMode.POSTMAN;
 
-console.log(`API Mode: ${currentApiMode}, Base URL: ${getBaseUrl()}`);
 
 export class ApiError extends Error {
   status?: number;

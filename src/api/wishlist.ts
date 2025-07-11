@@ -81,8 +81,6 @@ export const getWishFromWishlist = async (
   wishId: string,
 ): Promise<any> => {
   try {
-    console.log("Requesting wish from wishlist:", { wishlistId, wishId });
-
     const wishlistResponse = await getWishlist(wishlistId);
 
     const wish = wishlistResponse.wishes.find((w) => w.uuid === wishId);

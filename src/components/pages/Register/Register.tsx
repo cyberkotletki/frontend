@@ -126,11 +126,6 @@ const Register = () => {
         });
         const contract = await getContract();
 
-        console.log({
-          name: registrationData.name,
-          uuid: uuid,
-          topics: registrationData.chosenTopics.map((t) => t.text),
-        });
         const tx = await contract.registerUser(
           registrationData.name,
           "uuid",
@@ -138,7 +133,6 @@ const Register = () => {
         );
 
         await tx.wait();
-        console.log("user registered");
         navigate(routes.profile());
       }
     } catch (e: any) {
@@ -148,7 +142,6 @@ const Register = () => {
     }
   };
 
-  //functions
 
   const updateRegistrationData = (updates: Partial<RegistrationData>) => {
     setRegistrationData((prev) => ({ ...prev, ...updates }));
