@@ -11,14 +11,11 @@ import { getUserProfile } from "@/api/user.ts";
 interface BannerProps {
   mode?: "compact" | "full";
   showName?: boolean;
-  userUUID: string;
 }
 
 const Banner = ({
   mode = "compact",
   showName = true,
-  bannerSrc = "/example.png",
-  avatarSrc = "/example.png",
 }: BannerProps) => {
   const [searchParams] = useSearchParams();
   const uuid = searchParams.get("uuid");
