@@ -8,6 +8,8 @@ import styles from "../styles.module.scss";
 import { MyButton } from "@/components/custom/MyButton.tsx";
 import { setUserName, addTopic, removeTopic } from "@/stores/userSlice.tsx";
 import { UserProfileResponse } from "@/types/user";
+import { updateUserAppearance } from "@/api/user";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface AccountTabProps {
   userProfile: UserProfileResponse | null;
@@ -15,14 +17,17 @@ interface AccountTabProps {
 }
 
 const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
+  const { updatePartialUserProfile } = useUserProfile();
   const [newTopic, setNewTopic] = useState("");
   const [isAddingTopic, setIsAddingTopic] = useState(false);
   const [userName, setUserNameLocal] = useState(userProfile?.name || "");
   const [isChanged, setIsChanged] = useState(false);
+  const [topics, setTopics] = useState<string[]>(userProfile?.topics || []);
 
   useEffect(() => {
-    if (userProfile?.name) {
-      setUserNameLocal(userProfile.name);
+    if (userProfile) {
+      setUserNameLocal(userProfile.name || "");
+      setTopics(userProfile.topics || []);
     }
   }, [userProfile]);
 
@@ -33,7 +38,10 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
 
   const handleAddTopic = () => {
     if (newTopic.trim() !== "") {
+      setTopics((prev) => [...prev, newTopic.trim()]);
+
       dispatch(addTopic(newTopic.trim()));
+
       setNewTopic("");
       setIsAddingTopic(false);
       setIsChanged(true);
@@ -41,13 +49,32 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
   };
 
   const handleRemoveTopic = (topic: string) => {
+    // Удаляем тему локально
+    setTopics((prev) => prev.filter((t) => t !== topic));
+
+    // Также используем Redux для синхронизации состояния
     dispatch(removeTopic(topic));
+
     setIsChanged(true);
   };
 
-  const handleSaveChanges = () => {
-    dispatch(setUserName(userName));
-    setIsChanged(false);
+  const handleSaveChanges = async () => {
+    try {
+      const updatedProfile = await updateUserAppearance({
+        name: userName,
+        topics: topics,
+      });
+
+      dispatch(setUserName(userName));
+
+      updatePartialUserProfile(updatedProfile);
+
+      setIsChanged(false);
+      alert("Account settings saved successfully");
+    } catch (error) {
+      console.error("Error saving account settings:", error);
+      alert("Error saving account settings");
+    }
   };
 
   return (
@@ -76,9 +103,9 @@ const AccountTab = ({ userProfile, dispatch }: AccountTabProps) => {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Stream Categories</h2>
         <div className={styles.topicsContainer}>
-          {userProfile?.topics && userProfile.topics.length > 0 ? (
+          {topics && topics.length > 0 ? (
             <div className={styles.topicsList}>
-              {userProfile.topics.map((topic, index) => (
+              {topics.map((topic, index) => (
                 <div key={index} className={styles.topic}>
                   <span>{topic}</span>
                   <button

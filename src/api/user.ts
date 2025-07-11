@@ -4,12 +4,33 @@ import { UserProfileResponse } from "../types/user";
 
 import { axiosInstance, currentApiMode } from "./axios";
 
+export interface UserMeResponse {
+  streamer_uuid: string;
+}
+
+export const getCurrentUserProfile =
+  async (): Promise<UserMeResponse | null> => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_CONFIG.ENDPOINTS.USER}/me`,
+      );
+
+      console.log("Current user profile data:", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching current user profile:", error);
+
+      return null;
+    }
+  };
+
 export const getUserProfile = async (
-  streamerUuid: string,
+  streamerUuid?: string,
 ): Promise<UserProfileResponse> => {
   try {
     const response = await axiosInstance.get(`${API_CONFIG.ENDPOINTS.USER}`, {
-      params: { streamer_uuid: streamerUuid },
+      params: streamerUuid ? { streamer_uuid: streamerUuid } : {},
     });
 
     console.log("User profile data:", response.data);
@@ -52,11 +73,12 @@ export interface AppearanceSettings {
   button_background_color?: string;
   button_text_color?: string;
   avatar?: number;
+  topics?: string[];
 }
 
 export const updateUserAppearance = async (
   settings: AppearanceSettings,
-): Promise<any> => {
+): Promise<UserProfileResponse> => {
   try {
     const response = await axiosInstance.put(
       `${API_CONFIG.ENDPOINTS.USER}`,
@@ -71,3 +93,5 @@ export const updateUserAppearance = async (
     throw error;
   }
 };
+
+export const STORAGE_USER_PROFILE_KEY = "user_profile";

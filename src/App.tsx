@@ -1,23 +1,16 @@
 import { AppRouter } from "@/app/AppRouter.tsx";
+import UserProvider from "@/providers/UserProvider";
 import "./styles/globals.scss";
 
 function App() {
   return (
-    <>
+    <UserProvider>
       <div className={"bg"} />
       <div>
         <AppRouter />
       </div>
-    </>
+    </UserProvider>
   );
 }
-/*
-     <Routes>
- <Route element={<IndexPage />} path="/" />
- <Route element={<DocsPage />} path="/docs" />
- <Route element={<PricingPage />} path="/pricing" />
- <Route element={<BlogPage />} path="/blog" />
- <Route element={<AboutPage />} path="/about" />
-</Routes>
-     */
+
 export default App;

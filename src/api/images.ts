@@ -27,9 +27,15 @@ export const uploadImage = async (
     },
   );
 
-  return response.data.id;
+  return response.data;
 };
 
-export const getImageUrl = (imageId: number): string => {
+export const getImageUrl = (imageId: number | string): string => {
+  if (!imageId) return "";
+
+  if (typeof imageId === "string" && imageId.startsWith("http")) {
+    return imageId;
+  }
+
   return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATIC}/${imageId}`;
 };
