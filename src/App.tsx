@@ -1,7 +1,23 @@
 import { AppRouter } from "@/app/AppRouter.tsx";
+
 import "./styles/globals.scss";
+// import { retrieveRawInitData } from "@telegram-apps/sdk";
+// import { useEffect } from "react";
 
 function App() {
+  // useEffect(() => {
+  //   async function fetchUserData() {
+  //     const initDataRaw = retrieveRawInitData();
+  //
+  //     Authorization: `tma ${initDataRaw}`;
+  //     fetch("https://example.com/api", {
+  //       method: "POST",
+  //       headers: {},
+  //     });
+  //   }
+  //   fetchUserData();
+  // }, []);
+
   return (
     <>
       <div className={"bg"} />

@@ -1,3 +1,5 @@
+import { retrieveRawInitData } from "@telegram-apps/sdk";
+
 import { TelegramUser } from "@/components/elements/TelegramAuth/TelegramAuth.tsx";
 import { ApiError, axiosInstance } from "@/api/axios.ts";
 import { API_CONFIG } from "@/config/api.ts";
@@ -23,16 +25,42 @@ export const postVerifyTelegram = async (
 };
 
 export const postRegisterUser = async (user: UserDTO): Promise<string> => {
+  const initDataRaw = retrieveRawInitData();
+
   try {
     const resp = await axiosInstance.post(
       `${API_CONFIG.ENDPOINTS.USER}/streamer/register`,
       user,
+      {
+        headers: {
+          Authorization: `tma ${initDataRaw}`,
+        },
+      },
     );
 
     return resp.data;
   } catch (e: any) {
     throw new ApiError(
       "failed to register user",
+      e?.response?.status,
+      e?.response?.data,
+    );
+  }
+};
+
+export const loginUsingTelegramHeaders = async (): Promise<void> => {
+  const initDataRaw = retrieveRawInitData();
+
+  try {
+    await fetch(`${API_CONFIG.ENDPOINTS.USER}/streamer/login`, {
+      method: "POST",
+      headers: {
+        Authorization: `tma ${initDataRaw}`,
+      },
+    });
+  } catch (e: any) {
+    throw new ApiError(
+      "failed to login",
       e?.response?.status,
       e?.response?.data,
     );
