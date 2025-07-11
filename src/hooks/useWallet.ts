@@ -3,7 +3,7 @@ import { BrowserProvider, ethers, Eip1193Provider } from "ethers";
 import { useAppKitProvider } from "@reown/appkit/react";
 
 import { abi } from "@/contracts/Donates.json";
-import modal from "@/config/wallet.ts";
+import {modal} from "@/config/wallet.ts";
 
 export function useWalletConnectionState() {
   const [isConnected, setIsConnected] = useState(modal.getIsConnectedState());

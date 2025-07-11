@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../components/pages/Home/Home.tsx";
 import AddWish from "../components/pages/AddWish/AddWish.tsx";
 import ProfilePage from "../components/pages/Profile/Profile.tsx";
-import WishlistPage from "../components/pages/WishLish/Wishlist.tsx";
+import WishlistPage from "@/components/pages/WishList/Wishlist.tsx";
 import WishPage from "../components/pages/Wish/Wish.tsx";
 
 import { routes } from "./App.routes.ts";

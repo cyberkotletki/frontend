@@ -21,6 +21,12 @@ export type Topic = {
   text: string;
 };
 
+export type UserDTO = {
+  polygon_wallet: string;
+  topics: string[];
+  name: string;
+};
+
 export const UserTopics: Topic[] = [
   { emoji: "🌱", text: "IRL" },
   { emoji: "🎮", text: "Gaming" },

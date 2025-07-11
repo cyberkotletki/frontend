@@ -1,7 +1,9 @@
-import { Button } from "@heroui/react";
+import { Button, cn } from "@heroui/react";
 import { Image } from "@heroui/image";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAppKitAccount } from "@reown/appkit/react";
+import Decimal from "decimal.js";
 
 import styles from "./styles.module.scss";
 
@@ -13,6 +15,8 @@ import {
   setUserProfile,
 } from "@/stores/userSlice";
 import { UserTopics } from "@/types/user";
+import { useGetContract } from "@/hooks/useWallet.ts";
+import toPOL from "@/funcs/toPOL.ts";
 
 const BackIcon = () => {
   return (
@@ -37,6 +41,19 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userProfile = useAppSelector(getUserProfileSelector);
+  const [balance, setBalance] = useState<Decimal>(new Decimal(0));
+  const { address } = useAppKitAccount();
+  const { getContract } = useGetContract();
+
+  useEffect(() => {
+    async function fetchBalance() {
+      const contract = await getContract();
+      const balance = (await contract.users(address)).currentBalance;
+
+      setBalance(toPOL(balance));
+    }
+    fetchBalance();
+  }, [getContract]);
 
   const isStreamer = !!userProfile;
 
@@ -63,10 +80,6 @@ const Header = () => {
     navigate(routes.profile());
   };
 
-  const formatBalance = (balance: number): string => {
-    return balance.toFixed(2);
-  };
-
   const getTopicEmoji = (topicName: string): string => {
     const topic = UserTopics.find((t) => t.text === topicName);
 
@@ -83,9 +96,9 @@ const Header = () => {
 
       <div className={styles.profileInfo}>
         {isStreamer && userProfile && (
-          <div className={styles.balance}>
-            {formatBalance(userProfile.balance)} POL
-          </div>
+          <span className={cn(styles.balance, "font-bold")}>
+            {balance.toString()} POL
+          </span>
         )}
 
         <div className={styles.avatar} onClick={handleAvatarClick}>
