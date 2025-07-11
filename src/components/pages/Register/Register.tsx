@@ -121,7 +121,7 @@ const Register = () => {
         });
         const tx = await contract.registerUser(
           registrationData.name,
-          uuid,
+          "uuid",
           registrationData.chosenTopics.map((item) => item.text),
         );
 
@@ -297,3 +297,4 @@ const Register = () => {
 };
 
 export default Register;
+
