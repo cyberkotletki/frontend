@@ -48,7 +48,7 @@ const Header = () => {
       setBalance(toPOL(balance));
     }
     fetchBalance();
-  }, [getContract]);
+  }, []);
 */
   const isStreamer = !!userProfile;
 
