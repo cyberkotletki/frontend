@@ -124,7 +124,7 @@ const WishPage = () => {
       });
   };
 
-  const handleShare = async (platform: string) => {
+  const handleShare = async () => {
     const wishUrl = `${window.location.origin}/wishlist/${wishlistId}/wish/${wishId}`;
     const shareText = `Check out my wish: ${wish.name}`;
 
@@ -234,7 +234,7 @@ const WishPage = () => {
                     <div
                       className={styles.shareOption}
                       onClick={() => {
-                        handleShare("telegram");
+                        handleShare();
                         onClose();
                       }}
                     >

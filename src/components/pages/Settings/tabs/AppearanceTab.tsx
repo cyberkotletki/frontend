@@ -15,7 +15,7 @@ import styles from "../styles.module.scss";
 
 import { MyButton } from "@/components/custom/MyButton";
 import Uploader from "@/components/elements/Uploader/Uploader";
-import { uploadImage, getImageUrl } from "@/api/images";
+import { getImageUrl } from "@/api/images";
 import { updateUserAppearance, AppearanceSettings } from "@/api/user";
 import { UserProfileResponse } from "@/types/user";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -55,13 +55,13 @@ interface AppearanceTabProps {
 
 const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
   const { updatePartialUserProfile } = useUserProfile();
-  const [bannerImage, setBannerImage] = useState<number | null>(null);
-  const [avatarImage, setAvatarImage] = useState<number | null>(null);
+  const [bannerImage ] = useState<number | null>(null);
+  const [avatarImage] = useState<number | null>(null);
   const [username, setUsername] = useState(userProfile?.name || "Username");
   const [backgroundColor, setBackgroundColor] = useState(
     userProfile?.background_color || "#1E1E1E",
   );
-  const [backgroundImage, setBackgroundImage] = useState<number | null>(null);
+  const [backgroundImage] = useState<number | null>(null);
   const [buttonBgColor, setButtonBgColor] = useState(
     userProfile?.button_background_color || "#7272FD",
   );
@@ -151,40 +151,43 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
     }
   }, [userProfile]);
 
-  const handleBannerUpload = async (file: File) => {
-    try {
-      const response = await uploadImage(file, "banner");
+  // const handleBannerUpload = async (file: File) => {
+  //   try {
+  //     const response = await uploadImage(file, "banner");
+  //
+  //     setBannerImage(response.id);
+  //
+  //     setIsChanged(true);
+  //     onBannerClose();
+  //   } catch (error) {
+  //     console.error("Error uploading banner:", error);
+  //   }
+  // };
 
-      setBannerImage(response.id);
-      setIsChanged(true);
-      onBannerClose();
-    } catch (error) {
-      console.error("Error uploading banner:", error);
-    }
-  };
+  // const handleAvatarUpload = async (file: File) => {
+  //   try {
+  //     const response = await uploadImage(file, "avatar");
+  //
+  //     setAvatarImage(response.id);
+  //
+  //     setIsChanged(true);
+  //     onAvatarClose();
+  //   } catch (error) {
+  //     console.error("Error uploading avatar:", error);
+  //   }
+  // };
 
-  const handleAvatarUpload = async (file: File) => {
-    try {
-      const response = await uploadImage(file, "avatar");
-
-      setAvatarImage(response.id);
-      setIsChanged(true);
-      onAvatarClose();
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-    }
-  };
-
-  const handleBackgroundImageUpload = async (file: File) => {
-    try {
-      const response = await uploadImage(file, "background");
-
-      setBackgroundImage(response.id);
-      setIsChanged(true);
-    } catch (error) {
-      console.error("Error uploading background:", error);
-    }
-  };
+  // const handleBackgroundImageUpload = async (file: File) => {
+  //   try {
+  //     const response = await uploadImage(file, "background");
+  //
+  //     setBackgroundImage(response.id);
+  //
+  //     setIsChanged(true);
+  //   } catch (error) {
+  //     console.error("Error uploading background:", error);
+  //   }
+  // };
 
   const applyBackgroundSettings = () => {
     setBackgroundColor(tempBackgroundColor);
@@ -273,22 +276,22 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
     }
   };
 
-  const handleRevert = () => {
-    setBannerImage(initialStateRef.current.bannerImage);
-    setAvatarImage(initialStateRef.current.avatarImage);
-    setUsername(initialStateRef.current.username);
-    setBackgroundColor(initialStateRef.current.backgroundColor);
-
-    document.documentElement.style.setProperty(
-      "--background-color",
-      initialStateRef.current.backgroundColor,
-    );
-
-    setBackgroundImage(initialStateRef.current.backgroundImage);
-    setButtonBgColor(initialStateRef.current.buttonBgColor);
-    setButtonTextColor(initialStateRef.current.buttonTextColor);
-    setIsChanged(false);
-  };
+  // const handleRevert = () => {
+  //   setBannerImage(initialStateRef.current.bannerImage);
+  //   setAvatarImage(initialStateRef.current.avatarImage);
+  //   setUsername(initialStateRef.current.username);
+  //   setBackgroundColor(initialStateRef.current.backgroundColor);
+  //
+  //   document.documentElement.style.setProperty(
+  //     "--background-color",
+  //     initialStateRef.current.backgroundColor,
+  //   );
+  //
+  //   setBackgroundImage(initialStateRef.current.backgroundImage);
+  //   setButtonBgColor(initialStateRef.current.buttonBgColor);
+  //   setButtonTextColor(initialStateRef.current.buttonTextColor);
+  //   setIsChanged(false);
+  // };
 
   useEffect(() => {
     const currentBgColor = getComputedStyle(document.documentElement)
@@ -379,7 +382,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
         <div className={styles.buttonStyles}>
           <div className={styles.buttonPreview}>
             <MyButton
-              color="custom"
+              color="default"
               radius="full"
               style={{
                 backgroundColor: buttonBgColor,
@@ -456,8 +459,8 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
           <DrawerBody>
             <Uploader
               type="banner"
-              onCancel={onBannerClose}
-              onUpload={handleBannerUpload}
+              // onCancel={onBannerClose}
+              // onUpload={handleBannerUpload}
             />
             <div className={styles.drawerButtons}>
               <MyButton
@@ -494,8 +497,8 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
           <DrawerBody>
             <Uploader
               type="avatar"
-              onCancel={onAvatarClose}
-              onUpload={handleAvatarUpload}
+              // onCancel={onAvatarClose}
+              // onUpload={handleAvatarUpload}
             />
             <div className={styles.drawerButtons}>
               <MyButton
@@ -588,7 +591,7 @@ const AppearanceTab = ({ userProfile }: AppearanceTabProps) => {
                 <h4 className={styles.optionTitle}>Background Image</h4>
                 <Uploader
                   type="background"
-                  onUpload={handleBackgroundImageUpload}
+                  // onUpload={handleBackgroundImageUpload}
                 />
               </div>
 

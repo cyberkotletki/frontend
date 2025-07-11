@@ -34,6 +34,7 @@ export const userSlice = createSlice({
           button_text_color: "#0F0F0F",
           balance: new Decimal(0),
           topics: [],
+          address: "",
         };
       }
     },

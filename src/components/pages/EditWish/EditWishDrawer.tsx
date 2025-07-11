@@ -34,7 +34,6 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
     wish_uuid: wishUuid,
     is_priority: isPriority,
   });
-  const [uploadedImageId, setUploadedImageId] = useState<string | null>(null);
 
   const handlePriorityChange = (isSelected: boolean) => {
     setEditedData((prev) => ({
@@ -45,7 +44,7 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
 
   const handleImageUploaded = (imageUrl: string, imageId: number) => {
     console.log("Image uploaded in EditWish:", imageUrl, imageId);
-    setUploadedImageId(String(imageId));
+    // setUploadedImageId(String(imageId));
     setEditedData((prev) => ({
       ...prev,
       image: String(imageId),
@@ -53,7 +52,6 @@ const EditWishDrawer: React.FC<EditWishDrawerProps> = ({
   };
 
   const handleDeleteImage = () => {
-    setUploadedImageId(null);
     setEditedData((prev) => {
       const newData = { ...prev };
 

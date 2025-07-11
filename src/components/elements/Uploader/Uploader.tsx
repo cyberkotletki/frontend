@@ -11,6 +11,9 @@ interface UploaderProps {
   onImageDeleted?: () => void;
   defaultImage?: string;
   type?: ImageType;
+  // onCancel?: () => void;
+  // onDelete?: () => void;
+  // onUpload?: () => void;
 }
 
 const Uploader: React.FC<UploaderProps> = ({
@@ -80,10 +83,10 @@ const Uploader: React.FC<UploaderProps> = ({
       try {
         const imageId = await uploadImage(file, type);
 
-        const imageUrl = getImageUrl(imageId);
+        const imageUrl = getImageUrl(imageId.id);
 
         if (onImageUploaded) {
-          onImageUploaded(imageUrl, imageId);
+          onImageUploaded(imageUrl, imageId.id);
         }
       } catch (err: any) {
         console.error("Error uploading image:", err);

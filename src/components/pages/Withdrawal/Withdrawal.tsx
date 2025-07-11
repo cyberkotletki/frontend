@@ -29,7 +29,7 @@ import { useGetContract } from "@/hooks/useWallet.ts";
 
 const WithdrawalPage = () => {
   const [amount, setAmount] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const { getContract } = useGetContract();
   const { address } = useAppKitAccount();
   const userProfile = useSelector(getUserProfile);
