@@ -169,6 +169,7 @@ const WishPage = () => {
 
         {/* Share Drawer */}
         <Drawer
+          hideCloseButton={true}
           isOpen={isShareOpen}
           placement="bottom"
           onOpenChange={onShareClose}

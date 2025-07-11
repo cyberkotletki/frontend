@@ -76,13 +76,6 @@ const ProfilePage = () => {
               <Icon className={styles.icon} icon="solar:settings-linear" />
               <div className={styles.text}>Settings</div>
             </div>
-            <div className={styles.option}>
-              <Icon
-                className={styles.icon}
-                icon="solar:paint-roller-line-duotone"
-              />
-              <div className={styles.text}>Appearance</div>
-            </div>
           </div>
           <div className={styles.signOutBtn}>
             <MyButton
