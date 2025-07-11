@@ -18,6 +18,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage.ts";
 import { useGetContract, useWalletConnectionState } from "@/hooks/useWallet.ts";
 import { routes } from "@/app/App.routes.ts";
 import { postRegisterUser, postVerifyTelegram } from "@/api/auth.ts";
+import {retrieveRawInitData} from "@telegram-apps/sdk";
 
 enum RegistrationState {
   telegram = 0,
@@ -66,9 +67,20 @@ const Register = () => {
 
   const { address } = useAppKitAccount();
 
+
   const [verified, setVerified] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
+  const [inTg, setInTg] = useState(true);
+
+
+  useEffect(() =>{
+    try {
+      retrieveRawInitData()
+    } catch {
+      setInTg(false);
+    }
+  })
 
   const handleVerifyingTelegram = async (): Promise<void> => {
     if (!tgUser) {
@@ -181,14 +193,17 @@ const Register = () => {
               </span>
             </div>
 
-            <TelegramLoginButton
-              botName="donly_test_bot"
-              onAuth={(tguser) => {
-                setTgUser(tguser);
-                handleVerifyingTelegram();
-                setCurrentRegistrationState(RegistrationState.info);
-              }}
-            />
+            {!inTg && (
+                <TelegramLoginButton
+                    botName="donly_test_bot"
+                    onAuth={(tguser) => {
+                      setTgUser(tguser);
+                      handleVerifyingTelegram();
+                      setCurrentRegistrationState(RegistrationState.info);
+                    }}
+                />
+            )}
+
             <MyButton
               className={styles.accentButton}
               color={verified ? "vasily" : "antivasily"}

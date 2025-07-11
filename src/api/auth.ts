@@ -14,7 +14,7 @@ export const postVerifyTelegram = async (
 ): Promise<boolean> => {
   try {
     const resp = await axiosInstance.post(
-      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}/telegram`,
+      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.USER}/telegram`,
       tg,
     );
 
@@ -41,7 +41,7 @@ export const postRegisterUser = async (user: UserDTO): Promise<string> => {
 
   try {
     const resp = await axiosInstance.post<RegisterUserResponse>(
-      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.WISHLIST}/streamer/register`,
+      `${axiosInstance.defaults.baseURL}${API_CONFIG.ENDPOINTS.USER}/streamer/register`,
       user,
       {
         headers,
